@@ -40,9 +40,6 @@ tries to achieve is to trace the changes of markings due to transitions being
 executed along some legal behaviour of the original PT-net, and in doing so
 record which resources were consumed and produced.
 
-
-
-
 ---
 
 # Catalytic Petri Nets Are Turing Complete
@@ -53,13 +50,17 @@ LATA 2012: Language and Automata Theory and Applications pp 192-203
 In this paper we introduce a class of Petri nets, called catalytic Petri nets, and a suitable firing strategy where transitions are fired only when they use tokens from specific places, called catalytic places. By establishing a one-to-one relationship with catalytic membrane systems, we can prove that the class of catalytic Petri nets with at least two catalytic places is Turing complete.
 
 In order to make Petri nets Turing complete, different approaches have been
-taken; notably the one which extends the kind of arcs considered. The classic
-extension is the one where inhibitor arcs are considered, i.e., arcs where the
+taken; notably the one which extends the kind of arcs considered. 
+
+The classic extension is the one where inhibitor arcs are considered, i.e., arcs where the
 absence of tokens in certain places is modeled ([14]), or reset arcs, i.e., arcs with
 the characteristic of emptying the preset, regardless of the number of tokens
-present in the place ([8]). Other extensions of Petri Nets, not necessarily always
+present in the place ([8]). 
+
+Other extensions of Petri Nets, not necessarily always
 Turing complete, allow the introduction of non blocking arcs or transfer arcs
 ([11] and [13]) or making the transitions marking dependent ([5]).
+
 Summing up, to make Petri nets Turing complete either suitable extensions
 of the model have to be considered or quite heavy assumptions on the firing rule
 have to be made. In the former case many among the main features of Petri
@@ -106,7 +107,6 @@ A kolam or muggu is a geometrical line drawing composed of straight lines, curve
  is a finite set of transitions,   $ m > 0 $ ,   
  
 $$ P \cap T = ϕ $$ 
-, 
 
 $$ I : T \rightarrow P^{\infty}  $$ 
  
@@ -161,9 +161,6 @@ Kleene star
 
 ![reaction_automata_turing_machines_chomsky_hierarchy](./imgs/reaction_automata_turing_machines_chomsky_hierarchy.png)
 
-
-
-
 ---
 
 # Quantitative Causality in Membrane Systems
@@ -171,10 +168,8 @@ Kleene star
 International Conference on Membrane Computing
 CMC 2011: Membrane Computing pp 62-72
 
-
-
-To each multiset w we associate its support, denoted by
-supp(w), which contains those elements of S which have a non-zero image. 
+To each multiset $w$ we associate its support, denoted by
+$supp(w)$ , which contains those elements of $S$ which have a non-zero image. 
 
 
 A cover $(G, w)$ for a multiset $v$ is defined with respect to a certain evolution step 
@@ -192,10 +187,10 @@ An earlier attempt to define a notion of causality over objects in membrane
 systems was made in [1]. The definition was given in terms of relating multisets
 of objects of form $k · a$. Moreover, the multiplicity $k$ of a could only be taken to be $u(a)$ or $u'(a)$ from an evolution step 
 $$ u \xrightarrow{\text{F}} u'$$
-. 
+ 
 The definition in this paper is more general, allowing to relate (specifically) any multiset $v ≤ u$ with a multiset of rules $G$, and implicitly with a multiset of objects 
 $$ lhs(G) + v \setminus rhs(G) ≤ u $$
-.
+
 
 ---
 

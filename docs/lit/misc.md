@@ -85,33 +85,34 @@ Reading books aloud to children also contributes to the development of their abs
 A Primer on Multiple Intelligences pp 191-199
 
 BI system has following components [5].
-Data Mining: Sorting through large data sets using databases, statistics, and machine learning to identify trends and establish relationships.
 
-Big Data: We live in era of big data. BI applications extract, organize, analyze, and report large volumes of data to aid strategic and managerial decision-making.
+**Data Mining**: Sorting through large data sets using databases, statistics, and machine learning to identify trends and establish relationships.
 
-Querying: A request for specific data or information from a database.
+**Big Data**: We live in era of big data. BI applications extract, organize, analyze, and report large volumes of data to aid strategic and managerial decision-making.
 
-Data Preparation: The process of combining and structuring data in order to prepare it for analysis.
+**Querying**: A request for specific data or information from a database.
 
-Reporting: Sharing operating and financial data analysis with decision-makers so they can draw conclusions and make decisions.
+**Data Preparation**: The process of combining and structuring data in order to prepare it for analysis.
 
-Benchmarking: Comparing current business processes and performance metrics to historical data to track performance against industry bests.
+**Reporting**: Sharing operating and financial data analysis with decision-makers so they can draw conclusions and make decisions.
 
-Descriptive Analytics: The interpretation of historical data to draw comparisons and better understand changes that have occurred in a business.
+**Benchmarking**: Comparing current business processes and performance metrics to historical data to track performance against industry bests.
 
-Statistical Analysis: Collecting the results from descriptive analytics and applying statistics in order to identify trends.
+**Descriptive Analytics**: The interpretation of historical data to draw comparisons and better understand changes that have occurred in a business.
 
-On-line Analytical Processing (OLAP): These are BI tools that are used to analyze large volumes of historical data with drill-down functionality. Information is stored in OLAP cubes and provides a multidimensional view of data.
+**Statistical Analysis**: Collecting the results from descriptive analytics and applying statistics in order to identify trends.
 
-Data Visualization: This is the use of visual representation to explore, analyze, and interpret large amounts of data. It incorporates graphs, charts, Geographic Information Systems (GIS), Graphical User Interface (GUI), virtual reality, video, and animation. Data visualization technologies transform large quantitative data sets into useful information so that individuals can understand.
+**On-line Analytical Processing (OLAP**): These are BI tools that are used to analyze large volumes of historical data with drill-down functionality. Information is stored in OLAP cubes and provides a multidimensional view of data.
 
-Data Warehouse: This provides storing of aggregated and analyzed data. It allows reports to be produced at a reasonable cost for community.
+**Data Visualization**: This is the use of visual representation to explore, analyze, and interpret large amounts of data. It incorporates graphs, charts, Geographic Information Systems (GIS), Graphical User Interface (GUI), virtual reality, video, and animation. Data visualization technologies transform large quantitative data sets into useful information so that individuals can understand.
 
-Data Management and Integration: This component prepares data to be ready for analysis and reports. It involves analyzing, reporting, and presenting tools such as on-line analytical processing (OLAP) tools which allow users access and which analyze and model business problems and share information.
+**Data Warehouse**: This provides storing of aggregated and analyzed data. It allows reports to be produced at a reasonable cost for community.
 
-Mobile BI: Software that optimizes desktop business intelligence for mobile devices. Mobile BI solutions are available with voice-enabled access.
+**Data Management and Integration**: This component prepares data to be ready for analysis and reports. It involves analyzing, reporting, and presenting tools such as on-line analytical processing (OLAP) tools which allow users access and which analyze and model business problems and share information.
 
-Collaborative BI: This is the merging of business intelligence software with collaboration tools in order to streamline the sharing process.
+**Mobile BI**: Software that optimizes desktop business intelligence for mobile devices. Mobile BI solutions are available with voice-enabled access.
+
+**Collaborative BI**: This is the merging of business intelligence software with collaboration tools in order to streamline the sharing process.
 
 ---
 
@@ -158,16 +159,4 @@ HCC 2019: Human Centered Computing pp 626-636
 https://rkingsbury.github.io/membrane-toolkit/ 
 
 https://materialsproject.github.io/maggma/ 
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -6,11 +6,6 @@ source: springer
 
 155 Result(s) for 'p-system security membrane'
 
-
-
-
-
-
 ---
 
 # Integrated Membrane Computing Framework for Modeling Intrusion Detection Systems
@@ -365,20 +360,15 @@ Such a query-answering system, returning answers of the form P(query | data), co
 
 - Mineral prospecting expert systems quantifying P(ore grade | observations)
 
-
 BN software products and methods allow the following standard approach to formulating and solving probabilistic inference problems for BNs with any number of nodes.
 
 1. Create a BN consisting of a node for each random variable and a DAG (directed acyclic graph ) in which arrows between variables represent dependencies between them.
-
  
 2. Specify a marginal probability distribution for each input node.
-
  
 3. Specify a CPT for each node with an arrow pointing into it.
 
- 
 4. Enter observations or assumptions (sometimes referred to generically as “findings”) about the values of some of the variables.
-
  
 5. Obtain the conditional (posterior) distributions of all other variables, conditioned on the findings entered by the user. BN solver software packages automatically calculate these updated distributions.
 
@@ -426,7 +416,7 @@ Using job exposure matrices, remote-sensing and satellite imagery for pollutant 
 
 **Omitted interdependencies among explanatory variables**
 
-Direct and total effects of exposure on response can have opposite signs. More generally, the DAG model in which variables are embedded can create associations without causation in a regression model that includes on its right-hand side variables not in an adjustment set. This can be avoided by using DAGitty to compute adjustment sets for the total causal effect of exposure on response and then to condition on variables in an adjustment set to estimate that effect
+Direct and total effects of exposure on response can have opposite signs. More generally, the DAG model in which variables are embedded can create associations without causation in a regression model that includes on its right-hand side variables not in an adjustment set. This can be avoided by using *DAGitty* to compute adjustment sets for the total causal effect of exposure on response and then to condition on variables in an adjustment set to estimate that effect
 
 ---
 
@@ -444,12 +434,12 @@ Two important and complementary goals of autonomic communication are
 resilience and self-healing capacity: resilience against internal failures and misbehavior, and self-healing ability to recover from such abnormal conditions.
 
 Robustness to link or node failure is generally achieved by rerouting traffic
-to alternative paths. In OSPF (Open Shortest Path First), node or link failures
+to alternative paths. In OSPF (*Open Shortest Path First*), node or link failures
 are detected via link advertisement messages, and new routes are recomputed
-accordingly. In BGP (Border Gateway Protocol), as well as in MPLS (MultiProtocol Label Switching) route restoration is achieved via backup paths, such
+accordingly. In BGP (*Border Gateway Protocol*), as well as in MPLS (*MultiProtocol Label Switching*) route restoration is achieved via backup paths, such
 that service can be preserved during failure of the main path.
 
-Core Wars
+**Core Wars**
 Finally we mention “core wars” [19]: Two programs, which share the same random access (core) memory, struggle for survival by attacking the other program
 through tampering with its instructions and/or by evading attacks through dislocation. Various robustness and self-healing strategies have been proposed for
 this rather specific context and the associated virtual machine.
@@ -476,25 +466,25 @@ Through the simulation of the register machine, the computational completeness o
 
 ![celllike_membrane](./imgs/celllike_membrane.png)
 
-A P system based on a hypergraph H, called a hypergraph P system, with antiport and symport rules is a construct
-Π=(m,O,T,C,H,Ewi,ω1,…,ωm,A(i,j)((R1ρ1),…,(Rmρm)),i0)
-m is the degree of membrane,
-O is the alphabet, the elements of it is called objects,
+A $P$ system based on a hypergraph $H$, called a hypergraph P system, with antiport and symport rules is a construct
+$Π=(m,O,T,C,H,E_{wi}, ω_1,…,ω_m, A(i,j)((R_{1ρ_1}),…,(R_{mρ_m})),i_0)$
+$m$ is the degree of membrane,
+$O$ is the alphabet, the elements of it is called objects,
 
-T⊂O  is the alphabet of terminal objects,
+$T⊂O$  is the alphabet of terminal objects,
 
-C⊂O−T  is the catalyst, the elements of it do not change during evolution and do not produce new characters, but some evolutionary rules must have its participation,
+$C⊂O−T$  is the catalyst, the elements of it do not change during evolution and do not produce new characters, but some evolutionary rules must have its participation,
 
-H=(V,E) , V is the set of the vertices and E is a set of hyperedges. H represents the relationships between membranes of the hypergraph P system,
+$H=(V,E)$ , $V$ is the set of the vertices and $E$ is a set of hyperedges. $H$ represents the relationships between membranes of the hypergraph $P$ system,
 
-Ewi  is the weight of membrance i, the default value is 1,
+$E_{wi}$  is the weight of membrance $i$, the default value is 1,
 
-ω1,…,ωm  are the multisets of objects contained by the region i of membrane structure,
+$ω_1,…,ω_m$  are the multisets of objects contained by the region $i$ of membrane structure,
 
-A(i, j) is the accessible matrix to the membrances (edges),
+$A(i, j)$ is the accessible matrix to the membrances (edges),
 
-((R1ρ1),…,(Rmρm))  are finite sets of symport and antiport rules,   Ri(i=1,…,m)  is associated with the m membranes,   ρ  is the partial ordering relationship of the rules R, which is called the priority relation.   ρ  indicates the priority order of the execution of rules R,
+$((R_{1ρ1}),…,(R_{mρm}))$  are finite sets of symport and antiport rules,   $R_i(i=1,…,m)$  is associated with the m membranes, $ρ$  is the partial ordering relationship of the rules $R$, which is called the priority relation.   $ρ$  indicates the priority order of the execution of rules $R$,
 
-i0  is the input/output mark of membrance.
+$i_0$  is the input/output mark of membrance.
 
-If rules are totally ordered as   r1>r2…>rn>rn+1>… . Only the system has reached a stable configuration with respect to the rule   rn  can the rule   rn+1  start application.
+If rules are totally ordered as   $r1>r2…>rn>rn+1>…$ . Only the system has reached a stable configuration with respect to the rule  $r_n$  can the rule   $r_{n+1}$  start application.

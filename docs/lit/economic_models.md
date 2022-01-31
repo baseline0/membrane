@@ -123,7 +123,4 @@ means the existence link between   $li$  and $lj$  will eliminate and there will
 
 multi-objective optimization (MOO) 
 
-
-
 ---
-
