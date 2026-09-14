@@ -1,12 +1,15 @@
-/* Minimal CEC2017 stub for testing. Replace with official source. */
+/* DEPRECATED: This is a minimal stub for testing only.
+ *
+ * The real CEC2017 library is now built via Docker from the forked repo:
+ *   ../CEC2017-BoundConstrained/
+ *
+ * Build with: just docker-build-cec2017
+ *
+ * This stub remains for fallback/reference only.
+ */
 
 #include <math.h>
 #include <string.h>
-
-/* Placeholder: Official CEC2017 function evaluation.
- * Download from: http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2017/
- * Replace this file with cec17_test_func.c from official source.
- */
 
 void cec17_test_func(double *x, double *f, int nx, int mx, int func_num) {
     int i, j;

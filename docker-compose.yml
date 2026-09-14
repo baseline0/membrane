@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  cec2017-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: malta-cec2017:latest
+    volumes:
+      - ./benchmarks/c_src/cec2017:/output
+    command: sh -c "cp /build/libcec2017.so /output/ && cp -r /build/input_data /output/ && echo '✓ CEC2017 library built'"

@@ -57,11 +57,20 @@ clean:
     rm -rf .pytest_cache/ .ruff_cache/
     find . -type d -name "__pycache__" -exec rm -r {} +
 
-# --- Benchmarking: C Library Build ---
+# --- Benchmarking: C Library Build (Docker) ---
 
-# Compile CEC2017 C source into shared library
-build-cec2017:
-    @echo "Building CEC2017 shared library..."
+# Build CEC2017 library in Docker (reproducible, isolated)
+docker-build-cec2017:
+    @echo "Building CEC2017 library in Docker..."
     mkdir -p benchmarks/c_src/cec2017
-    gcc -shared -fPIC -O3 -lm benchmarks/c_src/cec2017/cec17_test_func.c -o benchmarks/c_src/cec2017/libcec2017.so
+    docker build -t malta-cec2017:latest -f Dockerfile ..
+    docker run --rm -v $(pwd)/benchmarks/c_src/cec2017:/output malta-cec2017:latest
+    @echo "✓ libcec2017.so ready at benchmarks/c_src/cec2017/libcec2017.so"
+
+# Legacy: direct gcc build (requires local gcc, less reproducible)
+build-cec2017:
+    @echo "Building CEC2017 shared library (direct)..."
+    mkdir -p benchmarks/c_src/cec2017
+    gcc -shared -fPIC -O3 -lm benchmarks/c_src/cec2017/cec17_test_func.c -o benchmarks/c_src/cec2017/libcec2017.so 2>/dev/null || \
+    (echo "Note: gcc build requires cec17_test_func.c in benchmarks/c_src/cec2017/" && exit 1)
     @echo "libcec2017.so built successfully"
