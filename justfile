@@ -2,6 +2,9 @@
 
 set default-list := true
 
+# Import shared recipes from tooling (fmt, lint, test, check, commit, clean)
+import "../tooling/just/shared.just"
+
 import "just/mod.just"
 
 # --- Development ---
@@ -25,12 +28,8 @@ check-imports:
 lint: check-imports
     uv run ruff check malta tests
 
-fmt:
-    uv run ruff format malta tests
-
-# Agent contract: verify all changes (lint + test)
-check: lint test
-    @echo "✓ All checks passed"
+# Note: fmt is provided by ../tooling/just/shared.just
+# Note: shared check would be: check: lint test
 
 # Install the pre-commit git hook (run once per clone)
 pre-commit-install:
@@ -44,11 +43,7 @@ pre-commit:
 tree:
     @python scripts/dev/tree_with_stats.py
 
-# Auto-generate conventional commit message via local LLM and commit staged changes
-# Requires: pipx install commitmate
-# Uses local Ollama model to generate message from staged diff
-commit:
-    commitmate && git commit
+# Note: commit is provided by ../tooling/just/shared.just (with Ollama health checks)
 
 # Regenerate just/cli.just by introspecting the Typer CLI
 gen-just:

@@ -14,15 +14,16 @@ Allowed imports by layer:
 
 import ast
 import sys
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Set
 
 
 @dataclass
 class Rule:
     """Import permission rule."""
-    source_pattern: str     # e.g., "malta/cli"
+
+    source_pattern: str  # e.g., "malta/cli"
     allowed_patterns: list  # e.g., ["malta.services", "malta.cli", "typer"]
 
 
@@ -48,10 +49,10 @@ def find_imports(file_path: Path) -> Set[str]:
     for node in ast.walk(tree):
         if isinstance(node, ast.ImportFrom):
             if node.module:
-                imports.add(node.module.split('.')[0])  # Get top-level module
+                imports.add(node.module.split(".")[0])  # Get top-level module
         elif isinstance(node, ast.Import):
             for alias in node.names:
-                imports.add(alias.name.split('.')[0])
+                imports.add(alias.name.split(".")[0])
     return imports
 
 
@@ -78,14 +79,9 @@ def check_file(file_path: Path) -> list[str]:
 
     for imp in imports:
         # Check if import matches any allowed pattern
-        allowed = any(
-            imp == pat or pat.startswith(imp + ".")
-            for pat in rule.allowed_patterns
-        )
+        allowed = any(imp == pat or pat.startswith(imp + ".") for pat in rule.allowed_patterns)
         if not allowed:
-            violations.append(
-                f"  {file_path}: imports '{imp}' (not in {rule.allowed_patterns})"
-            )
+            violations.append(f"  {file_path}: imports '{imp}' (not in {rule.allowed_patterns})")
 
     return violations
 

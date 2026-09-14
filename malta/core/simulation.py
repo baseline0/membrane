@@ -5,13 +5,13 @@ from typing import List, TextIO
 
 from anytree import Node, search
 
+from malta.constants import CONFIG_DIR
 from malta.core.environment import Environment, EnvState
 from malta.core.membrane_item import MembraneItem, load_membrane_items_from_file
-from malta.types.mmultiset import MMultiset, make_mmultiset, multiset_to_dict
-from malta.types.multiset_treenode import get_branches_from_g, get_membrane_tree1, get_membrane_tree2
 from malta.core.rule import Rule, make_rule
 from malta.core.ruleset import RuleSet, get_ruleset_1
-from malta.constants import CONFIG_DIR
+from malta.types.mmultiset import MMultiset, make_mmultiset, multiset_to_dict
+from malta.types.multiset_treenode import get_branches_from_g, get_membrane_tree1, get_membrane_tree2
 
 
 class NodeState(Enum):
@@ -312,7 +312,7 @@ class SimulationFactory:
     def get_sim1() -> Simulation:
         sim = Simulation()
 
-        alphabet = ["a", "b", "c", "w"]
+        alphabet = ["a", "b", "c", "w"]  # noqa: F841
 
         # details on the membranes items for summary report
         m_a = MembraneItem("a", descr="asset")
@@ -345,7 +345,7 @@ class SimulationFactory:
         contents.add("a", 1)
         contents.add("b", 4)
         contents.add("c", 2)
-        s0 = Node(name="sub0", parent=root, contents=contents)
+        s0 = Node(name="sub0", parent=root, contents=contents)  # noqa: F841
 
         e = Environment(tree=root, rules=ruleset, all_items=all_items)
         sim.environment = e
@@ -364,7 +364,7 @@ class SimulationFactory:
         # items in alphabet are used explicity in the following rules and contents but
         # the data structure (list) is not yet part of params.
         # Future - generate rules and contents from a defined alphabet
-        alphabet = ["a", "b", "c", "w"]
+        alphabet = ["a", "b", "c", "w"]  # noqa: F841
 
         # details on the membranes items for summary report
         with open(CONFIG_DIR / "sim1_items.json") as f:
@@ -396,7 +396,7 @@ class SimulationFactory:
         items["c"] = 3
         contents = make_mmultiset(items)
 
-        s0 = Node(name="sub0", parent=root, contents=contents)
+        s0 = Node(name="sub0", parent=root, contents=contents)  # noqa: F841
 
         e = Environment(tree=root, rules=ruleset, all_items=all_items)
         sim.environment = e
@@ -417,7 +417,7 @@ class SimulationFactory:
         fname = CONFIG_DIR / "sim3_items.json"
         all_items = load_membrane_items_from_file(fname)
 
-        alphabet = ["a", "b", "c", "w"]
+        alphabet = ["a", "b", "c", "w"]  # noqa: F841
         ruleset = get_ruleset_1(alphabet)
         root = get_membrane_tree1(alphabet)
 

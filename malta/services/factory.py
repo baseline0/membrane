@@ -3,15 +3,15 @@ from typing import List
 
 from anytree import Node
 
-from malta.io.dot import ContentItem
-from malta.io.dot_colour import get_rand_colour
+from malta.constants import CONFIG_DIR
 from malta.core.environment import Environment
 from malta.core.membrane_item import MembraneItem
-from malta.types.mmultiset import MMultiset, make_mmultiset
 from malta.core.rule import make_rule
 from malta.core.ruleset import RuleSet
-from malta.constants import CONFIG_DIR
 from malta.core.util import NameGenerator
+from malta.io.dot import ContentItem
+from malta.io.dot_colour import get_rand_colour
+from malta.types.mmultiset import MMultiset, make_mmultiset
 
 
 class Factory:
@@ -52,7 +52,7 @@ class Factory:
         update for tree
         """
 
-        alphabet = ["a", "b", "c", "w"]
+        alphabet = ["a", "b", "c", "w"]  # noqa: F841
 
         # details on the membranes items for summary report
         with open(CONFIG_DIR / "sim1_items.json") as f:
@@ -84,7 +84,7 @@ class Factory:
         items["c"] = 3
         contents = make_mmultiset(items)
 
-        s0 = Node(name="sub0", parent=root, contents=contents)
+        s0 = Node(name="sub0", parent=root, contents=contents)  # noqa: F841
 
         e = Environment(tree=root, rules=ruleset, all_items=all_items)
 

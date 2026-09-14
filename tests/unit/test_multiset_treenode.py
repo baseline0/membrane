@@ -4,13 +4,13 @@ from anytree import Node, PostOrderIter, RenderTree
 from anytree.exporter import DotExporter
 from anytree.walker import Walker
 
+from malta.core.util import get_alphabet1
 from malta.types.mmultiset import MMultiset
 from malta.types.multiset_treenode import (
     MultisetTreeFactory,
     get_random_selection_from_alphabet,
     show_multiset_tree,
 )
-from malta.core.util import get_alphabet1
 
 
 class TestMembraneTree(unittest.TestCase):

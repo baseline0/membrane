@@ -7,11 +7,10 @@ Usage:
     python scripts/dev/tree_with_stats.py .
 """
 
+import fnmatch
 import sys
-import os
 from pathlib import Path
 from typing import Set
-import fnmatch
 
 
 def parse_gitignore(root: Path) -> Set[str]:
@@ -44,15 +43,11 @@ def should_ignore(path: Path, root: Path, patterns: Set[str]) -> bool:
         # Handle directory patterns
         if pattern.endswith("/"):
             pattern = pattern.rstrip("/")
-            if fnmatch.fnmatch(str(rel_path), pattern) or fnmatch.fnmatch(
-                str(rel_path), f"{pattern}/*"
-            ):
+            if fnmatch.fnmatch(str(rel_path), pattern) or fnmatch.fnmatch(str(rel_path), f"{pattern}/*"):
                 return True
         else:
             # Match both filename and full path
-            if fnmatch.fnmatch(path.name, pattern) or fnmatch.fnmatch(
-                str(rel_path), pattern
-            ):
+            if fnmatch.fnmatch(path.name, pattern) or fnmatch.fnmatch(str(rel_path), pattern):
                 return True
 
     return False
@@ -67,9 +62,7 @@ def count_lines(filepath: Path) -> int:
         return 0
 
 
-def tree_with_stats(
-    root: Path, prefix: str = "", patterns: Set[str] = None, root_path: Path = None
-):
+def tree_with_stats(root: Path, prefix: str = "", patterns: Set[str] = None, root_path: Path = None):
     """Recursively print tree with stats."""
     if patterns is None:
         patterns = set()
@@ -89,9 +82,9 @@ def tree_with_stats(
     files = [f for f in files if not should_ignore(f, root_path, patterns)]
 
     # Count stats
-    file_count = len(files)
-    dir_count = len(dirs)
-    total_lines = sum(count_lines(f) for f in files)
+    file_count = len(files)  # noqa: F841
+    dir_count = len(dirs)  # noqa: F841
+    total_lines = sum(count_lines(f) for f in files)  # noqa: F841
 
     # Print dirs first
     for i, directory in enumerate(dirs):

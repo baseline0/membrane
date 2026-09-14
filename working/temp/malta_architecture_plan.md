@@ -342,7 +342,7 @@ from malta.io.dot import render
 class Simulation:
     def __init__(self, renderer=None):
         self.renderer = renderer or lambda x: None
-    
+
     def visualize(self):
         if self.renderer:
             return self.renderer(self)

@@ -2,8 +2,8 @@ import json
 import sys
 from typing import List, TextIO
 
-from malta.io.dot_colour import get_rand_colour
 from malta.core.util import NameGenerator
+from malta.io.dot_colour import get_rand_colour
 
 
 class Delimited:
