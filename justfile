@@ -9,9 +9,7 @@ import "just/mod.just"
 
 # --- Development ---
 
-# Run all test suites
-test:
-    uv run pytest tests/unit tests/integration tests/e2e --ignore=tests/cyprus -v
+# Note: 'test' is provided by ../tooling/just/shared.just (pytest -m "not live")
 
 # Run unit tests only (fast, safe to run frequently) with timing of slowest 5
 test-unit:
@@ -22,14 +20,8 @@ test-integration:
     uv run pytest tests/integration -m integration -v --durations=5
 
 # Check import layer boundaries
-check-imports:
-    python scripts/dev/check_imports.py
-
-lint: check-imports
-    uv run ruff check malta tests
-
-# Note: fmt is provided by ../tooling/just/shared.just
-# Note: shared check would be: check: lint test
+# Note: lint is now provided by ../tooling/just/shared.just (fmt + check-imports + ruff)
+# Check-imports is called automatically if scripts/dev/check_imports.py exists
 
 # Install the pre-commit git hook (run once per clone)
 pre-commit-install:
