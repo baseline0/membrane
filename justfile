@@ -36,8 +36,32 @@ pre-commit:
 gen-just:
     uv run malta dev gen-just
 
+# --- Benchmarking Demo ---
+
+# Run example benchmark: 3 seeds, 5 functions, 10D (fast demo)
+bench-example:
+    uv run python -m benchmarks.run_example 3 5 10
+
+# Run quick benchmark: 10 seeds, 10 functions, 30D (medium)
+bench-quick:
+    uv run python -m benchmarks.run_example 10 10 30
+
+# Run full benchmark: 30 seeds, all 29 functions, 10D (slow, ~1 hour)
+bench-full:
+    @echo "Running full CEC2017 benchmark (expect 1-2 hours)..."
+    uv run python -m benchmarks.run_example 30 29 10
+
 # Remove generated artifacts: caches, simulation output, build byproducts
 clean:
     rm -rf sims/ out/ malta/output/ malta/sims/ tests/out/ tests/_trial_temp/
     rm -rf .pytest_cache/ .ruff_cache/
-    find . -type d -name "__pycache__" -exec rm -r {} +"
+    find . -type d -name "__pycache__" -exec rm -r {} +
+
+# --- Benchmarking: C Library Build ---
+
+# Compile CEC2017 C source into shared library
+build-cec2017:
+    @echo "Building CEC2017 shared library..."
+    mkdir -p benchmarks/c_src/cec2017
+    gcc -shared -fPIC -O3 -lm benchmarks/c_src/cec2017/cec17_test_func.c -o benchmarks/c_src/cec2017/libcec2017.so
+    @echo "libcec2017.so built successfully"
