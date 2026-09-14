@@ -39,30 +39,30 @@ A Primer on Multiple Intelligences pp 249-262
 The main characteristics of military intelligence are presented as follows [5]:
 - To be effective, military intelligence has to be integrated with weapon systems and personnel to create military capability.
 - Intelligence consists of collecting and assessing knowledge which is relevant to all levels of the military and the civilian leaders.
-- Gaining information superiority is based on high-quality human capital and technology. 
+- Gaining information superiority is based on high-quality human capital and technology.
 - The intelligence mission is hampered by an inherent uncertainty, which may be reduced by good procedures and high-quality human capital, but cannot be eliminated.
 - Good intelligence gathering by the rival can reduce the relevance of the nation’s own intelligence as well as the potency of its weapon systems and its overall military capability.
 
 the principles of intelligence include
 
 1. **Accuracy**: With accurate intelligence on the enemy’s location, capability, and intent, planning can lead to victory.
- 
+
 2. **Timeliness**: Timeliness of intelligence contributes directly to the commander’s ability to observe, orient, decide, and act and achieve victory.
- 
+
 3. **Usability**: To have value, intelligence must be tailored to meet the needs of the commander and intelligence community. To make intelligence usable, effective marketing must be applied.
- 
+
 4. **Fusion**: Fused intelligence produces the most accurate and complete picture of what is known about an activity. It draws upon the complementary strengths of signals intelligence, imagery intelligence, human intelligence (all to be explained shortly).
- 
+
 5. **Relevancy**: Intelligence has relevancy if it contributes to the commander’s ability to execute his mission at his level of military operation. It must be geared to meet the needs of commanders across the full spectrum of military operations.
- 
+
 6. **Intellectual honesty**: Intellectual honesty must extend to reporting. Intellectual honesty must drive the intelligence professional to distinguish for the commander information which is solidly grounded in fact. The commander cannot be left with uncertainty in his mind regarding what is fact and what is opinion.
-   
+
 7. **Communication**: It is the responsibility of the intelligence professional to employ the most effective way to inform the commander. Knowing the enemy’s intent, capabilities, and location has no worth if the intelligence is not well communicated.
 
 ---
 
 # Abstract Intelligence
- 
+
 A Primer on Multiple Intelligences pp 201-210
 
 Howard Gardener, an American developmental psychologist, described nine types of intelligence in 1983 [2]:
@@ -156,7 +156,6 @@ HCC 2019: Human Centered Computing pp 626-636
 
 ---
 
-https://rkingsbury.github.io/membrane-toolkit/ 
+https://rkingsbury.github.io/membrane-toolkit/
 
-https://materialsproject.github.io/maggma/ 
-
+https://materialsproject.github.io/maggma/

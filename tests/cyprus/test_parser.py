@@ -1,10 +1,10 @@
-import unittest
 import os
 import sys
+import unittest
 
-from cyprus.program import parse, get_pretty_tree
-from cyprus.program import tokenize_file
 from funcparserlib.parser import NoParseError
+
+from cyprus.program import get_pretty_tree, parse, tokenize_file
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
@@ -12,16 +12,16 @@ sys.path.insert(0, parent_dir_path)
 
 
 class ParseTest(unittest.TestCase):
-
     def test1(self):
 
         try:
-            tree = parse(tokenize_file('./examples/example1.cyp'))
+            tree = parse(tokenize_file("./examples/example1.cyp"))
             print(get_pretty_tree(tree))
         except NoParseError as e:
             print(e)
 
         self.assertIsNotNone(tree)
+
 
 # E{Program}
 # `-- {Environment}

@@ -45,7 +45,7 @@ will be maximally applied before those with a lower priority.
 Cyprus is governed by a single monolithic clock.  All activity within
 all environments occurs in lockstep with the tick of the clock.  Each
 tick, all reactions that are applicable within a given container are applied
-maximally, obeying reaction priorities.  
+maximally, obeying reaction priorities.
 
 The clock stops ticking when no more
 reaction applications can occur.  At this point, the particles contained by
@@ -60,10 +60,10 @@ Particles may also osmose through their containing membrane's walls, either
 targeting their container's parent, or a specific membrane by way of names.
 
 Using named targets, a particle can osmose deeper into nested membranes,
-or pass through multiple containing membranes.  Environments cannot be 
+or pass through multiple containing membranes.  Environments cannot be
 osmosed through, though particles may osmose over environmental boundaries.
 
-Reaction application is maximal, but non-deterministic: reactions are 
+Reaction application is maximal, but non-deterministic: reactions are
 applied in any valid order which obeys the assigned reaction priorities.
 
 Cyprus is a Turing complete language, though using it for anything other
@@ -79,7 +79,7 @@ losely defined [Turing Tarpit](http://en.wikipedia.org/wiki/Turing_tarpit).
   1. Ensure you have Python3 ~~2.7 installed (not Python 3+!)~~
   2. Install funcparser lib with `pip install funcparserlib`
   3. Clone this repo
-    
+
 
 ## Using Cyprus
 
@@ -100,14 +100,14 @@ Convenience tools include:
 
 Edit
 
-```    
-    run.sh 
 ```
-    
+    run.sh
+```
+
 or add to Makefile.
 
 ---
-     
+
 # Cyprus' grammar
 
 Here's the grammar, in a modified EBNF:
@@ -120,7 +120,7 @@ Here's the grammar, in a modified EBNF:
     expr           := exists | reaction | priority
     exists         := "exists", "~", name, {name}
     reaction       := "reaction", <"as", name>, "~", name, {name}, "::",
-                       {symbol} 
+                       {symbol}
     priority       := "priority", "~", name, ">>", name
     name           := number | atom
     atom           := [A-Za-z], {[A-Za-z0-9]}
@@ -131,7 +131,7 @@ Here's the grammar, in a modified EBNF:
 see [examples/README.md](examples/README.md)
 
 
-Those examples, along with the grammar, show pretty much all you need to 
+Those examples, along with the grammar, show pretty much all you need to
 know about writing Cyprus programs.
 
 Planned features

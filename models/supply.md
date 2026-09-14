@@ -29,7 +29,3 @@ also
 - Supply Chain Risk Management and Resilience
 
 - Pricing and Revenue-Oriented Capacity Allocation
-
-
-
-

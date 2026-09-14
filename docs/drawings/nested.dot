@@ -30,5 +30,5 @@ digraph G {
     }
 
     edge[style=solid, penwidth=1, constraint=false];
-    
+
 }

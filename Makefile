@@ -3,14 +3,14 @@
 install_deps:
 	pip install funcparserlib
 
-lexertest: 
+lexertest:
 	python3 ./test/lexertest.py
 
-example1: 
+example1:
 	python3 -v cyprus.py -V ./examples/example1.cyp  >out.txt 2>&1
 
 
-example2: 
+example2:
 	python3 cyprus.py -V ./examples/example2.cyp
 
 hello:
@@ -22,6 +22,6 @@ demo:
 tests:
 	./do_tests.sh
 
-clean: 
+clean:
 	rm ./cyprus.log
 	echo "removed cyprus.log"

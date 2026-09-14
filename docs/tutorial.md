@@ -220,9 +220,9 @@ INFO:root:             symbols: [a, c]
 INFO:root:             rules: [[a] -> [a, b] (1), [a] -> [b, $] (1), [c] -> [c, c] (1)]
 INFO:root:             staging area: []
 INFO:root:             Membranes:
-INFO:root:            
-INFO:root:        
-INFO:root:    
+INFO:root:
+INFO:root:
+INFO:root:
 INFO:root:]
 INFO:root:Clock tick: 1
 INFO:root: [name: env
@@ -240,8 +240,8 @@ INFO:root:         symbols: [c, c, b]
 INFO:root:         rules: [[b] -> [d] (1), [d] -> [d, e] (1), [c, c] -> [c] (2)[c1]), [c] -> [$] (1)[c2])]
 INFO:root:         staging area: []
 INFO:root:         Membranes:
-INFO:root:        
-INFO:root:    
+INFO:root:
+INFO:root:
 INFO:root:]
 INFO:root:Clock tick: 2
 INFO:root: [name: env
@@ -259,8 +259,8 @@ INFO:root:         symbols: [c, d]
 INFO:root:         rules: [[b] -> [d] (1), [d] -> [d, e] (1), [c, c] -> [c] (2)[c1]), [c] -> [$] (1)[c2])]
 INFO:root:         staging area: []
 INFO:root:         Membranes:
-INFO:root:        
-INFO:root:    
+INFO:root:
+INFO:root:
 INFO:root:]
 INFO:root:Clock tick: 3
 INFO:root: [name: env
@@ -273,7 +273,7 @@ INFO:root:     symbols: [d, e]
 INFO:root:     rules: [[e] -> [!e] (1)]
 INFO:root:     staging area: []
 INFO:root:     Membranes:
-INFO:root:    
+INFO:root:
 INFO:root:]
 INFO:root:Clock tick: 4
 INFO:root: [name: env
@@ -286,7 +286,7 @@ INFO:root:     symbols: [d]
 INFO:root:     rules: [[e] -> [!e] (1)]
 INFO:root:     staging area: []
 INFO:root:     Membranes:
-INFO:root:    
+INFO:root:
 INFO:root:]
 INFO:root:Clock tick: 5
 INFO:root: [name: env
@@ -299,7 +299,6 @@ INFO:root:     symbols: [d]
 INFO:root:     rules: [[e] -> [!e] (1)]
 INFO:root:     staging area: []
 INFO:root:     Membranes:
-INFO:root:    
+INFO:root:
 INFO:root:]
 INFO:root:env: [e]
-

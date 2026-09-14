@@ -1,0 +1,396 @@
+baseline0/cyprus/malta/simulation.py
+making random rules from alphabet: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
+edge: (1, 0)
+edge: (2, 1)
+edge: (3, 1)
+edge: (4, 1)
+edge: (5, 1)
+edge: (6, 1)
+edge: (7, 1)
+edge: (8, 1)
+edge: (9, 8)
+running membrane simulation
+see output: ./sims/
+tick: 0
+2 has: {g}
+3 has: {e, f, d, h}
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+4 has: {f}
+5 has: {f, d, g, c, j, h, b, k}
+firing rule: rule
+	catalysts: {g}
+	input: {d}
+	output: {h}
+
+firing rule: rule
+	catalysts: {b}
+	input: {k}
+	output: {i}
+
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+6 has: {i, g, k, a, h, b, c, f, d, e, j}
+firing rule: rule
+	catalysts: {g}
+	input: {d}
+	output: {h}
+
+firing rule: rule
+	catalysts: {b}
+	input: {k}
+	output: {i}
+
+firing rule: rule
+	catalysts: {e}
+	input: {i}
+	output: {j}
+
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {e}
+	input: {i}
+	output: {d}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+firing rule: rule
+	catalysts: {d}
+	input: {j}
+	output: {h}
+
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+7 has: {k, c, g, a, j, e}
+firing rule: rule
+	catalysts: {c}
+	input: {k}
+	output: {f}
+
+9 has: {j, e, d, g, b, i}
+firing rule: rule
+	catalysts: {g}
+	input: {d}
+	output: {h}
+
+firing rule: rule
+	catalysts: {e}
+	input: {i}
+	output: {j}
+
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+8 has: {a, f, j, h, e, g}
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+1 has: {a, j, i, k, b, d, c, h}
+firing rule: rule
+	catalysts: {b}
+	input: {k}
+	output: {i}
+
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {d}
+	input: {j}
+	output: {h}
+
+root has: {}
+[0, 1, 2]
+[0, 1, 3]
+[0, 1, 4]
+[0, 1, 5]
+[0, 1, 6]
+[0, 1, 7]
+[0, 1, 8, 9]
+tick: 1
+2 has: {g}
+3 has: {e, f, d, g}
+firing rule: rule
+	catalysts: {g}
+	input: {d}
+	output: {h}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+4 has: {f}
+5 has: {f, c, j, h, i, a, b, g}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+6 has: {a, a, h, h, c, f, e, j, d, b, g}
+firing rule: rule
+	catalysts: {g}
+	input: {d}
+	output: {h}
+
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+7 has: {c, g, a, j, e, f}
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+9 has: {j, j, e, g, h, a}
+8 has: {a, f, j, e, b, g}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+1 has: {a, a, i, i, d, c, h, h}
+root has: {}
+[0, 1, 2]
+[0, 1, 3]
+[0, 1, 4]
+[0, 1, 5]
+[0, 1, 6]
+[0, 1, 7]
+[0, 1, 8, 9]
+tick: 2
+2 has: {g}
+3 has: {e, f, b, g}
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+4 has: {f}
+5 has: {f, c, j, i, a, a, b, g}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+6 has: {a, a, a, h, h, c, f, e, j, b, g}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+7 has: {c, a, j, e, f, b}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+9 has: {j, j, e, g, h, a}
+8 has: {a, a, f, j, e, b}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+1 has: {a, a, i, i, d, c, h, h}
+root has: {}
+[0, 1, 2]
+[0, 1, 3]
+[0, 1, 4]
+[0, 1, 5]
+[0, 1, 6]
+[0, 1, 7]
+[0, 1, 8, 9]
+tick: 3
+2 has: {g}
+3 has: {e, f, b, b}
+4 has: {f}
+5 has: {f, c, j, i, a, a, a, b}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+6 has: {a, a, a, a, h, c, f, e, j, b, g}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+firing rule: rule
+	catalysts: {f}
+	input: {h}
+	output: {g}
+
+7 has: {c, a, a, j, e, f}
+9 has: {j, j, e, g, h, a}
+8 has: {a, a, a, f, j, e}
+1 has: {a, a, i, i, d, c, h, h}
+root has: {}
+[0, 1, 2]
+[0, 1, 3]
+[0, 1, 4]
+[0, 1, 5]
+[0, 1, 6]
+[0, 1, 7]
+[0, 1, 8, 9]
+tick: 4
+2 has: {g}
+3 has: {e, f, b, b}
+4 has: {f}
+5 has: {f, c, j, i, a, a, a, a}
+6 has: {a, a, a, a, a, c, f, e, j, b, g}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+firing rule: rule
+	catalysts: {f}
+	input: {g}
+	output: {b}
+
+7 has: {c, a, a, j, e, f}
+9 has: {j, j, e, g, h, a}
+8 has: {a, a, a, f, j, e}
+1 has: {a, a, i, i, d, c, h, h}
+root has: {}
+[0, 1, 2]
+[0, 1, 3]
+[0, 1, 4]
+[0, 1, 5]
+[0, 1, 6]
+[0, 1, 7]
+[0, 1, 8, 9]
+tick: 5
+2 has: {g}
+3 has: {e, f, b, b}
+4 has: {f}
+5 has: {f, c, j, i, a, a, a, a}
+6 has: {a, a, a, a, a, a, c, f, e, j, b}
+firing rule: rule
+	catalysts: {j}
+	input: {b}
+	output: {a}
+
+7 has: {c, a, a, j, e, f}
+9 has: {j, j, e, g, h, a}
+8 has: {a, a, a, f, j, e}
+1 has: {a, a, i, i, d, c, h, h}
+root has: {}
+[0, 1, 2]
+[0, 1, 3]
+[0, 1, 4]
+[0, 1, 5]
+[0, 1, 6]
+[0, 1, 7]
+[0, 1, 8, 9]
+tick: 6
+2 has: {g}
+3 has: {e, f, b, b}
+4 has: {f}
+5 has: {f, c, j, i, a, a, a, a}
+6 has: {a, a, a, a, a, a, a, c, f, e, j}
+7 has: {c, a, a, j, e, f}
+9 has: {j, j, e, g, h, a}
+8 has: {a, a, a, f, j, e}
+1 has: {a, a, i, i, d, c, h, h}
+root has: {}
+[0, 1, 2]
+[0, 1, 3]
+[0, 1, 4]
+[0, 1, 5]
+[0, 1, 6]
+[0, 1, 7]
+[0, 1, 8, 9]
+stopping early based on env state. (no rule fired)
+DONE.

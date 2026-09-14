@@ -1,0 +1,964 @@
+import _frozen_importlib # frozen
+import _imp # builtin
+import '_thread' # <class '_frozen_importlib.BuiltinImporter'>
+import '_warnings' # <class '_frozen_importlib.BuiltinImporter'>
+import '_weakref' # <class '_frozen_importlib.BuiltinImporter'>
+import '_io' # <class '_frozen_importlib.BuiltinImporter'>
+import 'marshal' # <class '_frozen_importlib.BuiltinImporter'>
+import 'posix' # <class '_frozen_importlib.BuiltinImporter'>
+import '_frozen_importlib_external' # <class '_frozen_importlib.FrozenImporter'>
+# installing zipimport hook
+import 'time' # <class '_frozen_importlib.BuiltinImporter'>
+import 'zipimport' # <class '_frozen_importlib.FrozenImporter'>
+# installed zipimport hook
+# /usr/lib/python3.10/encodings/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/encodings/__init__.py
+# code object from '/usr/lib/python3.10/encodings/__pycache__/__init__.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/codecs.cpython-310.pyc matches /usr/lib/python3.10/codecs.py
+# code object from '/usr/lib/python3.10/__pycache__/codecs.cpython-310.pyc'
+import '_codecs' # <class '_frozen_importlib.BuiltinImporter'>
+import 'codecs' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e14d7f70>
+# /usr/lib/python3.10/encodings/__pycache__/aliases.cpython-310.pyc matches /usr/lib/python3.10/encodings/aliases.py
+# code object from '/usr/lib/python3.10/encodings/__pycache__/aliases.cpython-310.pyc'
+import 'encodings.aliases' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c1540>
+import 'encodings' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e14d7d30>
+# /usr/lib/python3.10/encodings/__pycache__/utf_8.cpython-310.pyc matches /usr/lib/python3.10/encodings/utf_8.py
+# code object from '/usr/lib/python3.10/encodings/__pycache__/utf_8.cpython-310.pyc'
+import 'encodings.utf_8' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c0610>
+import '_signal' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.10/__pycache__/io.cpython-310.pyc matches /usr/lib/python3.10/io.py
+# code object from '/usr/lib/python3.10/__pycache__/io.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/abc.cpython-310.pyc matches /usr/lib/python3.10/abc.py
+# code object from '/usr/lib/python3.10/__pycache__/abc.cpython-310.pyc'
+import '_abc' # <class '_frozen_importlib.BuiltinImporter'>
+import 'abc' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c18a0>
+import 'io' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c1690>
+# /usr/lib/python3.10/__pycache__/site.cpython-310.pyc matches /usr/lib/python3.10/site.py
+# code object from '/usr/lib/python3.10/__pycache__/site.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/os.cpython-310.pyc matches /usr/lib/python3.10/os.py
+# code object from '/usr/lib/python3.10/__pycache__/os.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/stat.cpython-310.pyc matches /usr/lib/python3.10/stat.py
+# code object from '/usr/lib/python3.10/__pycache__/stat.cpython-310.pyc'
+import '_stat' # <class '_frozen_importlib.BuiltinImporter'>
+import 'stat' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c3ac0>
+# /usr/lib/python3.10/__pycache__/_collections_abc.cpython-310.pyc matches /usr/lib/python3.10/_collections_abc.py
+# code object from '/usr/lib/python3.10/__pycache__/_collections_abc.cpython-310.pyc'
+import '_collections_abc' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c3e20>
+# /usr/lib/python3.10/__pycache__/posixpath.cpython-310.pyc matches /usr/lib/python3.10/posixpath.py
+# code object from '/usr/lib/python3.10/__pycache__/posixpath.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/genericpath.cpython-310.pyc matches /usr/lib/python3.10/genericpath.py
+# code object from '/usr/lib/python3.10/__pycache__/genericpath.cpython-310.pyc'
+import 'genericpath' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12fa650>
+import 'posixpath' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c3eb0>
+import 'os' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c26e0>
+# /usr/lib/python3.10/__pycache__/_sitebuiltins.cpython-310.pyc matches /usr/lib/python3.10/_sitebuiltins.py
+# code object from '/usr/lib/python3.10/__pycache__/_sitebuiltins.cpython-310.pyc'
+import '_sitebuiltins' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c37c0>
+Processing user site-packages
+Processing global site-packages
+Adding directory: '/usr/local/lib/python3.10/dist-packages'
+Adding directory: '/usr/lib/python3/dist-packages'
+Processing .pth file: '/usr/lib/python3/dist-packages/matplotlib-3.5.1-nspkg.pth'
+# /usr/lib/python3.10/__pycache__/types.cpython-310.pyc matches /usr/lib/python3.10/types.py
+# code object from '/usr/lib/python3.10/__pycache__/types.cpython-310.pyc'
+import 'types' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12fbdc0>
+# /usr/lib/python3.10/importlib/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/importlib/__init__.py
+# code object from '/usr/lib/python3.10/importlib/__pycache__/__init__.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/warnings.cpython-310.pyc matches /usr/lib/python3.10/warnings.py
+# code object from '/usr/lib/python3.10/__pycache__/warnings.cpython-310.pyc'
+import 'warnings' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12fb010>
+import 'importlib' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12fb490>
+# /usr/lib/python3.10/importlib/__pycache__/util.cpython-310.pyc matches /usr/lib/python3.10/importlib/util.py
+# code object from '/usr/lib/python3.10/importlib/__pycache__/util.cpython-310.pyc'
+# /usr/lib/python3.10/importlib/__pycache__/_abc.cpython-310.pyc matches /usr/lib/python3.10/importlib/_abc.py
+# code object from '/usr/lib/python3.10/importlib/__pycache__/_abc.cpython-310.pyc'
+import 'importlib._abc' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1331e10>
+# /usr/lib/python3.10/__pycache__/contextlib.cpython-310.pyc matches /usr/lib/python3.10/contextlib.py
+# code object from '/usr/lib/python3.10/__pycache__/contextlib.cpython-310.pyc'
+# /usr/lib/python3.10/collections/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/collections/__init__.py
+# code object from '/usr/lib/python3.10/collections/__pycache__/__init__.cpython-310.pyc'
+import 'itertools' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.10/__pycache__/keyword.cpython-310.pyc matches /usr/lib/python3.10/keyword.py
+# code object from '/usr/lib/python3.10/__pycache__/keyword.cpython-310.pyc'
+import 'keyword' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e13706d0>
+# /usr/lib/python3.10/__pycache__/operator.cpython-310.pyc matches /usr/lib/python3.10/operator.py
+# code object from '/usr/lib/python3.10/__pycache__/operator.cpython-310.pyc'
+import '_operator' # <class '_frozen_importlib.BuiltinImporter'>
+import 'operator' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1370790>
+# /usr/lib/python3.10/__pycache__/reprlib.cpython-310.pyc matches /usr/lib/python3.10/reprlib.py
+# code object from '/usr/lib/python3.10/__pycache__/reprlib.cpython-310.pyc'
+import 'reprlib' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e13709a0>
+import '_collections' # <class '_frozen_importlib.BuiltinImporter'>
+import 'collections' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1330550>
+# /usr/lib/python3.10/__pycache__/functools.cpython-310.pyc matches /usr/lib/python3.10/functools.py
+# code object from '/usr/lib/python3.10/__pycache__/functools.cpython-310.pyc'
+import '_functools' # <class '_frozen_importlib.BuiltinImporter'>
+import 'functools' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1371720>
+import 'contextlib' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1331c00>
+import 'importlib.util' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12fa980>
+# /usr/lib/python3.10/importlib/__pycache__/machinery.cpython-310.pyc matches /usr/lib/python3.10/importlib/machinery.py
+# code object from '/usr/lib/python3.10/importlib/__pycache__/machinery.cpython-310.pyc'
+import 'importlib.machinery' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e13313c0>
+Adding directory: '/usr/lib/python3.10/dist-packages'
+# /usr/lib/python3.10/__pycache__/sitecustomize.cpython-310.pyc matches /usr/lib/python3.10/sitecustomize.py
+# code object from '/usr/lib/python3.10/__pycache__/sitecustomize.cpython-310.pyc'
+# /usr/lib/python3/dist-packages/__pycache__/apport_python_hook.cpython-310.pyc matches /usr/lib/python3/dist-packages/apport_python_hook.py
+# code object from '/usr/lib/python3/dist-packages/__pycache__/apport_python_hook.cpython-310.pyc'
+import 'apport_python_hook' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12fbfa0>
+import 'sitecustomize' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12fbbb0>
+import 'site' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12c20b0>
+Python 3.10.4 (main, Apr  2 2022, 09:04:19) [GCC 11.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+# /usr/lib/python3.10/__pycache__/getopt.cpython-310.pyc matches /usr/lib/python3.10/getopt.py
+# code object from '/usr/lib/python3.10/__pycache__/getopt.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/gettext.cpython-310.pyc matches /usr/lib/python3.10/gettext.py
+# code object from '/usr/lib/python3.10/__pycache__/gettext.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/re.cpython-310.pyc matches /usr/lib/python3.10/re.py
+# code object from '/usr/lib/python3.10/__pycache__/re.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/enum.cpython-310.pyc matches /usr/lib/python3.10/enum.py
+# code object from '/usr/lib/python3.10/__pycache__/enum.cpython-310.pyc'
+import 'enum' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118e980>
+# /usr/lib/python3.10/__pycache__/sre_compile.cpython-310.pyc matches /usr/lib/python3.10/sre_compile.py
+# code object from '/usr/lib/python3.10/__pycache__/sre_compile.cpython-310.pyc'
+import '_sre' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.10/__pycache__/sre_parse.cpython-310.pyc matches /usr/lib/python3.10/sre_parse.py
+# code object from '/usr/lib/python3.10/__pycache__/sre_parse.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/sre_constants.cpython-310.pyc matches /usr/lib/python3.10/sre_constants.py
+# code object from '/usr/lib/python3.10/__pycache__/sre_constants.cpython-310.pyc'
+import 'sre_constants' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1373550>
+import 'sre_parse' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118c190>
+import 'sre_compile' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118ca60>
+import '_locale' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.10/__pycache__/copyreg.cpython-310.pyc matches /usr/lib/python3.10/copyreg.py
+# code object from '/usr/lib/python3.10/__pycache__/copyreg.cpython-310.pyc'
+import 'copyreg' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1190af0>
+import 're' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118f1f0>
+import 'gettext' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118fa30>
+import 'getopt' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118fcd0>
+# possible namespace for /home/mark/projects/baseline0/cyprus
+# /home/mark/projects/baseline0/cyprus/cyprus/__pycache__/__init__.cpython-310.pyc matches /home/mark/projects/baseline0/cyprus/cyprus/__init__.py
+# code object from '/home/mark/projects/baseline0/cyprus/cyprus/__pycache__/__init__.cpython-310.pyc'
+import 'cyprus' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118f370>
+# code object from /home/mark/projects/baseline0/cyprus/cyprus/base.py
+# created '/home/mark/projects/baseline0/cyprus/cyprus/__pycache__/base.cpython-310.pyc'
+# /usr/lib/python3.10/logging/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/logging/__init__.py
+# code object from '/usr/lib/python3.10/logging/__pycache__/__init__.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/traceback.cpython-310.pyc matches /usr/lib/python3.10/traceback.py
+# code object from '/usr/lib/python3.10/__pycache__/traceback.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/linecache.cpython-310.pyc matches /usr/lib/python3.10/linecache.py
+# code object from '/usr/lib/python3.10/__pycache__/linecache.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/tokenize.cpython-310.pyc matches /usr/lib/python3.10/tokenize.py
+# code object from '/usr/lib/python3.10/__pycache__/tokenize.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/token.cpython-310.pyc matches /usr/lib/python3.10/token.py
+# code object from '/usr/lib/python3.10/__pycache__/token.cpython-310.pyc'
+import 'token' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1200880>
+import 'tokenize' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1201120>
+import 'linecache' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1201870>
+import 'traceback' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1202350>
+# /usr/lib/python3.10/__pycache__/weakref.cpython-310.pyc matches /usr/lib/python3.10/weakref.py
+# code object from '/usr/lib/python3.10/__pycache__/weakref.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/_weakrefset.cpython-310.pyc matches /usr/lib/python3.10/_weakrefset.py
+# code object from '/usr/lib/python3.10/__pycache__/_weakrefset.cpython-310.pyc'
+import '_weakrefset' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12480d0>
+import 'weakref' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1201060>
+# /usr/lib/python3.10/collections/__pycache__/abc.cpython-310.pyc matches /usr/lib/python3.10/collections/abc.py
+# code object from '/usr/lib/python3.10/collections/__pycache__/abc.cpython-310.pyc'
+import 'collections.abc' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1248b80>
+# /usr/lib/python3.10/__pycache__/string.cpython-310.pyc matches /usr/lib/python3.10/string.py
+# code object from '/usr/lib/python3.10/__pycache__/string.cpython-310.pyc'
+import '_string' # <class '_frozen_importlib.BuiltinImporter'>
+import 'string' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1248c70>
+# /usr/lib/python3.10/__pycache__/threading.cpython-310.pyc matches /usr/lib/python3.10/threading.py
+# code object from '/usr/lib/python3.10/__pycache__/threading.cpython-310.pyc'
+import 'threading' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e12491e0>
+import 'atexit' # <class '_frozen_importlib.BuiltinImporter'>
+import 'logging' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1200490>
+import 'cyprus.base' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118ee60>
+# /home/mark/projects/baseline0/cyprus/cyprus/__pycache__/program.cpython-310.pyc matches /home/mark/projects/baseline0/cyprus/cyprus/program.py
+# code object from '/home/mark/projects/baseline0/cyprus/cyprus/__pycache__/program.cpython-310.pyc'
+# /home/mark/projects/baseline0/cyprus/cyprus/__pycache__/utils.cpython-310.pyc matches /home/mark/projects/baseline0/cyprus/cyprus/utils.py
+# code object from '/home/mark/projects/baseline0/cyprus/cyprus/__pycache__/utils.cpython-310.pyc'
+# /home/mark/projects/baseline0/cyprus/cyprus/__pycache__/parser.cpython-310.pyc matches /home/mark/projects/baseline0/cyprus/cyprus/parser.py
+# code object from '/home/mark/projects/baseline0/cyprus/cyprus/__pycache__/parser.cpython-310.pyc'
+# extension module 'apt_pkg' loaded from '/usr/lib/python3/dist-packages/apt_pkg.cpython-310-x86_64-linux-gnu.so'
+# extension module 'apt_pkg' executed from '/usr/lib/python3/dist-packages/apt_pkg.cpython-310-x86_64-linux-gnu.so'
+import 'apt_pkg' # <_frozen_importlib_external.ExtensionFileLoader object at 0x7fc8e1331990>
+# /usr/lib/python3/dist-packages/apport/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3/dist-packages/apport/__init__.py
+# code object from '/usr/lib/python3/dist-packages/apport/__pycache__/__init__.cpython-310.pyc'
+# /usr/lib/python3/dist-packages/apport/__pycache__/report.cpython-310.pyc matches /usr/lib/python3/dist-packages/apport/report.py
+# code object from '/usr/lib/python3/dist-packages/apport/__pycache__/report.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/subprocess.cpython-310.pyc matches /usr/lib/python3.10/subprocess.py
+# code object from '/usr/lib/python3.10/__pycache__/subprocess.cpython-310.pyc'
+import 'errno' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.10/__pycache__/signal.cpython-310.pyc matches /usr/lib/python3.10/signal.py
+# code object from '/usr/lib/python3.10/__pycache__/signal.cpython-310.pyc'
+import 'signal' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e10dc190>
+import 'fcntl' # <class '_frozen_importlib.BuiltinImporter'>
+import '_posixsubprocess' # <class '_frozen_importlib.BuiltinImporter'>
+import 'select' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.10/__pycache__/selectors.cpython-310.pyc matches /usr/lib/python3.10/selectors.py
+# code object from '/usr/lib/python3.10/__pycache__/selectors.cpython-310.pyc'
+import 'math' # <class '_frozen_importlib.BuiltinImporter'>
+import 'selectors' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e10dceb0>
+import 'subprocess' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118dc00>
+# /usr/lib/python3.10/__pycache__/tempfile.cpython-310.pyc matches /usr/lib/python3.10/tempfile.py
+# code object from '/usr/lib/python3.10/__pycache__/tempfile.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/shutil.cpython-310.pyc matches /usr/lib/python3.10/shutil.py
+# code object from '/usr/lib/python3.10/__pycache__/shutil.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/fnmatch.cpython-310.pyc matches /usr/lib/python3.10/fnmatch.py
+# code object from '/usr/lib/python3.10/__pycache__/fnmatch.cpython-310.pyc'
+import 'fnmatch' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e10df760>
+import 'zlib' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.10/__pycache__/bz2.cpython-310.pyc matches /usr/lib/python3.10/bz2.py
+# code object from '/usr/lib/python3.10/__pycache__/bz2.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/_compression.cpython-310.pyc matches /usr/lib/python3.10/_compression.py
+# code object from '/usr/lib/python3.10/__pycache__/_compression.cpython-310.pyc'
+import '_compression' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11142e0>
+# extension module '_bz2' loaded from '/usr/lib/python3.10/lib-dynload/_bz2.cpython-310-x86_64-linux-gnu.so'
+# extension module '_bz2' executed from '/usr/lib/python3.10/lib-dynload/_bz2.cpython-310-x86_64-linux-gnu.so'
+import '_bz2' # <_frozen_importlib_external.ExtensionFileLoader object at 0x7fc8e11147f0>
+import 'bz2' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e10dfac0>
+# /usr/lib/python3.10/__pycache__/lzma.cpython-310.pyc matches /usr/lib/python3.10/lzma.py
+# code object from '/usr/lib/python3.10/__pycache__/lzma.cpython-310.pyc'
+# extension module '_lzma' loaded from '/usr/lib/python3.10/lib-dynload/_lzma.cpython-310-x86_64-linux-gnu.so'
+# extension module '_lzma' executed from '/usr/lib/python3.10/lib-dynload/_lzma.cpython-310-x86_64-linux-gnu.so'
+import '_lzma' # <_frozen_importlib_external.ExtensionFileLoader object at 0x7fc8e1114eb0>
+import 'lzma' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1114850>
+import 'shutil' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e10de980>
+# /usr/lib/python3.10/__pycache__/random.cpython-310.pyc matches /usr/lib/python3.10/random.py
+# code object from '/usr/lib/python3.10/__pycache__/random.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/bisect.cpython-310.pyc matches /usr/lib/python3.10/bisect.py
+# code object from '/usr/lib/python3.10/__pycache__/bisect.cpython-310.pyc'
+import '_bisect' # <class '_frozen_importlib.BuiltinImporter'>
+import 'bisect' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1115f60>
+import '_random' # <class '_frozen_importlib.BuiltinImporter'>
+import '_sha512' # <class '_frozen_importlib.BuiltinImporter'>
+import 'random' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1115900>
+import 'tempfile' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e118dea0>
+import 'pwd' # <class '_frozen_importlib.BuiltinImporter'>
+import 'grp' # <class '_frozen_importlib.BuiltinImporter'>
+# /usr/lib/python3.10/__pycache__/glob.cpython-310.pyc matches /usr/lib/python3.10/glob.py
+# code object from '/usr/lib/python3.10/__pycache__/glob.cpython-310.pyc'
+import 'glob' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11161a0>
+# /usr/lib/python3.10/__pycache__/locale.cpython-310.pyc matches /usr/lib/python3.10/locale.py
+# code object from '/usr/lib/python3.10/__pycache__/locale.cpython-310.pyc'
+import 'locale' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11165f0>
+# /usr/lib/python3.10/__pycache__/imp.cpython-310.pyc matches /usr/lib/python3.10/imp.py
+# code object from '/usr/lib/python3.10/__pycache__/imp.cpython-310.pyc'
+import 'imp' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1117040>
+# /usr/lib/python3.10/xml/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/xml/__init__.py
+# code object from '/usr/lib/python3.10/xml/__pycache__/__init__.cpython-310.pyc'
+import 'xml' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11177c0>
+# /usr/lib/python3.10/xml/dom/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/xml/dom/__init__.py
+# code object from '/usr/lib/python3.10/xml/dom/__pycache__/__init__.cpython-310.pyc'
+# /usr/lib/python3.10/xml/dom/__pycache__/domreg.cpython-310.pyc matches /usr/lib/python3.10/xml/dom/domreg.py
+# code object from '/usr/lib/python3.10/xml/dom/__pycache__/domreg.cpython-310.pyc'
+import 'xml.dom.domreg' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1117ee0>
+import 'xml.dom' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1117820>
+# /usr/lib/python3.10/xml/dom/__pycache__/minidom.cpython-310.pyc matches /usr/lib/python3.10/xml/dom/minidom.py
+# code object from '/usr/lib/python3.10/xml/dom/__pycache__/minidom.cpython-310.pyc'
+# /usr/lib/python3.10/xml/dom/__pycache__/minicompat.cpython-310.pyc matches /usr/lib/python3.10/xml/dom/minicompat.py
+# code object from '/usr/lib/python3.10/xml/dom/__pycache__/minicompat.cpython-310.pyc'
+import 'xml.dom.minicompat' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1171ea0>
+# /usr/lib/python3.10/xml/dom/__pycache__/xmlbuilder.cpython-310.pyc matches /usr/lib/python3.10/xml/dom/xmlbuilder.py
+# code object from '/usr/lib/python3.10/xml/dom/__pycache__/xmlbuilder.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/copy.cpython-310.pyc matches /usr/lib/python3.10/copy.py
+# code object from '/usr/lib/python3.10/__pycache__/copy.cpython-310.pyc'
+import 'copy' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1172c50>
+# /usr/lib/python3.10/xml/dom/__pycache__/NodeFilter.cpython-310.pyc matches /usr/lib/python3.10/xml/dom/NodeFilter.py
+# code object from '/usr/lib/python3.10/xml/dom/__pycache__/NodeFilter.cpython-310.pyc'
+import 'xml.dom.NodeFilter' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1172fb0>
+import 'xml.dom.xmlbuilder' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11722c0>
+import 'xml.dom.minidom' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1117f40>
+# /usr/lib/python3.10/xml/parsers/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/xml/parsers/__init__.py
+# code object from '/usr/lib/python3.10/xml/parsers/__pycache__/__init__.cpython-310.pyc'
+import 'xml.parsers' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11735e0>
+# /usr/lib/python3.10/xml/parsers/__pycache__/expat.cpython-310.pyc matches /usr/lib/python3.10/xml/parsers/expat.py
+# code object from '/usr/lib/python3.10/xml/parsers/__pycache__/expat.cpython-310.pyc'
+import 'pyexpat' # <class '_frozen_importlib.BuiltinImporter'>
+import 'xml.parsers.expat' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11736d0>
+# /usr/lib/python3.10/urllib/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/urllib/__init__.py
+# code object from '/usr/lib/python3.10/urllib/__pycache__/__init__.cpython-310.pyc'
+import 'urllib' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1173850>
+# /usr/lib/python3.10/urllib/__pycache__/error.cpython-310.pyc matches /usr/lib/python3.10/urllib/error.py
+# code object from '/usr/lib/python3.10/urllib/__pycache__/error.cpython-310.pyc'
+# /usr/lib/python3.10/urllib/__pycache__/response.cpython-310.pyc matches /usr/lib/python3.10/urllib/response.py
+# code object from '/usr/lib/python3.10/urllib/__pycache__/response.cpython-310.pyc'
+import 'urllib.response' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1173cd0>
+import 'urllib.error' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1173910>
+# /usr/lib/python3.10/urllib/__pycache__/request.cpython-310.pyc matches /usr/lib/python3.10/urllib/request.py
+# code object from '/usr/lib/python3.10/urllib/__pycache__/request.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/base64.cpython-310.pyc matches /usr/lib/python3.10/base64.py
+# code object from '/usr/lib/python3.10/__pycache__/base64.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/struct.cpython-310.pyc matches /usr/lib/python3.10/struct.py
+# code object from '/usr/lib/python3.10/__pycache__/struct.cpython-310.pyc'
+import '_struct' # <class '_frozen_importlib.BuiltinImporter'>
+import 'struct' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07730a0>
+import 'binascii' # <class '_frozen_importlib.BuiltinImporter'>
+import 'base64' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07723e0>
+# /usr/lib/python3.10/email/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/email/__init__.py
+# code object from '/usr/lib/python3.10/email/__pycache__/__init__.cpython-310.pyc'
+import 'email' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0773250>
+# /usr/lib/python3.10/__pycache__/hashlib.cpython-310.pyc matches /usr/lib/python3.10/hashlib.py
+# code object from '/usr/lib/python3.10/__pycache__/hashlib.cpython-310.pyc'
+# extension module '_hashlib' loaded from '/usr/lib/python3.10/lib-dynload/_hashlib.cpython-310-x86_64-linux-gnu.so'
+# extension module '_hashlib' executed from '/usr/lib/python3.10/lib-dynload/_hashlib.cpython-310-x86_64-linux-gnu.so'
+import '_hashlib' # <_frozen_importlib_external.ExtensionFileLoader object at 0x7fc8e07736a0>
+import '_blake2' # <class '_frozen_importlib.BuiltinImporter'>
+import 'hashlib' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0773310>
+# /usr/lib/python3.10/http/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/http/__init__.py
+# code object from '/usr/lib/python3.10/http/__pycache__/__init__.cpython-310.pyc'
+import 'http' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0773b20>
+# /usr/lib/python3.10/http/__pycache__/client.cpython-310.pyc matches /usr/lib/python3.10/http/client.py
+# code object from '/usr/lib/python3.10/http/__pycache__/client.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/parser.cpython-310.pyc matches /usr/lib/python3.10/email/parser.py
+# code object from '/usr/lib/python3.10/email/__pycache__/parser.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/feedparser.cpython-310.pyc matches /usr/lib/python3.10/email/feedparser.py
+# code object from '/usr/lib/python3.10/email/__pycache__/feedparser.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/errors.cpython-310.pyc matches /usr/lib/python3.10/email/errors.py
+# code object from '/usr/lib/python3.10/email/__pycache__/errors.cpython-310.pyc'
+import 'email.errors' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07b22c0>
+# /usr/lib/python3.10/email/__pycache__/_policybase.cpython-310.pyc matches /usr/lib/python3.10/email/_policybase.py
+# code object from '/usr/lib/python3.10/email/__pycache__/_policybase.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/header.cpython-310.pyc matches /usr/lib/python3.10/email/header.py
+# code object from '/usr/lib/python3.10/email/__pycache__/header.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/quoprimime.cpython-310.pyc matches /usr/lib/python3.10/email/quoprimime.py
+# code object from '/usr/lib/python3.10/email/__pycache__/quoprimime.cpython-310.pyc'
+import 'email.quoprimime' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07b3df0>
+# /usr/lib/python3.10/email/__pycache__/base64mime.cpython-310.pyc matches /usr/lib/python3.10/email/base64mime.py
+# code object from '/usr/lib/python3.10/email/__pycache__/base64mime.cpython-310.pyc'
+import 'email.base64mime' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07e0340>
+# /usr/lib/python3.10/email/__pycache__/charset.cpython-310.pyc matches /usr/lib/python3.10/email/charset.py
+# code object from '/usr/lib/python3.10/email/__pycache__/charset.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/encoders.cpython-310.pyc matches /usr/lib/python3.10/email/encoders.py
+# code object from '/usr/lib/python3.10/email/__pycache__/encoders.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/quopri.cpython-310.pyc matches /usr/lib/python3.10/quopri.py
+# code object from '/usr/lib/python3.10/__pycache__/quopri.cpython-310.pyc'
+import 'quopri' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07e0d90>
+import 'email.encoders' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07e0a00>
+import 'email.charset' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07e0520>
+import 'email.header' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07b3670>
+# /usr/lib/python3.10/email/__pycache__/utils.cpython-310.pyc matches /usr/lib/python3.10/email/utils.py
+# code object from '/usr/lib/python3.10/email/__pycache__/utils.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/socket.cpython-310.pyc matches /usr/lib/python3.10/socket.py
+# code object from '/usr/lib/python3.10/__pycache__/socket.cpython-310.pyc'
+import '_socket' # <class '_frozen_importlib.BuiltinImporter'>
+import 'array' # <class '_frozen_importlib.BuiltinImporter'>
+import 'socket' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07e15d0>
+# /usr/lib/python3.10/__pycache__/datetime.cpython-310.pyc matches /usr/lib/python3.10/datetime.py
+# code object from '/usr/lib/python3.10/__pycache__/datetime.cpython-310.pyc'
+import '_datetime' # <class '_frozen_importlib.BuiltinImporter'>
+import 'datetime' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07e2e00>
+# /usr/lib/python3.10/urllib/__pycache__/parse.cpython-310.pyc matches /usr/lib/python3.10/urllib/parse.py
+# code object from '/usr/lib/python3.10/urllib/__pycache__/parse.cpython-310.pyc'
+import 'urllib.parse' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07e2f50>
+# /usr/lib/python3.10/email/__pycache__/_parseaddr.cpython-310.pyc matches /usr/lib/python3.10/email/_parseaddr.py
+# code object from '/usr/lib/python3.10/email/__pycache__/_parseaddr.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/calendar.cpython-310.pyc matches /usr/lib/python3.10/calendar.py
+# code object from '/usr/lib/python3.10/__pycache__/calendar.cpython-310.pyc'
+import 'calendar' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e01d33a0>
+import 'email._parseaddr' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e01d3880>
+import 'email.utils' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07e0c10>
+import 'email._policybase' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07b2c80>
+import 'email.feedparser' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07b1c30>
+import 'email.parser' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07b17e0>
+# /usr/lib/python3.10/email/__pycache__/message.cpython-310.pyc matches /usr/lib/python3.10/email/message.py
+# code object from '/usr/lib/python3.10/email/__pycache__/message.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/uu.cpython-310.pyc matches /usr/lib/python3.10/uu.py
+# code object from '/usr/lib/python3.10/__pycache__/uu.cpython-310.pyc'
+import 'uu' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e021d9f0>
+# /usr/lib/python3.10/email/__pycache__/_encoded_words.cpython-310.pyc matches /usr/lib/python3.10/email/_encoded_words.py
+# code object from '/usr/lib/python3.10/email/__pycache__/_encoded_words.cpython-310.pyc'
+import 'email._encoded_words' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e021dc30>
+# /usr/lib/python3.10/email/__pycache__/iterators.cpython-310.pyc matches /usr/lib/python3.10/email/iterators.py
+# code object from '/usr/lib/python3.10/email/__pycache__/iterators.cpython-310.pyc'
+import 'email.iterators' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e021e080>
+import 'email.message' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07b1a50>
+# /usr/lib/python3.10/__pycache__/ssl.cpython-310.pyc matches /usr/lib/python3.10/ssl.py
+# code object from '/usr/lib/python3.10/__pycache__/ssl.cpython-310.pyc'
+# extension module '_ssl' loaded from '/usr/lib/python3.10/lib-dynload/_ssl.cpython-310-x86_64-linux-gnu.so'
+# extension module '_ssl' executed from '/usr/lib/python3.10/lib-dynload/_ssl.cpython-310-x86_64-linux-gnu.so'
+import '_ssl' # <_frozen_importlib_external.ExtensionFileLoader object at 0x7fc8e021fc70>
+import 'ssl' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e021e470>
+import 'http.client' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e07734f0>
+import 'urllib.request' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e1173f10>
+# /usr/lib/python3/dist-packages/__pycache__/problem_report.cpython-310.pyc matches /usr/lib/python3/dist-packages/problem_report.py
+# code object from '/usr/lib/python3/dist-packages/__pycache__/problem_report.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/gzip.cpython-310.pyc matches /usr/lib/python3.10/gzip.py
+# code object from '/usr/lib/python3.10/__pycache__/gzip.cpython-310.pyc'
+import 'gzip' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e02946a0>
+# /usr/lib/python3.10/email/mime/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/email/mime/__init__.py
+# code object from '/usr/lib/python3.10/email/mime/__pycache__/__init__.cpython-310.pyc'
+import 'email.mime' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0295db0>
+# /usr/lib/python3.10/email/mime/__pycache__/multipart.cpython-310.pyc matches /usr/lib/python3.10/email/mime/multipart.py
+# code object from '/usr/lib/python3.10/email/mime/__pycache__/multipart.cpython-310.pyc'
+# /usr/lib/python3.10/email/mime/__pycache__/base.cpython-310.pyc matches /usr/lib/python3.10/email/mime/base.py
+# code object from '/usr/lib/python3.10/email/mime/__pycache__/base.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/policy.cpython-310.pyc matches /usr/lib/python3.10/email/policy.py
+# code object from '/usr/lib/python3.10/email/__pycache__/policy.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/headerregistry.cpython-310.pyc matches /usr/lib/python3.10/email/headerregistry.py
+# code object from '/usr/lib/python3.10/email/__pycache__/headerregistry.cpython-310.pyc'
+# /usr/lib/python3.10/email/__pycache__/_header_value_parser.cpython-310.pyc matches /usr/lib/python3.10/email/_header_value_parser.py
+# code object from '/usr/lib/python3.10/email/__pycache__/_header_value_parser.cpython-310.pyc'
+import 'email._header_value_parser' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e02976d0>
+import 'email.headerregistry' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0296830>
+# /usr/lib/python3.10/email/__pycache__/contentmanager.cpython-310.pyc matches /usr/lib/python3.10/email/contentmanager.py
+# code object from '/usr/lib/python3.10/email/__pycache__/contentmanager.cpython-310.pyc'
+import 'email.contentmanager' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0297100>
+import 'email.policy' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0296230>
+import 'email.mime.base' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0296020>
+import 'email.mime.multipart' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0295ea0>
+# /usr/lib/python3.10/email/mime/__pycache__/text.cpython-310.pyc matches /usr/lib/python3.10/email/mime/text.py
+# code object from '/usr/lib/python3.10/email/mime/__pycache__/text.cpython-310.pyc'
+# /usr/lib/python3.10/email/mime/__pycache__/nonmultipart.cpython-310.pyc matches /usr/lib/python3.10/email/mime/nonmultipart.py
+# code object from '/usr/lib/python3.10/email/mime/__pycache__/nonmultipart.cpython-310.pyc'
+import 'email.mime.nonmultipart' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfff2620>
+import 'email.mime.text' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e02960b0>
+import 'problem_report' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0770e20>
+# /usr/lib/python3/dist-packages/apport/__pycache__/fileutils.cpython-310.pyc matches /usr/lib/python3/dist-packages/apport/fileutils.py
+# code object from '/usr/lib/python3/dist-packages/apport/__pycache__/fileutils.cpython-310.pyc'
+# /usr/lib/python3.10/json/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3.10/json/__init__.py
+# code object from '/usr/lib/python3.10/json/__pycache__/__init__.cpython-310.pyc'
+# /usr/lib/python3.10/json/__pycache__/decoder.cpython-310.pyc matches /usr/lib/python3.10/json/decoder.py
+# code object from '/usr/lib/python3.10/json/__pycache__/decoder.cpython-310.pyc'
+# /usr/lib/python3.10/json/__pycache__/scanner.cpython-310.pyc matches /usr/lib/python3.10/json/scanner.py
+# code object from '/usr/lib/python3.10/json/__pycache__/scanner.cpython-310.pyc'
+# extension module '_json' loaded from '/usr/lib/python3.10/lib-dynload/_json.cpython-310-x86_64-linux-gnu.so'
+# extension module '_json' executed from '/usr/lib/python3.10/lib-dynload/_json.cpython-310-x86_64-linux-gnu.so'
+import '_json' # <_frozen_importlib_external.ExtensionFileLoader object at 0x7fc8dfff3100>
+import 'json.scanner' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfff2ef0>
+import 'json.decoder' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfff2bc0>
+# /usr/lib/python3.10/json/__pycache__/encoder.cpython-310.pyc matches /usr/lib/python3.10/json/encoder.py
+# code object from '/usr/lib/python3.10/json/__pycache__/encoder.cpython-310.pyc'
+import 'json.encoder' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfff3190>
+import 'json' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfff29b0>
+# /usr/lib/python3.10/__pycache__/configparser.cpython-310.pyc matches /usr/lib/python3.10/configparser.py
+# code object from '/usr/lib/python3.10/__pycache__/configparser.cpython-310.pyc'
+import 'configparser' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfff2cb0>
+# /usr/lib/python3/dist-packages/apport/__pycache__/packaging_impl.cpython-310.pyc matches /usr/lib/python3/dist-packages/apport/packaging_impl.py
+# code object from '/usr/lib/python3/dist-packages/apport/__pycache__/packaging_impl.cpython-310.pyc'
+# /usr/lib/python3/dist-packages/apt/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3/dist-packages/apt/__init__.py
+# code object from '/usr/lib/python3/dist-packages/apt/__pycache__/__init__.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/__future__.cpython-310.pyc matches /usr/lib/python3.10/__future__.py
+# code object from '/usr/lib/python3.10/__pycache__/__future__.cpython-310.pyc'
+import '__future__' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0049d20>
+# /usr/lib/python3/dist-packages/apt/__pycache__/package.cpython-310.pyc matches /usr/lib/python3/dist-packages/apt/package.py
+# code object from '/usr/lib/python3/dist-packages/apt/__pycache__/package.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/typing.cpython-310.pyc matches /usr/lib/python3.10/typing.py
+# code object from '/usr/lib/python3.10/__pycache__/typing.cpython-310.pyc'
+import 'typing' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e007c7c0>
+# /usr/lib/python3/dist-packages/apt/progress/__pycache__/__init__.cpython-310.pyc matches /usr/lib/python3/dist-packages/apt/progress/__init__.py
+# code object from '/usr/lib/python3/dist-packages/apt/progress/__pycache__/__init__.cpython-310.pyc'
+import 'apt.progress' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e007dd20>
+# /usr/lib/python3/dist-packages/apt/progress/__pycache__/text.cpython-310.pyc matches /usr/lib/python3/dist-packages/apt/progress/text.py
+# code object from '/usr/lib/python3/dist-packages/apt/progress/__pycache__/text.cpython-310.pyc'
+# /usr/lib/python3/dist-packages/apt/progress/__pycache__/base.cpython-310.pyc matches /usr/lib/python3/dist-packages/apt/progress/base.py
+# code object from '/usr/lib/python3/dist-packages/apt/progress/__pycache__/base.cpython-310.pyc'
+import 'apt.progress.base' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e00b54b0>
+import 'apt.progress.text' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e007df60>
+import 'apt.package' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e004a470>
+# /usr/lib/python3/dist-packages/apt/__pycache__/cache.cpython-310.pyc matches /usr/lib/python3/dist-packages/apt/cache.py
+# code object from '/usr/lib/python3/dist-packages/apt/__pycache__/cache.cpython-310.pyc'
+import 'apt.cache' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e00b5990>
+# /usr/lib/python3/dist-packages/apt/__pycache__/cdrom.cpython-310.pyc matches /usr/lib/python3/dist-packages/apt/cdrom.py
+# code object from '/usr/lib/python3/dist-packages/apt/__pycache__/cdrom.cpython-310.pyc'
+import 'apt.cdrom' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e00b6bf0>
+import 'apt' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e0049b70>
+# /usr/lib/python3.10/__pycache__/pickle.cpython-310.pyc matches /usr/lib/python3.10/pickle.py
+# code object from '/usr/lib/python3.10/__pycache__/pickle.cpython-310.pyc'
+# /usr/lib/python3.10/__pycache__/_compat_pickle.cpython-310.pyc matches /usr/lib/python3.10/_compat_pickle.py
+# code object from '/usr/lib/python3.10/__pycache__/_compat_pickle.cpython-310.pyc'
+import '_compat_pickle' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfe6d1b0>
+import '_pickle' # <class '_frozen_importlib.BuiltinImporter'>
+import 'pickle' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e00b6d70>
+# /usr/lib/python3/dist-packages/apport/__pycache__/packaging.cpython-310.pyc matches /usr/lib/python3/dist-packages/apport/packaging.py
+# code object from '/usr/lib/python3/dist-packages/apport/__pycache__/packaging.cpython-310.pyc'
+import 'apport.packaging' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e00b6e00>
+import 'apport.packaging_impl' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfff36d0>
+import 'apport.fileutils' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfff2650>
+# /usr/lib/python3/dist-packages/apport/__pycache__/hookutils.cpython-310.pyc matches /usr/lib/python3/dist-packages/apport/hookutils.py
+# code object from '/usr/lib/python3/dist-packages/apport/__pycache__/hookutils.cpython-310.pyc'
+import 'apport.hookutils' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8dfe6d6f0>
+import 'apport.report' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11916c0>
+import 'apport' # <_frozen_importlib_external.SourceFileLoader object at 0x7fc8e11913c0>
+Traceback (most recent call last):
+  File "/home/mark/projects/baseline0/cyprus/cyprus.py", line 11, in <module>
+    from cyprus.program import print_tree
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/mark/projects/baseline0/cyprus/cyprus/program.py", line 7, in <module>
+    from cyprus.utils import get_pretty_tree
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/mark/projects/baseline0/cyprus/cyprus/utils.py", line 1, in <module>
+    from cyprus.parser import Grouping, ProgramGroup, StatementGroup, EnvironmentGroup, MembraneGroup
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/mark/projects/baseline0/cyprus/cyprus/parser.py", line 1, in <module>
+    from funcparserlib.parser import (some, maybe, many, finished, skip, 
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'funcparserlib'
+# clear builtins._
+# clear sys.path
+# clear sys.argv
+# clear sys.ps1
+# clear sys.ps2
+# clear sys.last_type
+# clear sys.last_value
+# clear sys.last_traceback
+# destroy cyprus.parser
+# destroy cyprus.utils
+# destroy cyprus.program
+# clear sys.path_hooks
+# clear sys.path_importer_cache
+# clear sys.meta_path
+# clear sys.__interactivehook__
+# restore sys.stdin
+# restore sys.stdout
+# restore sys.stderr
+# cleanup[2] removing sys
+# cleanup[2] removing builtins
+# cleanup[2] removing _frozen_importlib
+# cleanup[2] removing _imp
+# cleanup[2] removing _thread
+# cleanup[2] removing _warnings
+# cleanup[2] removing _weakref
+# cleanup[2] removing _io
+# cleanup[2] removing marshal
+# cleanup[2] removing posix
+# cleanup[2] removing _frozen_importlib_external
+# cleanup[2] removing time
+# cleanup[2] removing zipimport
+# destroy zipimport
+# cleanup[2] removing _codecs
+# cleanup[2] removing codecs
+# cleanup[2] removing encodings.aliases
+# cleanup[2] removing encodings
+# cleanup[2] removing encodings.utf_8
+# cleanup[2] removing _signal
+# cleanup[2] removing _abc
+# cleanup[2] removing abc
+# cleanup[2] removing io
+# cleanup[2] removing __main__
+# destroy __main__
+# cleanup[2] removing _stat
+# cleanup[2] removing stat
+# cleanup[2] removing _collections_abc
+# cleanup[2] removing genericpath
+# cleanup[2] removing posixpath
+# cleanup[2] removing os.path
+# cleanup[2] removing os
+# cleanup[2] removing _sitebuiltins
+# cleanup[2] removing types
+# cleanup[2] removing importlib._bootstrap
+# cleanup[2] removing importlib._bootstrap_external
+# cleanup[2] removing warnings
+# cleanup[2] removing importlib
+# cleanup[2] removing importlib._abc
+# cleanup[2] removing itertools
+# cleanup[2] removing keyword
+# destroy keyword
+# cleanup[2] removing _operator
+# cleanup[2] removing operator
+# cleanup[2] removing reprlib
+# destroy reprlib
+# cleanup[2] removing _collections
+# cleanup[2] removing collections
+# cleanup[2] removing _functools
+# cleanup[2] removing functools
+# cleanup[2] removing contextlib
+# cleanup[2] removing importlib.util
+# cleanup[2] removing importlib.machinery
+# cleanup[2] removing mpl_toolkits
+# destroy mpl_toolkits
+# cleanup[2] removing apport_python_hook
+# cleanup[2] removing sitecustomize
+# destroy sitecustomize
+# destroy apport_python_hook
+# cleanup[2] removing site
+# destroy site
+# cleanup[2] removing enum
+# cleanup[2] removing _sre
+# cleanup[2] removing sre_constants
+# destroy sre_constants
+# cleanup[2] removing sre_parse
+# cleanup[2] removing sre_compile
+# cleanup[2] removing _locale
+# cleanup[2] removing copyreg
+# cleanup[2] removing re
+# cleanup[2] removing gettext
+# cleanup[2] removing getopt
+# destroy getopt
+# cleanup[2] removing cyprus
+# destroy cyprus
+# cleanup[2] removing token
+# destroy token
+# cleanup[2] removing tokenize
+# cleanup[2] removing linecache
+# cleanup[2] removing traceback
+# cleanup[2] removing _weakrefset
+# destroy _weakrefset
+# cleanup[2] removing weakref
+# cleanup[2] removing collections.abc
+# cleanup[2] removing _string
+# cleanup[2] removing string
+# cleanup[2] removing threading
+# cleanup[2] removing atexit
+# cleanup[2] removing logging
+# cleanup[2] removing cyprus.base
+# destroy cyprus.base
+# cleanup[2] removing apt_pkg
+# cleanup[2] removing errno
+# cleanup[2] removing signal
+# cleanup[2] removing fcntl
+# cleanup[2] removing _posixsubprocess
+# cleanup[2] removing select
+# cleanup[2] removing math
+# cleanup[2] removing selectors
+# cleanup[2] removing subprocess
+# cleanup[2] removing fnmatch
+# cleanup[2] removing zlib
+# cleanup[2] removing _compression
+# cleanup[2] removing _bz2
+# cleanup[2] removing bz2
+# destroy bz2
+# cleanup[2] removing _lzma
+# cleanup[2] removing lzma
+# destroy lzma
+# cleanup[2] removing shutil
+# cleanup[2] removing _bisect
+# cleanup[2] removing bisect
+# cleanup[2] removing _random
+# cleanup[2] removing _sha512
+# cleanup[2] removing random
+# cleanup[2] removing tempfile
+# cleanup[2] removing pwd
+# cleanup[2] removing grp
+# cleanup[2] removing glob
+# cleanup[2] removing locale
+# cleanup[2] removing imp
+# cleanup[2] removing xml
+# cleanup[2] removing xml.dom.domreg
+# cleanup[2] removing xml.dom
+# cleanup[2] removing xml.dom.minicompat
+# cleanup[2] removing copy
+# cleanup[2] removing xml.dom.NodeFilter
+# cleanup[2] removing xml.dom.xmlbuilder
+# cleanup[2] removing xml.dom.minidom
+# cleanup[2] removing xml.parsers
+# cleanup[2] removing pyexpat.errors
+# cleanup[2] removing pyexpat.model
+# cleanup[2] removing pyexpat
+# cleanup[2] removing xml.parsers.expat.model
+# cleanup[2] removing xml.parsers.expat.errors
+# cleanup[2] removing xml.parsers.expat
+# cleanup[2] removing urllib
+# cleanup[2] removing urllib.response
+# cleanup[2] removing urllib.error
+# cleanup[2] removing _struct
+# cleanup[2] removing struct
+# cleanup[2] removing binascii
+# cleanup[2] removing base64
+# cleanup[2] removing email
+# cleanup[2] removing _hashlib
+# cleanup[2] removing _blake2
+# cleanup[2] removing hashlib
+# cleanup[2] removing http
+# cleanup[2] removing email.errors
+# cleanup[2] removing email.quoprimime
+# cleanup[2] removing email.base64mime
+# cleanup[2] removing quopri
+# cleanup[2] removing email.encoders
+# cleanup[2] removing email.charset
+# cleanup[2] removing email.header
+# cleanup[2] removing _socket
+# cleanup[2] removing array
+# cleanup[2] removing socket
+# cleanup[2] removing _datetime
+# cleanup[2] removing datetime
+# cleanup[2] removing urllib.parse
+# cleanup[2] removing calendar
+# cleanup[2] removing email._parseaddr
+# cleanup[2] removing email.utils
+# cleanup[2] removing email._policybase
+# cleanup[2] removing email.feedparser
+# cleanup[2] removing email.parser
+# cleanup[2] removing uu
+# cleanup[2] removing email._encoded_words
+# cleanup[2] removing email.iterators
+# cleanup[2] removing email.message
+# cleanup[2] removing _ssl
+# cleanup[2] removing ssl
+# cleanup[2] removing http.client
+# cleanup[2] removing urllib.request
+# cleanup[2] removing gzip
+# cleanup[2] removing email.mime
+# cleanup[2] removing email._header_value_parser
+# cleanup[2] removing email.headerregistry
+# cleanup[2] removing email.contentmanager
+# cleanup[2] removing email.policy
+# cleanup[2] removing email.mime.base
+# cleanup[2] removing email.mime.multipart
+# cleanup[2] removing email.mime.nonmultipart
+# cleanup[2] removing email.mime.text
+# cleanup[2] removing problem_report
+# cleanup[2] removing _json
+# cleanup[2] removing json.scanner
+# cleanup[2] removing json.decoder
+# cleanup[2] removing json.encoder
+# cleanup[2] removing json
+# cleanup[2] removing configparser
+# destroy configparser
+# cleanup[2] removing __future__
+# destroy __future__
+# cleanup[2] removing typing
+# destroy typing
+# cleanup[2] removing apt.progress
+# cleanup[2] removing apt.progress.base
+# cleanup[2] removing apt.progress.text
+# cleanup[2] removing apt.package
+# cleanup[2] removing apt.cache
+# cleanup[2] removing apt.cdrom
+# cleanup[2] removing apt
+# cleanup[2] removing _compat_pickle
+# cleanup[2] removing _pickle
+# cleanup[2] removing pickle
+# cleanup[2] removing apport.packaging
+# destroy apport.packaging
+# cleanup[2] removing apport.packaging_impl
+# cleanup[2] removing apport.fileutils
+# cleanup[2] removing apport.hookutils
+# cleanup[2] removing apport.report
+# cleanup[2] removing apport
+# destroy _sitebuiltins
+# destroy importlib._abc
+# destroy apport.packaging_impl
+# destroy apport.fileutils
+# destroy apport.hookutils
+# destroy apport.report
+# destroy gettext
+# destroy imp
+# destroy problem_report
+# destroy _signal
+# destroy _posixsubprocess
+# destroy _bz2
+# destroy _lzma
+# destroy grp
+# destroy encodings
+# destroy importlib.machinery
+# destroy importlib.util
+# destroy importlib
+# destroy xml.dom
+# destroy xml.parsers
+# destroy xml.parsers.expat
+# destroy xml.dom.minicompat
+# destroy xml.dom.NodeFilter
+# destroy xml.dom.xmlbuilder
+# destroy xml.dom.minidom
+# destroy xml.dom.domreg
+# destroy copy
+# destroy xml
+# destroy pyexpat.errors
+# destroy pyexpat.model
+# destroy pyexpat
+# destroy urllib.response
+# destroy urllib.error
+# destroy urllib.parse
+# destroy urllib.request
+# destroy bisect
+# destroy string
+# destroy email.base64mime
+# destroy email.encoders
+# destroy email._parseaddr
+# destroy email._policybase
+# destroy email.feedparser
+# destroy email.parser
+# destroy email.iterators
+# destroy email.mime
+# destroy email.mime.base
+# destroy email.mime.multipart
+# destroy email.mime.nonmultipart
+# destroy email.mime.text
+# destroy email.headerregistry
+# destroy email.contentmanager
+# destroy email.policy
+# destroy _hashlib
+# destroy _blake2
+# destroy http.client
+# destroy ssl
+# destroy email.header
+# destroy random
+# destroy selectors
+# destroy array
+# destroy calendar
+# destroy uu
+# destroy quopri
+# destroy email.charset
+# destroy _ssl
+# destroy datetime
+# destroy locale
+# destroy base64
+# destroy gzip
+# destroy struct
+# destroy zlib
+# destroy _compression
+# destroy email.message
+# destroy email._header_value_parser
+# destroy urllib
+# destroy email._encoded_words
+# destroy email.utils
+# destroy binascii
+# destroy email
+# destroy email.quoprimime
+# destroy email.errors
+# destroy pwd
+# destroy http
+# destroy json.decoder
+# destroy json.encoder
+# destroy json.scanner
+# destroy _json
+# destroy tempfile
+# destroy shutil
+# destroy hashlib
+# destroy json
+# destroy pickle
+# destroy apport
+# destroy apt.progress
+# destroy apt.progress.text
+# destroy apt.package
+# destroy apt.cache
+# destroy apt.cdrom
+# destroy logging
+# destroy socket
+# destroy subprocess
+# destroy contextlib
+# destroy operator
+# destroy signal
+# destroy types
+# destroy apt.progress.base
+# destroy errno
+# destroy fcntl
+# destroy select
+# destroy fnmatch
+# destroy apt
+# destroy glob
+# destroy _struct
+# destroy _compat_pickle
+# cleanup[3] wiping _pickle
+# cleanup[3] wiping _datetime
+# cleanup[3] wiping _socket
+# cleanup[3] wiping _sha512
+# cleanup[3] wiping _random
+# cleanup[3] wiping _bisect
+# cleanup[3] wiping math
+# cleanup[3] wiping apt_pkg
+# cleanup[3] wiping atexit
+# cleanup[3] wiping threading
+# cleanup[3] wiping _string
+# cleanup[3] wiping collections.abc
+# cleanup[3] wiping weakref
+# cleanup[3] wiping traceback
+# destroy linecache
+# cleanup[3] wiping tokenize
+# cleanup[3] wiping re
+# destroy enum
+# destroy sre_compile
+# destroy copyreg
+# cleanup[3] wiping _locale
+# destroy _locale
+# cleanup[3] wiping sre_parse
+# cleanup[3] wiping _sre
+# cleanup[3] wiping functools
+# cleanup[3] wiping _functools
+# cleanup[3] wiping collections
+# destroy _collections_abc
+# destroy collections.abc
+# cleanup[3] wiping _collections
+# destroy _collections
+# cleanup[3] wiping _operator
+# cleanup[3] wiping itertools
+# destroy itertools
+# cleanup[3] wiping warnings
+# cleanup[3] wiping importlib._bootstrap_external
+# cleanup[3] wiping importlib._bootstrap
+# cleanup[3] wiping os
+# destroy posixpath
+# cleanup[3] wiping genericpath
+# cleanup[3] wiping stat
+# cleanup[3] wiping _stat
+# destroy _stat
+# cleanup[3] wiping io
+# destroy abc
+# cleanup[3] wiping _abc
+# cleanup[3] wiping encodings.utf_8
+# cleanup[3] wiping encodings.aliases
+# cleanup[3] wiping codecs
+# cleanup[3] wiping _codecs
+# cleanup[3] wiping time
+# cleanup[3] wiping _frozen_importlib_external
+# cleanup[3] wiping posix
+# cleanup[3] wiping marshal
+# cleanup[3] wiping _io
+# cleanup[3] wiping _weakref
+# cleanup[3] wiping _warnings
+# cleanup[3] wiping _thread
+# cleanup[3] wiping _imp
+# cleanup[3] wiping _frozen_importlib
+# cleanup[3] wiping sys
+# cleanup[3] wiping builtins
+# destroy _pickle
+# destroy _datetime
+# destroy _socket
+# destroy apt_pkg
+# destroy _functools
+# destroy _frozen_importlib_external
+# destroy _imp
+# destroy marshal
+# destroy stat
+# destroy genericpath
+# destroy sre_parse
+# destroy functools
+# destroy tokenize
+# destroy _frozen_importlib
+# destroy codecs
+# destroy encodings.aliases
+# destroy encodings.utf_8
+# destroy _codecs
+# destroy io
+# destroy traceback
+# destroy warnings
+# destroy weakref
+# destroy collections
+# destroy threading
+# destroy atexit
+# destroy _warnings
+# destroy math
+# destroy _bisect
+# destroy os
+# destroy time
+# destroy io
+# destroy _random
+# destroy _weakref
+# destroy _operator
+# destroy _sha512
+# destroy _sre
+# destroy _string
+# destroy re
+# destroy _abc
+# destroy posix
+# destroy sys
+# destroy builtins
+# destroy _thread
+# clear sys.audit hooks

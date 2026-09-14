@@ -16,7 +16,7 @@ INFO:root:     symbols: [hello]
 INFO:root:     rules: [[hello] -> [hello, world, $] (1)]
 INFO:root:     staging area: []
 INFO:root:     Membranes:
-INFO:root:    
+INFO:root:
 INFO:root:]
 INFO:root:Clock tick: 1
 INFO:root: [name: None

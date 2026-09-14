@@ -78,7 +78,7 @@ as $ref_↓$, respectively.
 – An external arc can be instantiated by identifying its external reference to a matching external definition from another module, i.e. either its $ref_↓$ reference to a $def_↓$
 definition, or its $ref_↑$ reference to a $def_↑$ definition.
 
-## Definition 1 (P module). 
+## Definition 1 (P module).
 A $P$ module is a system $Π = (O, K, δ, S, D_↑, D_↓, R_↑, R_↓)$,
 where:
 1. $O$ is a finite non-empty alphabet of objects;
@@ -97,7 +97,7 @@ $σ ∈ K$, has the form $σ = (Q,s0, w0, R)$, where:
 – $Q$ is a finite set of states;
 – $s_0 ∈ Q$ is the initial state;
 – $w_0 ∈ O¯∗$ is the initial multiset of objects;
-– $R$ is a finite ordered set of multiset rewriting rules of the general form: 
+– $R$ is a finite ordered set of multiset rewriting rules of the general form:
 
 $$s x →α s x (u)βγ $$
 
@@ -188,7 +188,7 @@ A collectively autocatalytic set is a network of catalytic
 reactions in which a product of each reaction may work as a source material of another reaction or as a catalyst to enhance or to repress another reaction. Each reaction
 is either a composition to produce a compound product from more primitive source
 materials, or a decomposition to decompose a source material into its component
-materials. 
+materials.
 
 ---
 
@@ -235,7 +235,7 @@ a robust system is a system that tolerates faults
 
 # The Contribution of Theoretical Chemistry to the Drug Design in Photodynamic Therapy
 
-Photosensitizers in Medicine, Environment, and Security pp 121-134 
+Photosensitizers in Medicine, Environment, and Security pp 121-134
 
 (a false positive for our search terms but interesting nonetheless)
 
@@ -246,11 +246,11 @@ The possibility to design new photosensitizers active in photodynamic therapy st
 The practical clinical cycle include the following steps:
 
 1. a non toxic photosensitizer is introduced in the body of the appropriate target;
- 
+
 2. the target is irradiated with light of appropriate wavelength, ranging from 600 to 900 nm (the so-called therapeutic window), in order to excite the photosensitizer from its ground state (S0) to a shorter-lived first excited state (S1);
- 
+
 3. S1 can undergo conversion to the first excited triplet state (T1) by intersystem crossing. Then the T1 state of the sensitizer can release its energy to the surrounding biological tissue exciting the O2 from its triplet to the highly reactive singlet state that induces an oxidative cellular damage leading the apoptosis or necrosis of the cells;
- 
+
 4. finally, the photosensitizer returns to its ground state and the cycle can be repeated with a new light irradiation. At the end of the therapeutic cycle the sensitizer is eliminated from the body.
 
 
@@ -267,13 +267,13 @@ universal Turing machine [99], where size is the number of states and symbols.
 
 In the early Sixties, Minsky and Watanabe had a running competition to see
 who could find the smallest universal Turing machine [51,54,103,104]. Early attempts [23,104] gave small universal Turing machines that efficiently (in polynomial time) simulated Turing machines. In 1962, Minsky [54] found a small
-7-state, 4-symbol universal machine. 
+7-state, 4-symbol universal machine.
 
 ![small_universal_turing_machines](./imgs/small_universal_turing_machines.png)
 
-**Rule 110** is an elementary cellular automaton, which means that it is a one-dimensional, nearest neighbour, 
+**Rule 110** is an elementary cellular automaton, which means that it is a one-dimensional, nearest neighbour,
 binary cellular automaton [106]. More precisely, it is composed of a sequence of cells $...p_−1p_0p_1...$ where each cell has a binary state $p_i ∈ {0, 1}$. At timestep
-t + 1 the value of cell 
+t + 1 the value of cell
 
 $$ p_{i,t+1} = F(p_{i−1,t}, p_{i,t}, p_{i+1,t}) $$
 
@@ -331,7 +331,7 @@ Causal Analytics for Applied Risk Analysis pp 97-247
 
 Perhaps the simplest intuition relating probability and causation is that causes make their effects more probable.
 
-$$ P\left(x,y\right)=P(y)P\left(x|y\right) $$ 
+$$ P\left(x,y\right)=P(y)P\left(x|y\right) $$
 
 $$  P\left(x,y\right)=P(x)P\left(y|x\right) $$
 
@@ -341,7 +341,7 @@ $$ P\left(x|y\right)=P(x)P\left(y|x\right)/P(y) $$
 
 **bayes rule**
 
-$$ P\left(x|y\right)=P(x)P\left(y|x\right)/{\sum}_{x^{\prime }}P\left(y|{x}^{\prime}\right)P\left({x}^{\prime}\right) $$ 
+$$ P\left(x|y\right)=P(x)P\left(y|x\right)/{\sum}_{x^{\prime }}P\left(y|{x}^{\prime}\right)P\left({x}^{\prime}\right) $$
 
 
 Such a query-answering system, returning answers of the form P(query | data), could potentially be useful for many applications, including the following, among very many others:
@@ -363,13 +363,13 @@ Such a query-answering system, returning answers of the form P(query | data), co
 BN software products and methods allow the following standard approach to formulating and solving probabilistic inference problems for BNs with any number of nodes.
 
 1. Create a BN consisting of a node for each random variable and a DAG (directed acyclic graph ) in which arrows between variables represent dependencies between them.
- 
+
 2. Specify a marginal probability distribution for each input node.
- 
+
 3. Specify a CPT for each node with an arrow pointing into it.
 
 4. Enter observations or assumptions (sometimes referred to generically as “findings”) about the values of some of the variables.
- 
+
 5. Obtain the conditional (posterior) distributions of all other variables, conditioned on the findings entered by the user. BN solver software packages automatically calculate these updated distributions.
 
 The general pattern illustrated by the foregoing example, in which conditioning on a common effect (or, in less suggestive language, a common child or descendant in a DAG) induces statistical dependencies among their parents or ancestors, has been discussed under different names in epidemiology, including selection bias, collider stratification bias, and Berkson’s bias (Cole et al. 2010; Westreich 2012). A practical implication is that statistic modeling can inadvertently create significant associations and dependencies between variables that are not causally related, or even associated with each other in the absence of conditioning on other variables. Either of the following two common research situations can create such non-causal statistical associations:
@@ -456,11 +456,11 @@ Through the simulation of the register machine, the computational completeness o
 ![hypergraph_w_orientation](./imgs/hypergraph_w_orientation.png)
 
 
-**vicinal membrance**:   m,m′  are vicinal only if   m′⊂m  and there is no   m′′  like   m′⊂m′′⊂m . 
+**vicinal membrance**:   m,m′  are vicinal only if   m′⊂m  and there is no   m′′  like   m′⊂m′′⊂m .
 
-**skin membrane**: there is an unique skin membrane in each membrane system, and the skin membrane has no upper vicinal membranes. 
+**skin membrane**: there is an unique skin membrane in each membrane system, and the skin membrane has no upper vicinal membranes.
 
-**elementary membrane**: the elementary membrane has no lower vicinal membranes. 
+**elementary membrane**: the elementary membrane has no lower vicinal membranes.
 
 **district in membrane**: This concept is pretty obvious to the elementary membrane, but for other kind of membrane, the district refers in particular to the space between the membrane and its nearest vicinal membrance. degree: number of membranes; sibling membranes   m,m′ : if   m′′  is a common upper vicinal for both m and   m′ .
 

@@ -50,12 +50,12 @@ LATA 2012: Language and Automata Theory and Applications pp 192-203
 In this paper we introduce a class of Petri nets, called catalytic Petri nets, and a suitable firing strategy where transitions are fired only when they use tokens from specific places, called catalytic places. By establishing a one-to-one relationship with catalytic membrane systems, we can prove that the class of catalytic Petri nets with at least two catalytic places is Turing complete.
 
 In order to make Petri nets Turing complete, different approaches have been
-taken; notably the one which extends the kind of arcs considered. 
+taken; notably the one which extends the kind of arcs considered.
 
 The classic extension is the one where inhibitor arcs are considered, i.e., arcs where the
 absence of tokens in certain places is modeled ([14]), or reset arcs, i.e., arcs with
 the characteristic of emptying the preset, regardless of the number of tokens
-present in the place ([8]). 
+present in the place ([8]).
 
 Other extensions of Petri Nets, not necessarily always
 Turing complete, allow the introduction of non blocking arcs or transfer arcs
@@ -83,7 +83,7 @@ CMC 2020: Membrane Computing pp 78-93
 
 Journal of Membrane Computing volume 2, pages341–354 (2020)
 
-By constructing the simulating time Petri net, we retain one of the main characteristics of the Petri net model; namely, the firings of the transitions can take place in any order, and there is no need to introduce maximal parallelism in the Petri net semantics. 
+By constructing the simulating time Petri net, we retain one of the main characteristics of the Petri net model; namely, the firings of the transitions can take place in any order, and there is no need to introduce maximal parallelism in the Petri net semantics.
 
 Place/transition Petri nets are bipartite graphs, the conditions of the events of a distributed system are represented by places, and directed arcs connect the places to the transitions which model the events. The conditions for the events are expressed by tokens: an event can take place, i.e., a transition can fire, if there are enough tokens in the places at the source ends of the incoming arcs of a transition. These places are called preconditions. The outgoing edges of a transition represent the post-condition of the events. Firing of a transition means removing tokens from the preconditions and adding them to the post-conditions. The number of tokens moved in this way is prescribed by the multiplicities of the incoming and outgoing arcs.
 
@@ -96,28 +96,28 @@ CMC 2020: Membrane Computing pp 135-152
 
 A kolam or muggu is a geometrical line drawing composed of straight lines, curves and loops, drawn around a grid pattern of dots.
 
- A Petri Net structure is a four tuple   $C=(P,T,I,O)$  where   
+ A Petri Net structure is a four tuple   $C=(P,T,I,O)$  where
 
- $$ P = \left\{ p_{1},p_{2},…,p_{n} \right\} $$ 
- 
- is a finite set of places,   $n>0$ ,   
- 
- $$ T = \left\{t_{1},t_{2},…,t_{m} \right\} $$  
- 
- is a finite set of transitions,   $ m > 0 $ ,   
- 
-$$ P \cap T = ϕ $$ 
+ $$ P = \left\{ p_{1},p_{2},…,p_{n} \right\} $$
 
-$$ I : T \rightarrow P^{\infty}  $$ 
- 
-is the input function from transitions to bags of places and   
- 
+ is a finite set of places,   $n>0$ ,
+
+ $$ T = \left\{t_{1},t_{2},…,t_{m} \right\} $$
+
+ is a finite set of transitions,   $ m > 0 $ ,
+
+$$ P \cap T = ϕ $$
+
+$$ I : T \rightarrow P^{\infty}  $$
+
+is the input function from transitions to bags of places and
+
 $$ O : T \rightarrow P^{\infty} $$
- 
-is the output function from transitions to bags of places, where   
- 
-$$ P^{\infty} $$ 
- 
+
+is the output function from transitions to bags of places, where
+
+$$ P^{\infty} $$
+
 is the bags of places.
 
 Partial Array Token Petri Net Structure (PATPNS)
@@ -169,15 +169,15 @@ International Conference on Membrane Computing
 CMC 2011: Membrane Computing pp 62-72
 
 To each multiset $w$ we associate its support, denoted by
-$supp(w)$ , which contains those elements of $S$ which have a non-zero image. 
+$supp(w)$ , which contains those elements of $S$ which have a non-zero image.
 
 
-A cover $(G, w)$ for a multiset $v$ is defined with respect to a certain evolution step 
+A cover $(G, w)$ for a multiset $v$ is defined with respect to a certain evolution step
 $$ u \xrightarrow{\text{F}} u' $$
 in which $v$ is obtained: $v ≤ u'$.
 
 It is formed from a multiset of rules $G$ and a multiset of objects w such that they both contribute to the apparition of $v$. The main idea is that $G ≤ F$ is a part of the rules used in the evolution step and $w ≤ u−lhs(F)$ is a part of the objects which are not consumed by rules, such
-that $v ≤ w + rhs(G)$. In other words, $v = w + (v − w)$ is obtained from $u$ in one evolution step 
+that $v ≤ w + rhs(G)$. In other words, $v = w + (v − w)$ is obtained from $u$ in one evolution step
 $u \xrightarrow{\text{F}} u' = u − lhs(F) + rhs(F)$
 , such that w are objects which are
 not consumed by any rule and $v − w$ are objects produced by rules in $G$.
@@ -185,10 +185,10 @@ not consumed by any rule and $v − w$ are objects produced by rules in $G$.
 
 An earlier attempt to define a notion of causality over objects in membrane
 systems was made in [1]. The definition was given in terms of relating multisets
-of objects of form $k · a$. Moreover, the multiplicity $k$ of a could only be taken to be $u(a)$ or $u'(a)$ from an evolution step 
+of objects of form $k · a$. Moreover, the multiplicity $k$ of a could only be taken to be $u(a)$ or $u'(a)$ from an evolution step
 $$ u \xrightarrow{\text{F}} u'$$
- 
-The definition in this paper is more general, allowing to relate (specifically) any multiset $v ≤ u$ with a multiset of rules $G$, and implicitly with a multiset of objects 
+
+The definition in this paper is more general, allowing to relate (specifically) any multiset $v ≤ u$ with a multiset of rules $G$, and implicitly with a multiset of objects
 $$ lhs(G) + v \setminus rhs(G) ≤ u $$
 
 
@@ -210,7 +210,7 @@ Given a transition P system Π with dissolution, promoters and inhibitors having
 International Conference on Reversible Computation
 RC 2020: Reversible Computation: Extending Horizons of Computing pp 1-40
 
-Reversible computation allows computation to proceed not only in the standard, forward direction, but also backward, recovering past states, and computing inputs from outputs. Reversible computation has attracted interest for multiple applications, covering areas as different as low-power computing [113], simulation [37], robotics [122] and debugging [129]. 
+Reversible computation allows computation to proceed not only in the standard, forward direction, but also backward, recovering past states, and computing inputs from outputs. Reversible computation has attracted interest for multiple applications, covering areas as different as low-power computing [113], simulation [37], robotics [122] and debugging [129].
 
 A useful specialisation of dagger categories, in connection with reversible computation, is dagger traced symmetric bimonoidal (or rig) categories, i.e., dagger categories equipped with two symmetric monoidal tensors (usually denoted   −⊕−  and   −⊗− ), interacting through a distributor and an annihilator, yielding the structure of a rig (i.e., a ring without additive inverses). Iteration is modelled by means of a trace operator   Tr  (see [1, 85, 175]) such that   (Trf)†=Tr(f†) . These categories are strongly related to the dagger compact closed categories [3, 174] that serve as the model of choice for the Oxford school of quantum computing.
 
@@ -229,7 +229,7 @@ Clavel, M., et al.: Maude: specification and programming in rewriting logic. The
 
 rocess calculi are a class of algebraic models for concurrent and distributed systems. Process calculi allow one to express the behaviour of a concurrent system in a concise way, abstracting away from implementation details, and focusing on the interaction patterns among the components of the system. Thus, it is possible to express the behaviour of a system in a mathematically precise way and verification techniques can be easily developed on top of it.
 
-Research on reversing process calculi can be perhaps tracked back to the Chemical Abstract Machine [30], a calculus inspired by chemical reactions whose operational semantics defines both forward and reverse reduction relations. The first attempts to reverse existing process calculi can be found in [44, 46], where a reversible extension of CCS [140] was presented. A main contribution of [44] was the definition of the notion of causal-consistent reversibility: any action can be undone, provided that its consequences, if any, are undone first. 
+Research on reversing process calculi can be perhaps tracked back to the Chemical Abstract Machine [30], a calculus inspired by chemical reactions whose operational semantics defines both forward and reverse reduction relations. The first attempts to reverse existing process calculi can be found in [44, 46], where a reversible extension of CCS [140] was presented. A main contribution of [44] was the definition of the notion of causal-consistent reversibility: any action can be undone, provided that its consequences, if any, are undone first.
 
 ---
 
@@ -351,10 +351,10 @@ stochastic simulation algorithm (SSA)
 Several stochastic algorithms are implemented in BioSimWare and can be chosen for
 the simulation of the dynamics of single and multi-volume systems. These includes SSA
 [22], tau leaping [10], adaptive tau leaping [11], DPP [49], τ-DPP [14] and Sτ-DPP
-[13]. 
+[13].
 
 In this section we present one of the simplest prototype chemical system that presents
-a bistable dynamical behavior, the **Schlögl system** [63,66]. 
+a bistable dynamical behavior, the **Schlögl system** [63,66].
 Bistability is a capacity exhibited by many biological systems, consisting in the possibility of switching between
 two different stable steady states in response to some chemical signaling (see, e.g.,
 [17,51,65] and references therein). The Schlögl system consists of 4 chemical reactions and 3 molecular species: r1 : A + 2X → 3X,r2 : 3X → A + 2X,r3 : B →
@@ -442,12 +442,12 @@ infection process and granuloma formation
 
 ---
 
-# Snoopy-A Tool to Design and Execute Graph-Based Formalisms. 
+# Snoopy-A Tool to Design and Execute Graph-Based Formalisms.
 
-Petri Net Newsletter 74, 8–22 (2008) 
+Petri Net Newsletter 74, 8–22 (2008)
 
 Heiner, M., et al.: Snoopy-A Tool to Design and Execute Graph-Based Formalisms. Petri
-Net Newsletter 74, 8–22 (2008) 
+Net Newsletter 74, 8–22 (2008)
 
 https://www-dssz.informatik.tu-cottbus.de/software/snoopy/snoopy-pnnl-web.pdf
 
@@ -477,11 +477,11 @@ International School on Formal Methods for the Design of Computer, Communication
 SFM 2013: Formal Methods for Dynamical Systems pp 63-112
 
 There are two fundamental types of biological networks – reaction networks and
-regulatory networks. Recent network reconstructions typically mix the two. 
+regulatory networks. Recent network reconstructions typically mix the two.
 
 **Reaction networks** provide a detailed view of underlying biochemical interactions
 – nodes are chemical species and stoichiometry-labeled (multi-)edges represent
-elementary chemical reactions. 
+elementary chemical reactions.
 
 **Regulatory networks** are higher level and focus
 on feedbacks among individual system components – nodes are species or abstract biological objects and edges represent positive or negative influence. Gene regulatory networks make a typical example
@@ -489,7 +489,7 @@ on feedbacks among individual system components – nodes are species or abstrac
 On the other hand, executable models employ abstract representations to explain biological phenomena. Examples of widely used formalisms are Boolean
 networks [159,50,121], Petri Nets [103,32,49,143], timed automata [27,153,97],
 compact process algebraic representations such as BioPEPA [56], Kappa [68] or
-suitable adaptations of π-calculus [141,145]. 
+suitable adaptations of π-calculus [141,145].
 
 Qualitative reachability properties express reachability of specified concentration levels in given model variables
 
@@ -500,7 +500,7 @@ generated by a given system S, satisfy the inspected property described as the
 formula ϕ, i.e., they effectively decide the language inclusion S ⊆ ϕ (ϕ is
 the set of all executions that satisfy ϕ). In order to generate all executions, the
 whole state-space has to be stored and evaluated. This is why the exhaustive
-techniques generally suffer from the state-space explosion problem. 
+techniques generally suffer from the state-space explosion problem.
 
 the monitoring techniques are based on the
 membership test ω ∈ ϕ of an individual simulation trace ω ∈ S, where the
@@ -530,11 +530,11 @@ Parikh mappings (vectors) express properties of words of a context-free language
 
 It first defines a mapping on multiset spaces and presents several of its properties and counter examples. Secondly, the new mapping has been shown to possess many nice properties in relation to pattern recognition measures of multisets such as cardinality, distance and similarity. This mapping has further been applied to Parikh and Khomenko models through suitable representation schemes and Nazmul and Hickman models as its special cases. The mapping rewrites multisets and thus enables one to model paradigms such as P systems, Petri Nets, Abstract Rewriting on Multisets (ARMS) and Abstract Chemical Machines. The paper also gives several fundamental results. By defining the notion of constant multisets, it shows that set theoretic forms of law of excluded middle and law of non-contradiction do not hold for multisets. This is the motivation to introduce m-coincidence to handle disjoint multisets.
 
---- 
+---
 
 # Interactomes, manufacturomes and relational biology: analogies between systems biology and manufacturing systems
 
-Theoretical Biology and Medical Modelling volume 8, Article number: 19 (2011) 
+Theoretical Biology and Medical Modelling volume 8, Article number: 19 (2011)
 
 We describe anticipatory systems, or long-range feed-forward chemical reaction chains, and compare them to open-loop manufacturing processes. We then close the loop by discussing metabolism-repair systems and describe the rationality of the self-referential equation f = f (f). This relationship is derived from some boundary conditions that, in molecular systems biology, can be stated as the cardinality of the following molecular sets must be about equal: metabolome, genome, proteome. We show that this conjecture is not likely correct so the problem of self-referential mappings for describing the boundary between living and nonliving systems remains an open question. We calculate a lower and upper bound for the number of edges in the molecular interaction network (the interactome) for two cellular organisms and for two manufacturomes for CMOS integrated circuit manufacturing.
 
@@ -560,7 +560,7 @@ Anticipatory Systems pp 313-370
 Robert Rosen
 
 
-n biology, senescence is an almost ubiquitous property of organisms, but at present it remains one of the most poorly understood. The concept of senescence, being intimately concerned with mortality, has proved as difficult to define as life itself. Senescence is also closely related to the concepts of time and age, which we saw in Sect. 6.4 above to be exceedingly complex in themselves. Perhaps the most satisfactory working definition, which has been adopted by most of those concerned with senescence phenomena, is the following: 
+n biology, senescence is an almost ubiquitous property of organisms, but at present it remains one of the most poorly understood. The concept of senescence, being intimately concerned with mortality, has proved as difficult to define as life itself. Senescence is also closely related to the concepts of time and age, which we saw in Sect. 6.4 above to be exceedingly complex in themselves. Perhaps the most satisfactory working definition, which has been adopted by most of those concerned with senescence phenomena, is the following:
 
 **senescence is an increase in the probability of death per unit time with chronological age.**
 
@@ -648,7 +648,7 @@ be input by localised illumination;
 chip restores its architecture even after a substantial part of its protoplasmic network is removed.
 
 Kolmogorov-Uspensky machines
-- https://arxiv.org/abs/1211.5544 
+- https://arxiv.org/abs/1211.5544
 
 
 Slime mould cannot function for 50+ years as silicon computer chip do. Such
@@ -659,5 +659,3 @@ In laboratory-based experiments presented in Mayne and Adamatzky
 (2015b) we developed a nanoscale artificial circuit components by encouraging slime mould to internalize a range of electrically active nanoparticles,
 assemble them in vivo and distribute them around the plasmodium. We found
 that they hybridized plasmodium is able to form biomorphic mineralized networks inside the living plasmodium and the empty trails left following its migration, both of which facilitate the transmission of electricity.
-
-

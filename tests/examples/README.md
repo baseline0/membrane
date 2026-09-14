@@ -1,6 +1,6 @@
 # Example programs
 
-Here's an annotated example program, (example1.cyp) that generates 
+Here's an annotated example program, (example1.cyp) that generates
 perfect squares:
 
 ```
@@ -12,28 +12,28 @@ perfect squares:
         (3   // open a membrane, call it "3"
         // seed the membrane "3" with 2 particles, "a" and "c"
         exists~   a c
-        
+
         // define some reactions (in "3")
         reaction~   a :: a b  // take an "a", produce "a" and "b"
         reaction~   a :: b $  // take an "a", produce "b" and dissolve self
                                 // reaction~ a :: b $3 would do the same in
                                 //                     this situation.
                                 // reaction~ a :: b $foo would dissolve
-                                //                       container "foo" 
+                                //                       container "foo"
         reaction~   c :: c c  // take a "c", produce two "c"s
         )
-        
+
         // define some reactions (in "2")
         reaction~         b :: d
         reaction~         d :: d e
         reaction as c1~ c c :: c  // name this reaction c1
         reaction as c2~   c :: $  // name this reaction c2
-        
+
         // define rule priority
         priority~        c1 >> c2 // c1 must be maximally applied before c2
         // named reactions are required for rule priorities
     )
-    
+
     // define a reaction (in "3")
     reaction~ e :: !e // take an "e", osmose an "e" to parent container
                         // reaction~ e :: !e!!env would do the same in this
@@ -47,7 +47,7 @@ perfect squares:
 The output here is the amount of "e" particles in the environment at the
 end of the program's execution.
 
-Here's another example annotated program (test/hello.cyp), that produces 
+Here's another example annotated program (test/hello.cyp), that produces
 a "hello, world!" effect:
 
 ```
@@ -74,7 +74,7 @@ make example1
 
 **output**
 
-``` 
+```
 {Program}
 `-- {Environment}
     |-- Token('name', 'env')

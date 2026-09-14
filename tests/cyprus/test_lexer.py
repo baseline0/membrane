@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 import unittest
 
 from cyprus.program import tokenize_file
@@ -9,9 +10,8 @@ sys.path.insert(0, parent_dir_path)
 
 
 class LexerTest(unittest.TestCase):
-
     def test_unicode(self):
-        ts = tokenize_file('./examples/example1.cyp')
+        ts = tokenize_file("./examples/example1.cyp")
         print(ts[0])
         self.assertEqual(str(ts[0]), "3,1-3,1: env_open '['")
 

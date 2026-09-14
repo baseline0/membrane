@@ -1,0 +1,25 @@
+digraph d { 
+
+	subgraph cluster_0	 { 
+		subgraph cluster_3	 { 
+			subgraph cluster_5	 { 
+				subgraph cluster_9	 { 
+} 
+
+		 c3[label = "c:1" ]
+		 j3[label = "j:1" ]
+		 i3[label = "i:1" ]
+		 e3[label = "e:1" ]
+} 
+
+		 b5[label = "b:1" ]
+		 h5[label = "h:1" ]
+} 
+
+		 j9[label = "j:1" ]
+		 d9[label = "d:1" ]
+		 k9[label = "k:1" ]
+		 i9[label = "i:1" ]
+} 
+
+}

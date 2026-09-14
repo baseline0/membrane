@@ -161,7 +161,7 @@ SAFe recommends a transition based on the 7-step process introduced by Kotter [1
 
 The overall goals of the LACE to be: 1) relentless improvement, 2) cross-organisational scope, and 3) increased customer focus
 
-We are not interested in sub-optimising problems in some specific area only. And typically, there’s not many problems, which are specific to some area only. [...] If there’s no vehicle, these problems stay inside those silos, because there’s no way to raise them up. So that’s, of course, the way to provide this vehicle where you can raise and then what this vehicle tries to do is exactly, we talk about systemic issues.” 
+We are not interested in sub-optimising problems in some specific area only. And typically, there’s not many problems, which are specific to some area only. [...] If there’s no vehicle, these problems stay inside those silos, because there’s no way to raise them up. So that’s, of course, the way to provide this vehicle where you can raise and then what this vehicle tries to do is exactly, we talk about systemic issues.”
 
 Currently, the most important features as identified by the Product Owners are: “Clear Line of Sight”, aiming to display the relations between smaller features and strategic projects, and “Feature Lead Time”, targeting shorter delivery times of development features by implementing a metrics dashboard
 
@@ -284,7 +284,7 @@ System automatically defends against malicious attacks; it uses early warning an
 International Symposium on Leveraging Applications of Formal Methods
 ISoLA 2021: Leveraging Applications of Formal Methods, Verification and Validation pp 213-232
 
-We begin by outlining four design patterns in distributed systems that we call alignment, precedence, simultaneity, and consistency. All of these patterns have many possible implementations that do not require any temporal semantics at all, but in each case, we will give a solution that uses temporal semantics. Our solutions will use a rather new programming framework called Lingua Franca (LF) [25] that supports concurrent and distributed programming using time-stamped messages. 
+We begin by outlining four design patterns in distributed systems that we call alignment, precedence, simultaneity, and consistency. All of these patterns have many possible implementations that do not require any temporal semantics at all, but in each case, we will give a solution that uses temporal semantics. Our solutions will use a rather new programming framework called Lingua Franca (LF) [25] that supports concurrent and distributed programming using time-stamped messages.
 
 Three smokers are sitting at a table. One of them has tobacco, another has cigarette papers, and the third one has matches—each one has a different ingredient required to make and smoke a cigarette but he may not give any ingredient to another. On the table in front of them, two of the same three ingredients will be placed, and the smoker who has the necessary third ingredient should pick up the ingredients from the table, make the cigarette and smoke it. Since a new pair of ingredients will not be placed on the table until this action is completed, the other smokers who cannot make and smoke a cigarette with the ingredients on the table must not interfere with the fellow who can.
 
@@ -352,29 +352,29 @@ A CoP is a group of people who share a generative activity or a profession. The 
 Wenger, McDermott, and Snyder (2002) identified seven actions necessary to cultivate CoPs, summarized as follows:
 
 1. **Design the community to evolve naturally** – CoPs are best designed to support shifts in focus as a CoP is dynamic – its interests, goals, and members are fluid.
- 
+
 2. **Scan the environment beyond the CoP to create opportunities** for open dialog engaging voices with outside perspectives even when members and their knowledge are its most valuable resource. A CoP benefits when members look outside its bounds to understand the different possibilities for achieving learning goals.
- 
+
 3. **Encourage multiple levels of participation** – Three levels of participation should be included – a core group whose participation is intense and focuses on discussions and projects and its members lead the group, an active group who regularly participate not to the level of the leaders, and a larger, peripheral group whose passive participation allows learning from their level of involvement. Provide space for growth for subject matter experts (SMEs) and interested stakeholders alike.
 
 4. **Development of community spaces** – CoPs operate in public spaces where all members share, discuss, and explore ideas; they should also offer private forums for exchanges. These can be physical (e.g., meetings) and/or virtual (dialogue forums). Relationships and shared resources should be managed using customized approaches to meet specific needs.
- 
+
 5. **Focus on value** – CoPs should create opportunities for participants to discuss explicitly the value and productivity of their participation in the community.
 
 6. **Balance familiarity and novelty** – In addition to meeting expected learning outcomes and as part of their structure and programming, CoPs should include opportunities for members to shape their learning experience. This may include brainstorming, possibly mind mapping, which examines conventional and radical wisdom related to their topic.
- 
+
 7. **Cultivate a consistent rhythm for the community** – CoPs should conduct a vigorous cycle of activities that encourage members to meet, reflect, and evolve. This means establishment of a sustainable rhythm – one that anticipates different levels of engagement and enables a vibrant, thriving community, yet is not so fast-paced and intense that it becomes unmanageable.
 
 According to Cooperrider and Whitney (2001), five principles of appreciative inquiry are:
 
 1. **The constructionist principle** states that ideas and action emerge from relationships built on shared beliefs and narratives, thus a co-created reality. Inquiry’s purpose is stimulation of thought and action that generates new opportunities based on customary interaction and dialogue.
- 
+
 2. **The principle of simultaneity** states that as humans inquire into their systems, the systems change and thus humans change in reciprocity. Questions are propitious, not be neutral. The questions that persist move social systems in directions they passionately explore.
 
 3. **The poetic principle** states that organizational life is expressed as a narrative coauthored by its members in their daily stories. The selection of words and topics has impact far beyond the words themselves. Discernment is used to choose words that engage, invigorate, and inspire the best in people.
 
 4. **The anticipatory principle** states that today’s actions are guided by our expectations of the future. Human systems anticipate and visualize horizons bringing the future powerfully into the present compelling action. Through collective creation of constructive imagery, appreciative inquiry transforms anticipatory reality.
- 
+
 5. **The positive principle** states positive affect and social bonding are required for momentum and sustainable change. Attitudes like enthusiasm, hope, friendliness, and curiosity increase openness to new ideas and people, cognitive flexibility, and creativity. Positive social bonding fosters strong relationships between people, which are required for collective inquiry and change as well as mitigating conflict when groups disagree.
 
 ---
@@ -389,7 +389,7 @@ Handbook of Systems Sciences pp 1333-1339
 ### 1. Holism
 
 A system is a whole with emergent properties, that is, properties of the whole that are different from, and not possessed by individual parts or their sum (e.g., Checkland 1981; Morowitz 2002). For example, consciousness is not possessed by individual neurons but by the whole of the human mind. Holism in inquiry would focus attention on properties of the whole object or phenomenon, and go beyond typical analysis and reconstruction of parts.
- 
+
 ### 2. Interdependence
 
 The parts of a system interdepend, so change in one part will affect all others (e.g., von Bertalanffy 1968). Similarly, systems are interconnected with their environments, so change in the environment will impact the system and vice versa. For example, the actions of members of an educational institution will impact other members, and a change in political or economic climate will impact all. Inquiry taking interdependence into consideration would go beyond the study of parts and their static relationships, and examine internal and external dynamics.
@@ -405,18 +405,18 @@ Systems are better understood from multiple perspectives (e.g., Banathy 1996). F
 ### 5. Complexity
 
 Systems can be seen to possess degrees of dimensionality and complexity (e.g., Csikszentmihalyi 1993; Gell-Mann 1994). A simple system has few parts that are related in predictable ways (e.g., a lever). A complicated system has many parts that are not well integrated (e.g., a device with many functions but a difficult user interface). A complex system has many parts that are well integrated (e.g., a high-performing sports team). A more systemic inquiry would appreciate the complexity of the system(s) being studied, and match that with methods that were sufficiently complex to understand its nature.
- 
+
 ### 6. Co-evolution
 
 In order to develop, in fact, in order to survive, systems adapt to and co-evolve with their environments (e.g., Banathy 2000). Over time, this can be seen as a movement toward greater complexity, that is, toward simultaneously greater differentiation and integration (Casti 1994; Csikszentmihalyi 1993). For example, modern humans have developed and adapted to their environments in ways that make them more complex than their predecessors. A more systemic inquiry would consciously and continuously adapt, based on what was learned, and in response to continual changes in the systems and environments being studied.
- 
+
 ### 7. Second-order understanding
 
 Among the most important elements of systems science is the recognition that, while there are certainly interdependencies, hierarchies, and so on in the world beyond human experience, “systems” are human constructions (e.g., von Foerster 1974; Maturana and Varela 1988). In other words, a system is what we call a system. For example, we define the boundary of an educational system or any other system, we select the perspective(s) from which to view it, and we perceive it having, and describe it with, a certain level of complexity. An inquiry that is more systemic would recognize that we define the object of inquiry, the instruments by which it is studied, and the roles that we take in doing so, and it would require that we continually review the definitions, instruments, and roles with skepticism and a readiness for modification.
 
 As a consequence of this reflection we would come to realize that our inquiry itself is a system – an inquiry system – constructed and applied by us in relationship to the system(s) we study. As such, it would be seen to possess all the systems characteristics above and require the same ongoing critique and modification. For example, coherence of the elements of inquiry, in particular among purposes, methods, and criteria, would be recognized as an instance of interdependency.
 
---- 
+---
 
 # General Schemas Theory
 
@@ -495,7 +495,7 @@ Handbook of Systems Sciences pp 617-642
 
 Scott Bader was created in 1921 by a Quaker, Ernest Bader. It started as a distributor of chemical products, based in London. Today it is a global manufacturer of polymers used in an array of applications. It operates across the globe through 8 plants on 5 continents, employing 700 colleagues, as they are called, and generating $300 m in revenues annually.
 
-defining sustainable development as “development that meets the needs of the present without compromising the ability of future generations to meet their own needs” (Sustainability report 2015) 
+defining sustainable development as “development that meets the needs of the present without compromising the ability of future generations to meet their own needs” (Sustainability report 2015)
 
 ![intervention-effectiveness](./imgs/intervention-effectiveness.png)
 
@@ -511,32 +511,32 @@ Handbook of Systems Sciences pp 185-216
 **Epigrams from the Past**
 
 (i). “Death sneaks upon us from the back door not the front.” (Yoshida 1985)
- 
+
 (ii). “Watch out for the undertow.” “Death, it seems, does not like to wait until we are prepared for it. Death is indulgent and enjoys, when it can, a flair for the dramatic.” (Irving 1984)
 
 The world is full of uncertainty, as this Japanese essayist and American novelist observed about the unpredictability of life.
- 
+
 (iii). “Analysis destroys wholes. Some things, magic things, are meant to stay whole. If you look at their pieces, they go away.” (Waller 2003)
 
 This quote reminds us of a reductionist approach which deprives holistic features of an object.
 
 (iv). “Fools say they learn from experience; I prefer to learn from the experience of others.” (Otto von Bismarck Cited in Samuel 1950)
 
- 
+
 (v). “Discover something new by looking back on a past.” (Old Chinese saying)
 
 Those two quotes show the importance of learning from the others.
 
 Furthermore, there is such urgency for moving to implementation of the proposed activities; we should not wait until we have all the information. We all face the dilemma between “analysis by paralysis” and “extinct by instinct.” In this regard, the quote from General Collin Powell’s Primer in Leadership (Harari 2003) is practical:
 
- 
+
 (vi). Part I: “Use the formula P = 40 to 70, in which P stands for the probability of success and the numbers indicate the percentage of information acquired.”
 
 Part II: “Once the information is in the 40 to 70 range, go with your gut.”
 
 The other epigram is the pitfall of goal-seeking model. It often leads us to the place where we are all burned out.
 
- 
+
 (vii). “The meaning of stability is likely to remain obscured in western cultures until they rediscover the fact that life consists in experiencing relations, rather than in seeking goals or ‘ends’…..
 
 The barren contradiction of life, where this truth is overlooked, seems to me to be well, though unconsciously, expressed in line by Louis Untermeyer which have, significantly, became a favorite quotation in north America –
@@ -550,7 +550,7 @@ and when at last the fight is won,
 
 God keep me still dissatisfied.” (Vickers 1972)
 ```
- 
+
 (viii). “The horror of that moment” the king went on,
 
 “I shall never, never forget”
