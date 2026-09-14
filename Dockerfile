@@ -3,12 +3,16 @@ FROM gcc:12-bookworm
 
 WORKDIR /build
 
-# Copy CEC2017 source from sibling repo
-COPY ../CEC2017-BoundConstrained/codes /cec2017_src
+# Copy CEC2017 source from sibling repo (build context is baseline0/)
+COPY CEC2017-BoundContrained/codes /cec2017_src
 
 # Compile CEC2017 C++ source to shared library
+# Remove Windows-specific headers, compile test function only
+# Allow undefined symbols (globals defined at call time)
 RUN cd /cec2017_src/C\ version && \
-    gcc -shared -fPIC -O3 -lm \
+    sed -i '/#include.*WINDOWS/d' cec17_test_func.cpp && \
+    g++ -shared -fPIC -O3 -lm \
+    -Wl,--allow-shlib-undefined \
     -Wno-all \
     cec17_test_func.cpp \
     -o /build/libcec2017.so && \

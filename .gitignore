@@ -16,3 +16,6 @@ _trial_temp/
 malta/output/
 malta/sims/
 tests/out/
+
+benchmarks/c_src/cec2017/libcec2017.so
+benchmarks/c_src/cec2017/input_data/

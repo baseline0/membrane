@@ -63,8 +63,8 @@ clean:
 docker-build-cec2017:
     @echo "Building CEC2017 library in Docker..."
     mkdir -p benchmarks/c_src/cec2017
-    docker build -t malta-cec2017:latest -f Dockerfile ..
-    docker run --rm -v $(pwd)/benchmarks/c_src/cec2017:/output malta-cec2017:latest
+    cd .. && docker build -t malta-cec2017:latest -f cyprus/Dockerfile . && \
+    docker run --rm -v $(pwd)/cyprus/benchmarks/c_src/cec2017:/output malta-cec2017:latest
     @echo "✓ libcec2017.so ready at benchmarks/c_src/cec2017/libcec2017.so"
 
 # Legacy: direct gcc build (requires local gcc, less reproducible)
