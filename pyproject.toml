@@ -1,0 +1,47 @@
+[project]
+name = "malta"
+version = "0.1.0"
+description = "Membrane-computing simulation (P System) built on anytree/networkx"
+readme = "README.md"
+authors = [
+    { name = "Mark Alexiuk", email = "malexiuk@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "anytree>=2.12.1",
+    "matplotlib>=3.10.0",
+    "multiset>=3.1.0",
+    "networkx>=3.4.2",
+    "typer>=0.15.1",
+]
+
+[project.scripts]
+malta = "malta.cli.main:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["malta"]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0.1",
+    "pytest>=8.3.4",
+    "ruff>=0.8.4",
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = ["-ra", "-q"]
+testpaths = ["tests"]
+pythonpath = ["."]
+norecursedirs = ["tests/cyprus"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

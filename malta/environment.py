@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import List, TextIO
 
 from anytree import Node, PostOrderIter
@@ -6,11 +7,6 @@ from malta.membrane import Membrane
 from malta.membrane_item import MembraneItem
 from malta.rule import apply, rule_will_fire
 from malta.ruleset import RuleSet
-
-
-from enum import Enum
-
-from multiset_treenode import convert_tree_to_membranes
 
 
 class EnvState(Enum):
@@ -27,9 +23,7 @@ class Environment:
     # FUTURE - make ENUM and do proper hook
     STOP_CRITERION = "NO_RULES_FIRED"
 
-    def __init__(self, tree: Node,
-                 rules: RuleSet,
-                 all_items: List[MembraneItem]):
+    def __init__(self, tree: Node, rules: RuleSet, all_items: List[MembraneItem]):
 
         self.tree = tree
 
@@ -57,7 +51,7 @@ class Environment:
         self.rule_fired = False
 
         for node in PostOrderIter(root):
-            print(f'{node.name} has: {node.contents}')
+            print(f"{node.name} has: {node.contents}")
 
             for r in self.rules.rules:
                 # does it apply? run it. update contents of the respective membrane
@@ -75,8 +69,8 @@ class Environment:
         to the membrane structure and contents.
         """
 
-        with open(fname, 'w') as f:
-            f.write('update for use of anytree')
+        with open(fname, "w") as f:
+            f.write("update for use of anytree")
 
         raise Exception
 
@@ -112,11 +106,11 @@ class Environment:
 
         # TODO
         try:
-            if hasattr(m, 'membranes'):
+            if hasattr(m, "membranes"):
                 for mm in m.membranes:
                     self.process_membrane_as_dot(f, mm)
         except Exception:
-            raise ValueError('recursive membranes is wip. TODO')
+            raise ValueError("recursive membranes is wip. TODO")
 
     def get_membrane_item_by_name(self, name) -> MembraneItem:
         """
@@ -144,7 +138,7 @@ class Environment:
 
         if isinstance(c, str):
             if c:
-                s = f'\n{name}[color={c}]\n'
+                s = f"\n{name}[color={c}]\n"
             else:
-                s = f'{name}\n'
+                s = f"{name}\n"
         return s

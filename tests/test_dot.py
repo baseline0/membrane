@@ -2,12 +2,9 @@ import os
 import sys
 import unittest
 
-from malta.dot import ContentItem, DigraphGenerator, ClusterFactory
+from malta.dot import ContentItem
 from malta.dot_colour import DotColour
 from malta.factory import ContentItemFactory
-from malta.membrane import Membrane
-from malta.membrane_item import MembraneItem
-from malta.simulation import get_multiset_of_item_names_from_membrane_items
 from malta.util import NameGenerator
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -16,7 +13,6 @@ sys.path.insert(0, parent_dir_path)
 
 
 class TestDigraphGenerator(unittest.TestCase):
-
     def test_1(self):
 
         color = str(DotColour.aliceblue.name)

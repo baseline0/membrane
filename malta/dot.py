@@ -1,14 +1,13 @@
 import json
 import sys
-from typing import TextIO, List
+from typing import List, TextIO
 
 from malta.dot_colour import get_rand_colour
 from malta.util import NameGenerator
 
 
 class Delimited:
-
-    def start(self, name: str = 'd') -> str:
+    def start(self, name: str = "d") -> str:
         pass
 
     @classmethod
@@ -29,7 +28,7 @@ class ContentItem:
         if name is None:
             self.name = NameGenerator().get_rand_name()
         else:
-            self.name = name.replace(' ', '')
+            self.name = name.replace(" ", "")
 
         if colour is None:
             # self.colour = str(get_rand_colours(1)[0].name)
@@ -44,7 +43,6 @@ class ContentItem:
 
 
 class Base(Delimited):
-
     def write_contents(self) -> str:
         pass
 
@@ -54,7 +52,6 @@ class Base(Delimited):
 
 def write_cluster(fp: TextIO, c: Base):
     try:
-
         fp.writelines(c.start())
 
         fp.writelines(f"{x} \n" for x in c.contents)
@@ -80,11 +77,11 @@ class Subgraph(Delimited):
             self.label = label
 
     def start(self) -> str:
-        return f"subgraph {self.label} " + Subgraph.START + '\n'
+        return f"subgraph {self.label} " + Subgraph.START + "\n"
 
     @classmethod
     def end(cls) -> str:
-        return Subgraph.END + '\n'
+        return Subgraph.END + "\n"
 
 
 class Cluster(Delimited):
@@ -97,7 +94,7 @@ class Cluster(Delimited):
             self.name = NameGenerator().get_rand_name()
         else:
             # whitespace in names confounds dot
-            self.name = name.replace(' ', '')
+            self.name = name.replace(" ", "")
 
         # the cluster label in diagram
         if label is None:
@@ -115,42 +112,41 @@ class Cluster(Delimited):
         self.clusters.append(c)
 
     def start(self) -> str:
-        return f"subgraph cluster_{self.name} {Cluster.START} " + '\n'
+        return f"subgraph cluster_{self.name} {Cluster.START} " + "\n"
 
     def get_label(self) -> str:
         if self.label is None:
-            return ''
+            return ""
         else:
-            s = f"label = \"{self.label}\""
+            s = f'label = "{self.label}"'
             return s
 
     @classmethod
     def end(cls) -> str:
-        return Cluster.END + '\n'
+        return Cluster.END + "\n"
 
 
 class Digraph(Delimited):
     START = "{"
     END = "}"
 
-    def __init__(self, label: str = 'd') -> None:
+    def __init__(self, label: str = "d") -> None:
         self.label = label
         self.clusters = []
 
     @classmethod
-    def start(cls, name: str = 'd') -> str:
-        return f"digraph {name} " + Digraph.START + '\n'
+    def start(cls, name: str = "d") -> str:
+        return f"digraph {name} " + Digraph.START + "\n"
 
     @classmethod
     def end(cls) -> str:
-        return Digraph.END + '\n'
+        return Digraph.END + "\n"
 
     def add_cluster(self, c: Cluster):
         self.clusters.append(c)
 
 
 class DigraphGenerator:
-
     def __init__(self):
 
         self.data = None
@@ -161,7 +157,7 @@ class DigraphGenerator:
 
         # self.simulation_prefix
         self.output_dir = "./out/"
-        self.png_prefix = 'tick_'
+        self.png_prefix = "tick_"
 
     def _get_tick_index(self) -> int:
         return self._tick_index
@@ -182,7 +178,7 @@ class DigraphGenerator:
 
     def save_json(self, fname: str) -> None:
         try:
-            data = json.load(fname)
+            json.load(fname)
         except IOError:
             print(f"unable to load digraph from: {fname}")
 
@@ -208,7 +204,7 @@ class DigraphGenerator:
 
         print(f"writing digraph to: {fname}")
 
-        with open(fname, 'w') as fp:
+        with open(fname, "w") as fp:
             fp.writelines(self.digraph.start())
 
             for c in self.digraph.clusters:
@@ -228,10 +224,10 @@ class ClusterFactory:
         # simple. small. nested one deep
 
         c = Cluster(name="top")
-        c.contents = ['a', 'b', 'c']
+        c.contents = ["a", "b", "c"]
 
         d = Cluster(name="nested")
-        d.contents = ['d', 'e', 'f']
+        d.contents = ["d", "e", "f"]
 
         c.add_cluster(d)
 
@@ -240,16 +236,16 @@ class ClusterFactory:
     @classmethod
     def get_cluster_2(cls) -> List[Cluster]:
         c = Cluster(name="top")
-        c.contents = ['a', 'b', 'c']
+        c.contents = ["a", "b", "c"]
 
         peer = Cluster(name="peer")
-        peer.contents = ['a1', 'b1', 'c1']
+        peer.contents = ["a1", "b1", "c1"]
 
         d = Cluster(name="nested")
-        d.contents = ['d', 'e', 'f']
+        d.contents = ["d", "e", "f"]
 
         e = Cluster(name="nested_2")
-        e.contents = ['g', 'h', 'i']
+        e.contents = ["g", "h", "i"]
 
         d.add_cluster(e)
         c.add_cluster(d)

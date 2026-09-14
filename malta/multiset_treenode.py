@@ -1,21 +1,20 @@
 import random
+from pathlib import Path
 from random import randint
 from typing import List, TextIO
 
 import matplotlib.pyplot as plt
 import networkx as nx
-import networkx.convert
-from anytree import NodeMixin, Node
-from anytree import RenderTree, PreOrderIter, PostOrderIter
+from anytree import Node, NodeMixin, PostOrderIter, PreOrderIter, RenderTree
 
-from mmultiset import MMultiset, make_mmultiset
+from malta.mmultiset import MMultiset, make_mmultiset
 
 
 def save_nested_membranes(root: Node):
     # do the full nested membrane image properly
 
     for node in PostOrderIter(root):
-        print(f'{node.name} has: {node.contents}')
+        print(f"{node.name} has: {node.contents}")
         # TODO
 
 
@@ -89,6 +88,7 @@ def get_polytree(num_nodes: int = 10):
     """
 
     g = nx.gn_graph(num_nodes)
+    Path("./sims/").mkdir(parents=True, exist_ok=True)
     save_simple_graph_to_file("./sims/directed_tree_example.png", g)
 
     return g
@@ -123,7 +123,7 @@ def random_dag(nodes: int = 5):
             g.remove_edge(a, b)
 
     # is this really a dag? check it
-    save_simple_graph_to_file('an_example_of_random_dag.png', g)
+    save_simple_graph_to_file("an_example_of_random_dag.png", g)
 
     return g
 
@@ -133,7 +133,14 @@ class MultisetTreeNode(MMultiset, NodeMixin):
     A node for use with anytree that contains a multiset
     """
 
-    def __init__(self, name: str, length: int, width: int, parent=None, children=None, ):
+    def __init__(
+        self,
+        name: str,
+        length: int,
+        width: int,
+        parent=None,
+        children=None,
+    ):
         # super(MMultiset, self).__init__()
 
         self.name = name
@@ -151,7 +158,6 @@ class MultisetTreeNode(MMultiset, NodeMixin):
 
 
 class MultisetTreeFactory:
-
     @staticmethod
     def get_mt1() -> MultisetTreeNode:
         udo = Node("Udo")
@@ -166,7 +172,7 @@ class MultisetTreeFactory:
 
     @staticmethod
     def get_mt2() -> MultisetTreeNode:
-        node_names = ['m1', 'm2', 'm3', 'm4', 'm5']
+        node_names = ["m1", "m2", "m3", "m4", "m5"]
 
         root = Node("root")
         children = []
@@ -210,10 +216,10 @@ def get_random_selection_from_alphabet(num: int, alphabet: List[str], max_sample
 
     if num < 0:
         num = 1
-        print('setting min to 1. expect positive')
+        print("setting min to 1. expect positive")
     if max_samples < 0:
         max_samples = 10
-        print('setting max_samples to 10. expect positive')
+        print("setting max_samples to 10. expect positive")
 
     from random import sample
 
@@ -257,7 +263,7 @@ def get_membrane_tree1(alphabet: List[str]) -> Node:
     """
 
     if not alphabet:
-        print('expecting a list of membrane identifiers')
+        print("expecting a list of membrane identifiers")
         raise ValueError
 
     root = get_root_node()
@@ -283,9 +289,9 @@ def get_membrane_tree1(alphabet: List[str]) -> Node:
 
 def get_membrane_tree2(alphabet: List[str]) -> (Node, nx.Graph):
     """
-        a little more complex nesting
-        done manually.
-        FUTURE - obtain a random graph from networkx
+    a little more complex nesting
+    done manually.
+    FUTURE - obtain a random graph from networkx
 
     """
 
@@ -343,14 +349,14 @@ def get_root_node() -> Node:
     return root
 
 
-def start_writing_node(node, f:TextIO):
-    f.write(f'\tsubgraph cluster_{node.name} {{ \n')
+def start_writing_node(node, f: TextIO):
+    f.write(f"\tsubgraph cluster_{node.name} {{ \n")
     # write contents.
 
 
-def finish_writing_node(f:TextIO):
+def finish_writing_node(f: TextIO):
     # write label
-    f.write('\t}')
+    f.write("\t}")
 
 
 class MemStruct:
@@ -363,31 +369,32 @@ class MemStruct:
     https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.simple_paths.all_simple_paths.html
 
     """
+
     def __init__(self, branches: List):
         self.branches = branches
 
     def save_to_file(self, fname: str):
-        with open(fname, 'w') as f:
-            f.write('digraph d {')
+        with open(fname, "w") as f:
+            f.write("digraph d {")
 
             for i in self.branches:
-                f.write('branch here\n\n')
+                f.write("branch here\n\n")
 
-            f.write('}')
+            f.write("}")
 
 
-def get_leaf_nodes(g: networkx.Graph) -> []:
+def get_leaf_nodes(g: nx.Graph) -> []:
     leaf_nodes = [node for node in g.nodes() if g.out_degree(node) != 0 and g.in_degree(node) == 0]
     print(f"leaf nodes are: {leaf_nodes}")
     return leaf_nodes
 
 
-def remove_nodes(g: networkx.Graph, nodes: List) -> networkx.Graph:
+def remove_nodes(g: nx.Graph, nodes: List) -> nx.Graph:
     """
     use with leaf nodes
     """
 
-    if not isinstance(g, networkx.Graph):
+    if not isinstance(g, nx.Graph):
         raise ValueError
 
     for n in nodes:
@@ -398,10 +405,10 @@ def remove_nodes(g: networkx.Graph, nodes: List) -> networkx.Graph:
 
 def walk_dfs_post_order(g: nx.Graph):
     """
-        walk the tree, pick up multiset contents from node id, write to digraph subgraph cluster...
-        https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.traversal.depth_first_search.dfs_postorder_nodes.html#networkx.algorithms.traversal.depth_first_search.dfs_postorder_nodes
+    walk the tree, pick up multiset contents from node id, write to digraph subgraph cluster...
+    https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.traversal.depth_first_search.dfs_postorder_nodes.html#networkx.algorithms.traversal.depth_first_search.dfs_postorder_nodes
 
-        subtree_at_2 = dfs_tree(t, 2)
+    subtree_at_2 = dfs_tree(t, 2)
 
     """
 
@@ -427,7 +434,7 @@ def get_branches_from_g(g: nx.Graph) -> List:
     # nested structure only along one branch
 
     if not isinstance(g, nx.Graph):
-        raise  ValueError
+        raise ValueError
 
     # get all branches
     roots = (v for v, d in g.in_degree() if d == 0)
@@ -448,7 +455,7 @@ def get_branches_from_g(g: nx.Graph) -> List:
 def convert_tree_to_membranes(g: nx.Graph) -> MemStruct:
     """
     root is root of directed tree (polytree)
-    note: need to constantly associated networkx.Graph g and MultisetTree Node root to capture
+    note: need to constantly associated nx.Graph g and MultisetTree Node root to capture
     both the membrane structure AND the multiset contents. so TODO make appropriate data struct
     """
 
@@ -456,14 +463,6 @@ def convert_tree_to_membranes(g: nx.Graph) -> MemStruct:
         raise ValueError
 
     branches = get_branches_from_g(g)
-
-    # x = networkx.convert.to_dict_of_dicts(g)
-    # print(x)
-    # example: {0: {}, 1: {0: {}}, 2: {0: {}}, 3: {2: {}}, 4: {0: {}}, 5: {3: {}}, 6: {2: {}}, 7: {3: {}}, 8: {0: {}}, 9: {4: {}}}
-
-    node_connections = networkx.convert.to_dict_of_lists(g)
-    # print(y)
-    # example: {0: [], 1: [0], 2: [0], 3: [2], 4: [0], 5: [3], 6: [2], 7: [3], 8: [0], 9: [4]}
 
     leaf_order = []
     # make a copy of g. find leaf nodes and record node id. erode leaves to get next layer

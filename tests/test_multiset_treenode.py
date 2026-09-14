@@ -1,17 +1,19 @@
 import unittest
 
-from anytree import Node, RenderTree, PostOrderIter
+from anytree import Node, PostOrderIter, RenderTree
 from anytree.exporter import DotExporter
 from anytree.walker import Walker
 
-from malta.multiset_treenode import MultisetTreeFactory, show_multiset_tree, get_random_selection_from_alphabet
+from malta.mmultiset import MMultiset
+from malta.multiset_treenode import (
+    MultisetTreeFactory,
+    get_random_selection_from_alphabet,
+    show_multiset_tree,
+)
 from malta.util import get_alphabet1
-from mmultiset import MMultiset
-from multiset_treenode import MemStruct
 
 
 class TestMembraneTree(unittest.TestCase):
-
     def test_leaf_order(self):
         """
         known small 10 node polytree
@@ -36,22 +38,22 @@ class TestMembraneTree(unittest.TestCase):
 
         """
         leaf_order = []
-        leaf_order.append([4,5,6,7,8,9])
-        leaf_order.append([2,3])
+        leaf_order.append([4, 5, 6, 7, 8, 9])
+        leaf_order.append([2, 3])
         leaf_order.append([1])
 
         # dict of lists. 0 is root
         node_connections = {}
-        node_connections['0'] = []
-        node_connections['1'] = [0]
-        node_connections['2'] = [0]
-        node_connections['3'] = [1]
-        node_connections['4'] = [1]
-        node_connections['5'] = [1]
-        node_connections['6'] = [0]
-        node_connections['7'] = [0]
-        node_connections['8'] = [3]
-        node_connections['9'] = [2]
+        node_connections["0"] = []
+        node_connections["1"] = [0]
+        node_connections["2"] = [0]
+        node_connections["3"] = [1]
+        node_connections["4"] = [1]
+        node_connections["5"] = [1]
+        node_connections["6"] = [0]
+        node_connections["7"] = [0]
+        node_connections["8"] = [3]
+        node_connections["9"] = [2]
 
         # TODO
         # ms = MemStruct(node_connections, leaf_order)
@@ -84,9 +86,9 @@ class TestMembraneTree(unittest.TestCase):
         # alphabet = get_alphabet1(10)
 
         items = {}
-        items['a'] = 2
-        items['b'] = 5
-        items['w'] = 1
+        items["a"] = 2
+        items["b"] = 5
+        items["w"] = 1
 
     def test_get_random_selection_from_alphabet(self):
 
@@ -99,11 +101,11 @@ class TestMembraneTree(unittest.TestCase):
         root = Node(name="root", contents=MMultiset())
 
         contents = MMultiset()
-        contents.add('a', 1)
-        contents.add('b', 4)
+        contents.add("a", 1)
+        contents.add("b", 4)
         # s0 = Node(name="sub0", parent=root, contents=contents)
 
         print([node.name for node in PostOrderIter(root)])
 
         for node in PostOrderIter(root):
-            print(f'{node.name} has: {node.contents}')
+            print(f"{node.name} has: {node.contents}")

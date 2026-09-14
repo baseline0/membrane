@@ -1,5 +1,18 @@
-cyprus.log 
+cyprus.log
 
-__pycache__
-
+__pycache__/
 *.py[cod]
+
+.idea/
+.vscode/
+
+.venv/
+uv-cache/
+
+.pytest_cache/
+.ruff_cache/
+_trial_temp/
+
+malta/output/
+malta/sims/
+tests/out/

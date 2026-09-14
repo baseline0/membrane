@@ -1,7 +1,7 @@
 import json
 from typing import List
 
-from dot_colour import get_rand_colour
+from malta.dot_colour import get_rand_colour
 
 
 class MembraneItem:

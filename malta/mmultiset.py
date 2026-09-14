@@ -5,21 +5,20 @@ from multiset import Multiset
 
 
 class MMultiset(Multiset):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def json_serialize(self) -> dict:
         d = {}
         s = self.__str__()
-        s = s.replace("{", '')
-        s = s.replace("}", '')
-        s = s.replace("'", '')
-        s = s.replace(":", '')
-        s = s.replace(",", '')
+        s = s.replace("{", "")
+        s = s.replace("}", "")
+        s = s.replace("'", "")
+        s = s.replace(":", "")
+        s = s.replace(",", "")
 
         # may need to split into tuples here?
-        tokens = s.split(' ')
+        tokens = s.split(" ")
 
         for t in tokens:
             if t in d.keys():
@@ -30,11 +29,11 @@ class MMultiset(Multiset):
 
     def as_simple_string(self) -> str:
         s = self.__str__()
-        s = s.replace("{", '')
-        s = s.replace("}", '')
-        s = s.replace("'", '')
-        s = s.replace(":", '')
-        s = s.replace(",", '')
+        s = s.replace("{", "")
+        s = s.replace("}", "")
+        s = s.replace("'", "")
+        s = s.replace(":", "")
+        s = s.replace(",", "")
 
         return s
 
@@ -45,9 +44,9 @@ class MMultiset(Multiset):
         """
         s = self.as_simple_string()
 
-        formatted = ''
+        formatted = ""
 
-        tokens = s.split(' ')
+        tokens = s.split(" ")
 
         for t in tokens:
             formatted += f"{t}\n"
@@ -58,14 +57,14 @@ class MMultiset(Multiset):
 def json_serialize(m: Multiset) -> dict:
     d = {}
     s = m.__str__()
-    s = s.replace("{", '')
-    s = s.replace("}", '')
-    s = s.replace("'", '')
-    s = s.replace(":", '')
-    s = s.replace(",", '')
+    s = s.replace("{", "")
+    s = s.replace("}", "")
+    s = s.replace("'", "")
+    s = s.replace(":", "")
+    s = s.replace(",", "")
 
     # may need to split into tuples here?
-    tokens = s.split(' ')
+    tokens = s.split(" ")
 
     for t in tokens:
         if t in d.keys():

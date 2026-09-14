@@ -10,7 +10,7 @@ from malta.membrane_item import MembraneItem
 from malta.mmultiset import MMultiset, make_mmultiset
 from malta.rule import make_rule
 from malta.ruleset import RuleSet
-from malta.util import NameGenerator
+from malta.util import CONFIG_DIR, NameGenerator
 
 
 class Factory:
@@ -51,10 +51,10 @@ class Factory:
         update for tree
         """
 
-        alphabet = ['a', 'b', 'c', 'w']
+        alphabet = ["a", "b", "c", "w"]
 
         # details on the membranes items for summary report
-        with open("./config/sim1_items.json") as f:
+        with open(CONFIG_DIR / "sim1_items.json") as f:
             out = json.load(f)
 
         all_items = []
@@ -63,11 +63,12 @@ class Factory:
 
         # ---------------------
         # make rules
-        catalyst = {'b': 1}
-        r_input = {'c': 1}
-        r_output = {'w': 1}
-        r = make_rule(name='r1', descr="make w from c when b present", catalyst=catalyst, rule_input=r_input,
-                      rule_output=r_output)
+        catalyst = {"b": 1}
+        r_input = {"c": 1}
+        r_output = {"w": 1}
+        r = make_rule(
+            name="r1", descr="make w from c when b present", catalyst=catalyst, rule_input=r_input, rule_output=r_output
+        )
 
         ruleset = RuleSet()
         ruleset.rules.append(r)
@@ -77,9 +78,9 @@ class Factory:
         root = Node(name="root", contents=MMultiset())
 
         items = {}
-        items['a'] = 1
-        items['b'] = 2
-        items['c'] = 3
+        items["a"] = 1
+        items["b"] = 2
+        items["c"] = 3
         contents = make_mmultiset(items)
 
         s0 = Node(name="sub0", parent=root, contents=contents)
@@ -90,7 +91,6 @@ class Factory:
 
 
 class ContentItemFactory:
-
     @classmethod
     def get_items_for_names(cls, names, colour: str = None):  # -> List(ContentItem):
         # all same colour

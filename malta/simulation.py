@@ -1,17 +1,17 @@
 import json
+from enum import Enum
+from pathlib import Path
 from typing import List, TextIO
 
 from anytree import Node, search
 
 from malta.environment import Environment, EnvState
-from malta.membrane_item import MembraneItem
-from malta.membrane_item import load_membrane_items_from_file
+from malta.membrane_item import MembraneItem, load_membrane_items_from_file
 from malta.mmultiset import MMultiset, make_mmultiset, multiset_to_dict
-from malta.multiset_treenode import get_membrane_tree1, get_membrane_tree2, get_branches_from_g
+from malta.multiset_treenode import get_branches_from_g, get_membrane_tree1, get_membrane_tree2
 from malta.rule import Rule, make_rule
 from malta.ruleset import RuleSet, get_ruleset_1
-
-from enum import Enum
+from malta.util import CONFIG_DIR
 
 
 class NodeState(Enum):
@@ -56,6 +56,7 @@ class BranchManager:
 
 
     """
+
     # NOTE TO SELF: use anytree walker
     # for node in PostOrderIter(root):
     #     print(f'{node.name} has: {node.contents}')
@@ -65,14 +66,17 @@ class Simulation:
     MAX_TICKS = 10
     COMPLETE = False
 
-    def __init__(self) -> None:
-        self.output_dir = "./sims/"
+    def __init__(self, output_dir: str = "./sims/") -> None:
+        self.output_dir = output_dir
 
         # useful for when we use index to trigger file saves or image output
         self.current_index = 0
 
         # need to load config or programmatically populate: Environment()
         self.environment = None
+
+        # root node of the membrane tree (set alongside self.environment)
+        self.root = None
 
         # networkx graph which forms basis of Nodes
         self.graph = None
@@ -105,17 +109,19 @@ class Simulation:
         # go through each membrane. apply rules.
         # if no change, is complete or HALT condition.
 
-        print(f'tick: {self.current_index}')
+        print(f"tick: {self.current_index}")
         self.current_index += 1
         self.environment.apply_rules(self.root)
 
         # if self.current_index == 5:
         #     print('save img')
-        self.write_simplified_branches()
+        if self.branches is not None:
+            self.write_simplified_branches()
 
     def write_simplified_branches(self):
 
-        prefix = "./sims/simplified_branch_"
+        Path(self.output_dir).mkdir(parents=True, exist_ok=True)
+        prefix = f"{self.output_dir}simplified_branch_"
 
         for i, b in enumerate(self.branches):
             fname = f"{prefix}{i}.dot"
@@ -133,7 +139,7 @@ class Simulation:
         depth = 1
 
         for name in names:
-            indent = TAB*depth
+            indent = TAB * depth
             line = f"{indent}{start_clause}{name}"
             fp.write(line + "\t { \n")
             depth += 1
@@ -141,20 +147,20 @@ class Simulation:
     @staticmethod
     def get_label_string(name: str, multiplicity: int):
         if not name or multiplicity < 1:
-            return ''
-        s = f"[label = \"{name}:{multiplicity}\" ]"
+            return ""
+        s = f'[label = "{name}:{multiplicity}" ]'
         return s
 
     @staticmethod
     def write_subgraph_end(fp: TextIO, node: Node):
 
         if not hasattr(node, "contents"):
-            print('node must have contents attr for membrane items')
+            print("node must have contents attr for membrane items")
             raise AttributeError
 
         # constant indent for now
         TAB = "\t"
-        indent = TAB*2
+        indent = TAB * 2
         # node names are integers but we need char to start for dot so use node name as suffix
         suffix = node.name
 
@@ -168,7 +174,7 @@ class Simulation:
         # need to have unique name within the membrane so add prefix based on nesting
         for k, v in d.items():
             # TODO - get node colour, label, etc
-            descr = Simulation.get_label_string(k,v)
+            descr = Simulation.get_label_string(k, v)
             fp.write(f"{indent} {k}{suffix}{descr}\n")
 
             # TODO
@@ -209,8 +215,8 @@ class Simulation:
 
         print(branch)
 
-        with open(fname, 'w') as f:
-            f.write('digraph d { \n\n')
+        with open(fname, "w") as f:
+            f.write("digraph d { \n\n")
 
             # start all the nesting
             self.write_subgraph_starts(f, branch)
@@ -230,25 +236,25 @@ class Simulation:
                     self.write_subgraph_end(f, node)
 
                 except Exception:
-                    print(f'could not access node with id {node_id}')
+                    print(f"could not access node with id {node_id}")
                     raise ValueError
 
             # end digraph
-            f.write('}\n')
+            f.write("}\n")
 
     def run(self):
         self.current_index = 0
 
-        print('running membrane simulation')
-        print(f'see output: {self.output_dir}')
+        print("running membrane simulation")
+        print(f"see output: {self.output_dir}")
 
         while self.current_index < Simulation.MAX_TICKS and not Simulation.COMPLETE:
             self.next()
             if self.environment.running_state == EnvState.STOPPED:
-                print('stopping early based on env state. (no rule fired)')
+                print("stopping early based on env state. (no rule fired)")
                 break
 
-        print('DONE.')
+        print("DONE.")
 
 
 def get_item_names_from_membrane_items(items: List[MembraneItem], names: List[str] = None) -> List[str]:
@@ -263,15 +269,15 @@ def get_item_names_from_membrane_items(items: List[MembraneItem], names: List[st
         for mi in items:
             names.append(mi.name)
 
-        print(f'number of items is: {len(names)}')
-        print(f'{names}')
+        print(f"number of items is: {len(names)}")
+        print(f"{names}")
         return names
     elif isinstance(names, List):
         # we are appending to an existing list
         # convert the existing list into a set.
         # process the list.
         # convert back to a list
-        print('TODO')
+        print("TODO")
         raise ValueError("FIXME")
     else:
         raise ValueError
@@ -295,39 +301,38 @@ def get_multiset_of_item_names_from_membrane_items(items: List[MembraneItem], na
         # convert the existing list into a set.
         # process the list.
         # convert back to a list
-        print('TODO')
+        print("TODO")
         raise ValueError("FIXME")
     else:
         raise ValueError
 
 
 class SimulationFactory:
-
     @staticmethod
     def get_sim1() -> Simulation:
         sim = Simulation()
 
-        alphabet = ['a', 'b', 'c', 'w']
+        alphabet = ["a", "b", "c", "w"]
 
         # details on the membranes items for summary report
-        m_a = MembraneItem('a', descr='asset')
-        m_b = MembraneItem('b', descr='budget')
-        m_c = MembraneItem('c', descr='capital')
-        m_w = MembraneItem('w', descr='win')
+        m_a = MembraneItem("a", descr="asset")
+        m_b = MembraneItem("b", descr="budget")
+        m_c = MembraneItem("c", descr="capital")
+        m_w = MembraneItem("w", descr="win")
         all_items = [m_a, m_b, m_c, m_w]
 
         # ---------------------
         # make rules
         r_catalyst = MMultiset()
-        r_catalyst.add('b')
+        r_catalyst.add("b")
 
         r_input = MMultiset()
-        r_input.add('c')
+        r_input.add("c")
 
         r_output = MMultiset()
-        r_output.add('w')
+        r_output.add("w")
 
-        r = Rule(name='r1', descr='', catalyst=r_catalyst, rule_input=r_input, rule_output=r_output)
+        r = Rule(name="r1", descr="", catalyst=r_catalyst, rule_input=r_input, rule_output=r_output)
 
         ruleset = RuleSet()
         ruleset.rules = [r]
@@ -337,9 +342,9 @@ class SimulationFactory:
         root = Node(name="root", contents=MMultiset())
 
         contents = MMultiset()
-        contents.add('a', 1)
-        contents.add('b', 4)
-        contents.add('c', 2)
+        contents.add("a", 1)
+        contents.add("b", 4)
+        contents.add("c", 2)
         s0 = Node(name="sub0", parent=root, contents=contents)
 
         e = Environment(tree=root, rules=ruleset, all_items=all_items)
@@ -359,10 +364,10 @@ class SimulationFactory:
         # items in alphabet are used explicity in the following rules and contents but
         # the data structure (list) is not yet part of params.
         # Future - generate rules and contents from a defined alphabet
-        alphabet = ['a', 'b', 'c', 'w']
+        alphabet = ["a", "b", "c", "w"]
 
         # details on the membranes items for summary report
-        with open("./config/sim1_items.json") as f:
+        with open(CONFIG_DIR / "sim1_items.json") as f:
             out = json.load(f)
 
         all_items = []
@@ -371,11 +376,12 @@ class SimulationFactory:
 
         # ---------------------
         # make rules
-        catalyst = {'b': 1}
-        r_input = {'c': 1}
-        r_output = {'w': 1}
-        r = make_rule(name='r1', descr="make w from c when b present", catalyst=catalyst, rule_input=r_input,
-                      rule_output=r_output)
+        catalyst = {"b": 1}
+        r_input = {"c": 1}
+        r_output = {"w": 1}
+        r = make_rule(
+            name="r1", descr="make w from c when b present", catalyst=catalyst, rule_input=r_input, rule_output=r_output
+        )
 
         ruleset = RuleSet()
         ruleset.rules.append(r)
@@ -385,9 +391,9 @@ class SimulationFactory:
         root = Node(name="root", contents=MMultiset())
 
         items = {}
-        items['a'] = 1
-        items['b'] = 2
-        items['c'] = 3
+        items["a"] = 1
+        items["b"] = 2
+        items["c"] = 3
         contents = make_mmultiset(items)
 
         s0 = Node(name="sub0", parent=root, contents=contents)
@@ -408,10 +414,10 @@ class SimulationFactory:
 
         sim = Simulation()
 
-        fname = "./config/sim3_items.json"
+        fname = CONFIG_DIR / "sim3_items.json"
         all_items = load_membrane_items_from_file(fname)
 
-        alphabet = ['a', 'b', 'c', 'w']
+        alphabet = ["a", "b", "c", "w"]
         ruleset = get_ruleset_1(alphabet)
         root = get_membrane_tree1(alphabet)
 
@@ -427,7 +433,7 @@ class SimulationFactory:
         """
         sim = Simulation()
 
-        fname = "./config/sim4_items.json"
+        fname = CONFIG_DIR / "sim4_items.json"
         all_items, alphabet = load_membrane_items_from_file(fname)
 
         ruleset = get_ruleset_1(alphabet)
@@ -439,9 +445,9 @@ class SimulationFactory:
         sim.root = root
         sim.graph = g
 
-        #sim.membrane_struct = convert_tree_to_membranes(g)
+        # sim.membrane_struct = convert_tree_to_membranes(g)
         sim.branches = get_branches_from_g(g)
-        #walk_dfs_post_order(g)
+        # walk_dfs_post_order(g)
 
         return sim
 

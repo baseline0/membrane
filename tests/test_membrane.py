@@ -5,10 +5,9 @@ from malta.membrane_item import MembraneItem
 
 
 class TestMembraneItem(unittest.TestCase):
-
     def test_serialize_membrane_item(self):
         def as_membrane_item(d: dict = None):
-            if '__MembraneItem__' in d:
+            if "__MembraneItem__" in d:
                 return MembraneItem(name=d["name"])
             return d
 

@@ -8,6 +8,7 @@ class Membrane:
     contents is a list of strings that are the names of the membrane items
     contents needs to be a multiset so it is compatible with set operations for rules.
     """
+
     # https://pythonhosted.org/multiset/
 
     __slots__ = ["name", "descr", "contents", "membranes"]
@@ -44,7 +45,7 @@ class Membrane:
         dot digraph file for visualization
         """
 
-        s = f'subgraph cluster_{self.name} {{ \n'
+        s = f"subgraph cluster_{self.name} {{ \n"
 
         # TODO - add in indent
 
@@ -53,9 +54,9 @@ class Membrane:
         # option1: duplicate the visual object
         # option2: use a label on the object with quantity
         for c in self.contents:
-            s += f'{c} \n'
+            s += f"{c} \n"
 
-        s += '}'
+        s += "}"
 
         return s
 

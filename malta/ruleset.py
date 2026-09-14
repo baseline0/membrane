@@ -2,11 +2,10 @@ import random
 from typing import List
 
 from malta.rule import Rule, make_rule
-from util import NameGenerator
+from malta.util import NameGenerator
 
 
 class RuleSet:
-
     def __init__(self):
 
         # the list of symbols which are valid
@@ -72,11 +71,11 @@ def make_random_rule_from_alphabet(alphabet: List[str]) -> Rule:
 
     if len(alphabet) < 2:
         # the single letter just multiplies?
-        print('add more letters to alphabet')
+        print("add more letters to alphabet")
         return
 
     if len(alphabet) == 2:
-        print('making a rule without a catalyst since alphabet is size:2')
+        print("making a rule without a catalyst since alphabet is size:2")
         # coin flip for which letter is input or output
         coin = random.randint(0, 1)
         if coin == 0:
@@ -87,28 +86,26 @@ def make_random_rule_from_alphabet(alphabet: List[str]) -> Rule:
             r_output = {alphabet[0]: 1}
         descr = "coin flip"
     else:
-
         selected = random.sample(alphabet, 3)
-        s = ''.join([x for x in selected])
-        descr = f'{name}: {s}'
+        s = "".join([x for x in selected])
+        descr = f"{name}: {s}"
 
         catalyst = {selected[0]: 1}
         r_input = {selected[1]: 1}
         r_output = {selected[2]: 1}
 
-    r = make_rule(name=name, descr=descr, catalyst=catalyst, rule_input=r_input,
-                  rule_output=r_output)
+    r = make_rule(name=name, descr=descr, catalyst=catalyst, rule_input=r_input, rule_output=r_output)
     return r
 
 
 def make_random_rules_from_alphabet(alphabet: List[str], n: int = 10) -> List[Rule]:
     """
-        alphabet: a list of strings, each of which is the identifier of a membrane item
-        n: the number of rules to make. its ok if we end up with duplicate rules here. if this happens,
-        the interpretation is that the duplicated rule is more likely
+    alphabet: a list of strings, each of which is the identifier of a membrane item
+    n: the number of rules to make. its ok if we end up with duplicate rules here. if this happens,
+    the interpretation is that the duplicated rule is more likely
     """
 
-    print(f'making random rules from alphabet: {alphabet}')
+    print(f"making random rules from alphabet: {alphabet}")
     ruleset = RuleSet()
 
     if n < 0:

@@ -11,7 +11,7 @@ https://we1s.ucsb.edu/curriculum-lab/
 
 https://altair-viz.github.io/index.html
 
-### 
+###
 
 cloacina (python2)
 Tools for downloading from the LexisNexis API
@@ -55,4 +55,3 @@ https://github.com/nelsonic/github-scraper
 ## news filters
 
 https://github.com/openeventdata/FJTY-Filter
-

@@ -56,9 +56,9 @@ class Rule:
 
         d["name"] = self.name
         d["descr"] = self.descr
-        d['catalyst'] = self.catalyst.__str__()
-        d['rule_input'] = self.rule_input.__str__()
-        d['rule_output'] = self.rule_output.__str__()
+        d["catalyst"] = self.catalyst.__str__()
+        d["rule_input"] = self.rule_input.__str__()
+        d["rule_output"] = self.rule_output.__str__()
 
         return d
 
@@ -96,7 +96,7 @@ def rule_will_fire(r: Rule, m: MMultiset) -> bool:
     if r.catalyst.issubset(m):
         # catalysts present
         if r.rule_input.issubset(m):
-            print(f'firing rule: {r}')
+            print(f"firing rule: {r}")
             # inputs also present. rule will fire.
             return True
     return False
