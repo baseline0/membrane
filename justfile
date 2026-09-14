@@ -36,19 +36,4 @@ gen-just:
 clean:
     rm -rf sims/ out/ malta/output/ malta/sims/ tests/out/ tests/_trial_temp/
     rm -rf .pytest_cache/ .ruff_cache/
-    find . -type d -name "__pycache__" -exec rm -r {} +
-
-# --- Benchmarking ---
-
-# Compile CEC2017 C source into shared library
-build-cec2017:
-    @echo "Building CEC2017 shared library..."
-    mkdir -p benchmarks/c_src/cec2017
-    gcc -shared -fPIC -O3 \
-        benchmarks/c_src/cec2017/cec17_test_func.c \
-        -o benchmarks/c_src/cec2017/libcec2017.so -lm
-    @echo "✓ libcec2017.so built successfully"
-
-# Setup benchmarking framework
-setup-benchmarks: build-cec2017
-    @echo "Benchmarking framework ready"
+    find . -type d -name "__pycache__" -exec rm -r {} +"
