@@ -9,9 +9,12 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "anytree>=2.12.1",
+    "deap>=1.4.1",
     "matplotlib>=3.10.0",
     "multiset>=3.1.0",
     "networkx>=3.4.2",
+    "pandas>=2.2.0",
+    "scipy>=1.13.0",
     "typer>=0.15.1",
 ]
 
@@ -27,15 +30,18 @@ packages = ["malta"]
 
 [dependency-groups]
 dev = [
+    "deap>=1.4.1",
+    "pandas>=2.2.0",
     "pre-commit>=4.0.1",
     "pytest>=8.3.4",
     "ruff>=0.8.4",
+    "scipy>=1.13.0",
 ]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = ["-ra", "-q"]
-testpaths = ["tests"]
+testpaths = ["tests/unit", "tests/integration", "tests/e2e"]
 pythonpath = ["."]
 norecursedirs = ["tests/cyprus"]
 

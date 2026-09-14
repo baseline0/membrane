@@ -6,9 +6,13 @@ import "just/mod.just"
 
 # --- Development ---
 
-# Run the malta test suite (cyprus/ is a separate, untouched legacy package)
+# Run all test suites
 test:
-    uv run pytest tests/ --ignore=tests/cyprus -v
+    uv run pytest tests/unit tests/integration tests/e2e --ignore=tests/cyprus -v
+
+# Run unit tests only (fast, safe to run frequently) with timing of slowest 5
+test-unit:
+    uv run pytest tests/unit -m unit -v --durations=5
 
 lint:
     uv run ruff check malta tests
@@ -33,3 +37,18 @@ clean:
     rm -rf sims/ out/ malta/output/ malta/sims/ tests/out/ tests/_trial_temp/
     rm -rf .pytest_cache/ .ruff_cache/
     find . -type d -name "__pycache__" -exec rm -r {} +
+
+# --- Benchmarking ---
+
+# Compile CEC2017 C source into shared library
+build-cec2017:
+    @echo "Building CEC2017 shared library..."
+    mkdir -p benchmarks/c_src/cec2017
+    gcc -shared -fPIC -O3 \
+        benchmarks/c_src/cec2017/cec17_test_func.c \
+        -o benchmarks/c_src/cec2017/libcec2017.so -lm
+    @echo "✓ libcec2017.so built successfully"
+
+# Setup benchmarking framework
+setup-benchmarks: build-cec2017
+    @echo "Benchmarking framework ready"
