@@ -2,10 +2,10 @@ import os
 import sys
 import unittest
 
-from malta.dot import ContentItem
-from malta.dot_colour import DotColour
-from malta.factory import ContentItemFactory
-from malta.util import NameGenerator
+from malta.io.dot import ContentItem
+from malta.io.dot_colour import DotColour
+from malta.services.factory import ContentItemFactory
+from malta.core.util import NameGenerator
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))

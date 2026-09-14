@@ -5,13 +5,13 @@ from typing import List, TextIO
 
 from anytree import Node, search
 
-from malta.environment import Environment, EnvState
-from malta.membrane_item import MembraneItem, load_membrane_items_from_file
-from malta.mmultiset import MMultiset, make_mmultiset, multiset_to_dict
-from malta.multiset_treenode import get_branches_from_g, get_membrane_tree1, get_membrane_tree2
-from malta.rule import Rule, make_rule
-from malta.ruleset import RuleSet, get_ruleset_1
-from malta.util import CONFIG_DIR
+from malta.core.environment import Environment, EnvState
+from malta.core.membrane_item import MembraneItem, load_membrane_items_from_file
+from malta.types.mmultiset import MMultiset, make_mmultiset, multiset_to_dict
+from malta.types.multiset_treenode import get_branches_from_g, get_membrane_tree1, get_membrane_tree2
+from malta.core.rule import Rule, make_rule
+from malta.core.ruleset import RuleSet, get_ruleset_1
+from malta.constants import CONFIG_DIR
 
 
 class NodeState(Enum):

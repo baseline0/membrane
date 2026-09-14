@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from malta.membrane_item import MembraneItem
+from malta.core.membrane_item import MembraneItem
 
 
 class TestMembraneItem(unittest.TestCase):

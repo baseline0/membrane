@@ -3,9 +3,9 @@ import unittest
 
 from multiset import Multiset
 
-from malta.mmultiset import MMultiset
-from malta.rule import Rule, apply
-from malta.util import prettyprint_json
+from malta.types.mmultiset import MMultiset
+from malta.core.rule import Rule, apply
+from malta.core.util import prettyprint_json
 
 
 class TestRule(unittest.TestCase):

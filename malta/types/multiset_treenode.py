@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from anytree import Node, NodeMixin, PostOrderIter, PreOrderIter, RenderTree
 
-from malta.mmultiset import MMultiset, make_mmultiset
+from malta.types.mmultiset import MMultiset, make_mmultiset
 
 
 def save_nested_membranes(root: Node):

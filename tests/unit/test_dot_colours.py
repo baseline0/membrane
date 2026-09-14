@@ -1,6 +1,6 @@
 import unittest
 
-from malta.dot_colour import get_rand_colours
+from malta.io.dot_colour import get_rand_colours
 
 
 class TestDotColour(unittest.TestCase):

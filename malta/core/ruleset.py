@@ -1,8 +1,8 @@
 import random
 from typing import List
 
-from malta.rule import Rule, make_rule
-from malta.util import NameGenerator
+from malta.core.rule import Rule, make_rule
+from malta.core.util import NameGenerator
 
 
 class RuleSet:

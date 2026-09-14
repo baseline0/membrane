@@ -1,7 +1,7 @@
 import unittest
 
-from malta.membrane_item import MembraneItem
-from malta.simulation import get_item_names_from_membrane_items
+from malta.core.membrane_item import MembraneItem
+from malta.core.simulation import get_item_names_from_membrane_items
 
 # get a simulation.
 # run it to completion.

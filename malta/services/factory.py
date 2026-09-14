@@ -3,14 +3,15 @@ from typing import List
 
 from anytree import Node
 
-from malta.dot import ContentItem
-from malta.dot_colour import get_rand_colour
-from malta.environment import Environment
-from malta.membrane_item import MembraneItem
-from malta.mmultiset import MMultiset, make_mmultiset
-from malta.rule import make_rule
-from malta.ruleset import RuleSet
-from malta.util import CONFIG_DIR, NameGenerator
+from malta.io.dot import ContentItem
+from malta.io.dot_colour import get_rand_colour
+from malta.core.environment import Environment
+from malta.core.membrane_item import MembraneItem
+from malta.types.mmultiset import MMultiset, make_mmultiset
+from malta.core.rule import make_rule
+from malta.core.ruleset import RuleSet
+from malta.constants import CONFIG_DIR
+from malta.core.util import NameGenerator
 
 
 class Factory:

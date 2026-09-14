@@ -1,4 +1,4 @@
-from malta.mmultiset import MMultiset, make_mmultiset
+from malta.types.mmultiset import MMultiset, make_mmultiset
 
 
 class Rule:

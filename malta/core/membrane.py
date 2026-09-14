@@ -1,6 +1,6 @@
 from typing import List
 
-from malta.mmultiset import MMultiset
+from malta.types.mmultiset import MMultiset
 
 
 class Membrane:

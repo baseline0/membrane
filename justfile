@@ -18,11 +18,19 @@ test-unit:
 test-integration:
     uv run pytest tests/integration -m integration -v --durations=5
 
-lint:
+# Check import layer boundaries
+check-imports:
+    python scripts/dev/check_imports.py
+
+lint: check-imports
     uv run ruff check malta tests
 
 fmt:
     uv run ruff format malta tests
+
+# Agent contract: verify all changes (lint + test)
+check: lint test
+    @echo "✓ All checks passed"
 
 # Install the pre-commit git hook (run once per clone)
 pre-commit-install:
@@ -31,6 +39,16 @@ pre-commit-install:
 # Run pre-commit hooks (ruff + basic hygiene checks) against all files
 pre-commit:
     uv run pre-commit run --all-files
+
+# Print tree with file/line counts (respects .gitignore)
+tree:
+    @python scripts/dev/tree_with_stats.py
+
+# Auto-generate conventional commit message via local LLM and commit staged changes
+# Requires: pipx install commitmate
+# Uses local Ollama model to generate message from staged diff
+commit:
+    commitmate && git commit
 
 # Regenerate just/cli.just by introspecting the Typer CLI
 gen-just:

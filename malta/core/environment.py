@@ -3,10 +3,10 @@ from typing import List, TextIO
 
 from anytree import Node, PostOrderIter
 
-from malta.membrane import Membrane
-from malta.membrane_item import MembraneItem
-from malta.rule import apply, rule_will_fire
-from malta.ruleset import RuleSet
+from malta.core.membrane import Membrane
+from malta.core.membrane_item import MembraneItem
+from malta.core.rule import apply, rule_will_fire
+from malta.core.ruleset import RuleSet
 
 
 class EnvState(Enum):

@@ -3,7 +3,7 @@ import unittest
 
 from multiset import Multiset
 
-from malta.mmultiset import json_serialize, multiset_to_dict
+from malta.types.mmultiset import json_serialize, multiset_to_dict
 
 
 class TestMMultiset(unittest.TestCase):
