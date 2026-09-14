@@ -14,6 +14,10 @@ test:
 test-unit:
     uv run pytest tests/unit -m unit -v --durations=5
 
+# Run integration tests (slower, tests component interactions)
+test-integration:
+    uv run pytest tests/integration -m integration -v --durations=5
+
 lint:
     uv run ruff check malta tests
 
