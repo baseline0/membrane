@@ -27,11 +27,11 @@ protected-always:
   - .env*
   - credentials.*
   - secrets.json
-  - **/*.lock
-  - **/__pycache__/**
-  - **/node_modules/**
-  - **/.pytest_cache/**
-  - **/.venv/**
+  - "**/*.lock"
+  - "**/__pycache__/**"
+  - "**/node_modules/**"
+  - "**/.pytest_cache/**"
+  - "**/.venv/**"
 
 guard-rails:
   max-files-per-operation: 50
