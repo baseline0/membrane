@@ -1,0 +1,49 @@
+# Target Academic Institutions for HPC Faculty Discovery
+# Format: One institution per line. Lines starting with # are ignored.
+#
+# Strategy: Focus on:
+# - Natural computing / membrane computing research hubs
+# - Universities with active HPC allocations (ACCESS, PRACE, WoW)
+# - Departments with parallel computing / GPU research
+#
+# Last updated: 2025-09-15
+
+# --- Membrane Computing Research Centers (Tier 1: Direct P-System Expertise) ---
+University of Seville
+Universidad de Tarragona
+University of Computer Science and Technology
+
+# --- Natural Computing / Bio-Inspired Computing (Tier 2: Algorithmic Overlap) ---
+Leiden University
+University of Sheffield
+MIT - Department of Biological Engineering
+Stanford University - Synthetic Biology Lab
+UC Berkeley - Electrical Engineering and Computer Science
+
+# --- Parallel Computing / GPU Research (Tier 3: HPC Infrastructure) ---
+UC San Diego
+Georgia Tech
+Carnegie Mellon University
+University of Toronto - Parallel Computing Lab
+INRIA - French National Institute for Research in Computer Science
+
+# --- High-Performance Computing Centers (Tier 4: Allocation Access) ---
+University of Illinois Urbana-Champaign - Blue Waters Program
+University of California, Los Angeles - Institute for Digital Research and Education
+University of Pennsylvania - Center for High-Performance Computing
+Max Planck Institute for Informatics
+National Center for Atmospheric Research (NCAR)
+
+# --- International Supercomputing Partnerships (Tier 5: PRACE/WoW) ---
+ETH Zurich - Scalable Parallel Computing Lab
+University of Vienna - Scientific Computing
+University of Stuttgart - Simulation of Large Systems
+Leibniz Supercomputing Centre (Germany)
+CINECA (Italy)
+
+# --- Quantum & Emerging Computing (Tier 6: Potential Hybrid Applications) ---
+MIT - Quantum Engineering Lab
+IBM Research - Quantum Computing Division
+University of Waterloo - Institute for Quantum Computing
+Delft University of Technology - QuTech
+University of Science and Technology of China - Quantum Lab
