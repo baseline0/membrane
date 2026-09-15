@@ -28,6 +28,7 @@ import numpy.typing as npt
 @dataclass(frozen=True)
 class BenchmarkFunction:
     """Single optimization problem instance."""
+
     id: int | str
     name: str
     dimension: int
@@ -100,9 +101,9 @@ class CEC2017CBinding:
         self._test_func.argtypes = [
             ctypes.POINTER(ctypes.c_double),  # x
             ctypes.POINTER(ctypes.c_double),  # f
-            ctypes.c_int,                      # nx (dimension)
-            ctypes.c_int,                      # mx (num vectors)
-            ctypes.c_int,                      # func_num
+            ctypes.c_int,  # nx (dimension)
+            ctypes.c_int,  # mx (num vectors)
+            ctypes.c_int,  # func_num
         ]
         self._test_func.restype = None
 
@@ -189,14 +190,15 @@ setup-benchmarks: build-cec2017
 import numpy as np
 from benchmarks.suites.cec2017 import CEC2017Suite
 
+
 def test_cec2017_load_and_eval():
     suite = CEC2017Suite()
     f1 = suite.get_function(1, dimension=10)
-    
+
     assert f1.name == "F1: Shifted and Rotated Bent Cigar Function"
     assert f1.bounds == (-100.0, 100.0)
     assert f1.optimum_value == 100.0
-    
+
     x = np.random.uniform(-100, 100, size=10)
     result = f1(x)
     assert isinstance(result, float)
@@ -245,8 +247,9 @@ class GeneticAlgorithm:
         toolbox.register("select", tools.selBest)
 
         pop = toolbox.population(n=self.pop_size)
-        pop, logbook = algorithms.eaSimple(pop, toolbox, cxpb=self.cxpb, mutpb=self.mutpb,
-                                          ngen=self.generations, verbose=False)
+        pop, logbook = algorithms.eaSimple(
+            pop, toolbox, cxpb=self.cxpb, mutpb=self.mutpb, ngen=self.generations, verbose=False
+        )
 
         return min([ind.fitness.values[0] for ind in pop])
 ```
@@ -289,9 +292,11 @@ class ParticleSwarmOptimizer:
         for _ in range(self.generations):
             for i in range(self.pop_size):
                 r1, r2 = np.random.random((2, problem.dimension))
-                velocities[i] = (self.w * velocities[i] +
-                                self.c1 * r1 * (particles[i] - particles[i]) +
-                                self.c2 * r2 * (global_best_pos - particles[i]))
+                velocities[i] = (
+                    self.w * velocities[i]
+                    + self.c1 * r1 * (particles[i] - particles[i])
+                    + self.c2 * r2 * (global_best_pos - particles[i])
+                )
                 particles[i] += velocities[i]
                 particles[i] = np.clip(particles[i], *problem.bounds)
 
@@ -358,14 +363,16 @@ class BenchmarkHarness:
             for func in functions:
                 for alg_name, alg in algorithms.items():
                     stats_dict = self.run_algorithm_on_problem(alg, func, n_seeds=n_seeds)
-                    results.append({
-                        "dimension": dimension,
-                        "function": func.name,
-                        "algorithm": alg_name,
-                        "mean": stats_dict["mean"],
-                        "std": stats_dict["std"],
-                        "error_mean": stats_dict["error_mean"],
-                    })
+                    results.append(
+                        {
+                            "dimension": dimension,
+                            "function": func.name,
+                            "algorithm": alg_name,
+                            "mean": stats_dict["mean"],
+                            "std": stats_dict["std"],
+                            "error_mean": stats_dict["error_mean"],
+                        }
+                    )
 
         return pd.DataFrame(results)
 ```

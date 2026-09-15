@@ -20,9 +20,7 @@ def validate_seed(seed: int) -> None:
 def validate_dimension(dimension: int, supported: Tuple[int, ...] = (10, 30, 50, 100)) -> None:
     """Ensure dimension is supported by the benchmark suite."""
     if dimension not in supported:
-        raise ValidationError(
-            f"dimension {dimension} not supported. Choose from {supported}"
-        )
+        raise ValidationError(f"dimension {dimension} not supported. Choose from {supported}")
 
 
 def validate_function_id(func_id: int, max_id: int = 30) -> None:
@@ -50,9 +48,7 @@ def validate_result_finite(result: float, label: str = "result") -> None:
         raise ValidationError(f"{label} is not finite: {result}")
 
 
-def validate_result_bounds(
-    result: float, func_id: int, dimension: int
-) -> None:
+def validate_result_bounds(result: float, func_id: int, dimension: int) -> None:
     """
     Sanity check: result should be close to expected optimum value.
     CEC2017 optimum = func_id * 100.

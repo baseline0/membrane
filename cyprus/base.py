@@ -1,7 +1,7 @@
 import logging
 
 # encoding='utf-8'
-logging.basicConfig(filename='cyprus.log', level=logging.INFO)
+logging.basicConfig(filename="cyprus.log", level=logging.INFO)
 logging.info("starting simulation")
 
 
@@ -23,7 +23,7 @@ class Base(Singleton):
         self.state_rule_applied = True
 
     def membrane_name_in_use(self, name: str) -> bool:
-        # retval=false means name is not already used and 
+        # retval=false means name is not already used and
         # therefore can be used
         retval = False
 

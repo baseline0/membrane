@@ -1,7 +1,5 @@
 """Tests for malta.constants path validation."""
 
-import pytest
-
 from malta.constants import CONFIG_DIR, EXAMPLES_DIR, MALTA_ROOT, REPO_ROOT
 
 

@@ -7,15 +7,15 @@ Run: uv run python scripts/dev/scan_related_projects.py
 Output: Saved to scripts/dev/scan_findings.md
 """
 
-import json
-import subprocess
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
+
 
 @dataclass
 class ProjectScan:
     """Findings from scanning a related project."""
+
     name: str
     path: Path
     has_pyproject: bool = False
@@ -42,6 +42,7 @@ def scan_project(project_path: Path) -> ProjectScan:
         scan.has_pyproject = True
         try:
             import tomllib
+
             with open(pyproject, "rb") as f:
                 data = tomllib.load(f)
 
@@ -163,7 +164,7 @@ def main():
         f.write("- [ ] Consider pre-commit/CI/CD setup for malta\n")
 
     print(f"\n✓ Findings written to {report_path}")
-    print(f"  Review and decide next steps for malta/demos")
+    print("  Review and decide next steps for malta/demos")
 
 
 if __name__ == "__main__":

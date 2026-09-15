@@ -1,26 +1,20 @@
 from random import shuffle
-from textwrap import indent
 from typing import List
 
 from cyprus.base import get_base, log_info
 from cyprus.dissolve_particle import DissolveParticle
-from cyprus.particle import Particle
 from cyprus.osmose_particle import OsmoseParticle
+from cyprus.particle import Particle
 
 base = get_base()
 
 
 class Environment(object):
     """
-  An environment - a container object for rules and particles
-  """
+    An environment - a container object for rules and particles
+    """
 
-    def __init__(self,
-                 name=None,
-                 parent=None,
-                 contents: List = [],
-                 membranes: List = [],
-                 rules: List = []) -> None:
+    def __init__(self, name=None, parent=None, contents: List = [], membranes: List = [], rules: List = []) -> None:
 
         self.name = name
         self.parent = parent
@@ -36,15 +30,15 @@ class Environment(object):
     def log_status(self, depth=0):
         indent = " " * (depth * 2)
 
-        log_info(f'{indent} [name: {self.name}')
-        log_info(f'{indent} symbols: {self.contents}')
-        log_info(f'{indent} rules: {self.rules}')
-        log_info(f'{indent} staging area: {self.staging_area}')
+        log_info(f"{indent} [name: {self.name}")
+        log_info(f"{indent} symbols: {self.contents}")
+        log_info(f"{indent} rules: {self.rules}")
+        log_info(f"{indent} staging area: {self.staging_area}")
 
-        log_info(f'{indent} Membranes:')
+        log_info(f"{indent} Membranes:")
         for m in self.membranes:
             m.log_status(depth + 1)
-        log_info(f'{indent}]')
+        log_info(f"{indent}]")
 
     def tick(self):
         self.stage1()
@@ -60,7 +54,8 @@ class Environment(object):
             self.ruleranks[rule.priority] = r
 
     def setparents(self):
-        for m in self.membranes: m.parent = self
+        for m in self.membranes:
+            m.parent = self
 
     def dissolve(self):
         pass  # environments cannot dissolve
@@ -68,8 +63,9 @@ class Environment(object):
     def rule_is_applicable(self, rule):
         counts = set([(s.__str__(), rule.requirements.count(s)) for s in rule.requirements])
         s_counts = dict([(s.__str__(), self.contents.count(s)) for s in self.contents])
-        for (s, c) in counts:
-            if s_counts.get(s, None) == None or s_counts[s] < c: return False
+        for s, c in counts:
+            if s_counts.get(s, None) == None or s_counts[s] < c:
+                return False
         return True
 
     def apply_rule(self, rule):
@@ -124,8 +120,7 @@ class Environment(object):
                     if not base.membrane_table.get(s.target, None):
                         msg = "ERROR: No containers defined with name '%s'" % s.target
                         raise Exception(msg)
-                    base.membrane_table[s.target].contents.append(
-                        Particle(s.payload))
+                    base.membrane_table[s.target].contents.append(Particle(s.payload))
                 elif self.parent:
                     self.parent.contents.append(Particle(s.payload))
                 else:  # environments cannot be osmosed through

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(just test *)",
+      "Bash(just --list)",
+      "Bash(git add *)",
+      "Bash(just commit *)",
+      "Bash(git commit -m 'feat\\(malta\\): add hardening—path validation, benchmark validators, domain exceptions *)"
+    ]
+  }
+}

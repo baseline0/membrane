@@ -21,4 +21,3 @@ MALTA_ROOT = _validate_path(MALTA_ROOT, "MALTA_ROOT")
 # Commonly used paths
 CONFIG_DIR = _validate_path(MALTA_ROOT / "config", "CONFIG_DIR")
 EXAMPLES_DIR = _validate_path(MALTA_ROOT / "examples", "EXAMPLES_DIR")
-
