@@ -1,3 +1,10 @@
+
+
+
+---- 
+
+## Deferred 
+
 have the ticks write to individual files within a run-specific folder
 
 write a tool to convert an environment into a dot/graphviz digraph

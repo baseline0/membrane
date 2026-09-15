@@ -6,10 +6,38 @@
       "Bash(git add *)",
       "Bash(just commit *)",
       "Bash(git commit -m 'feat\\(malta\\): add hardening—path validation, benchmark validators, domain exceptions *)",
-      "Bash(uv sync *)"
+      "Bash(uv sync *)",
+      "Bash(MESSAGE='feat\\(shared\\): integrate agent-tooling recipes \\(test, lint, commit\\) *)",
+      "Bash(python -m malta.quantum_simulator /tmp/test_obsidian_notes)",
+      "Bash(git commit -m ' *)",
+      "Bash(git commit -m 'feat\\(quantum\\): research infrastructure for membrane quantum computing *)",
+      "Bash(pre-commit install *)",
+      "Bash(rm -rf .git/hooks/pre-commit)",
+      "Bash(python -m pip install pre-commit --quiet)",
+      "Bash(python -m pre-commit install --quiet)",
+      "Bash(find /home/mark/projects -type f -name \"*.py\" -o -name \"*.md\" | xargs grep -l \"entity.map\\\\|entity_map\\\\|mapping.*entit\" 2>/dev/null | head -20)",
+      "Read(//home/mark/projects/**)",
+      "Bash(find /home/mark/projects -type f \\\\\\( -name \"*.py\" -o -name \"*.md\" \\\\\\) ! -path \"*/.venv/*\" ! -path \"*/__pycache__/*\" ! -path \"*/site-packages/*\" | xargs grep -l \"entity\" 2>/dev/null | grep -v \".pyc\" | head -20)",
+      "Bash(python tools/hpc_lead_discovery.py --institutions \"UC San Diego\" \"Georgia Tech\" --top-n 3)",
+      "Bash(git commit *)",
+      "Bash(uv add *)",
+      "Bash(python tools/hpc_lead_discovery.py --institutions \"UC San Diego\" \"Georgia Tech\" \"University of Seville\" --top-n 5)",
+      "Bash(python tools/hpc_lead_discovery.py --institutions-file docs/outreach/target_institutions.txt --output docs/outreach/full_lead_database.csv --top-n 10)",
+      "Bash(python -c \"from research.entity_resolution import Entity, RORResolver, AcademicHPCResolver, EntityCache; print\\('✓ Imports successful'\\)\")",
+      "Bash(pip install *)",
+      "Bash(python -c \"from research.entity_resolution import Entity, RORResolver, AcademicHPCResolver, EntityCache; print\\('✓ All imports successful'\\)\")",
+      "Bash(python3.13 -m pip install -e . -q)",
+      "Bash(python3.13 -c \"from research.entity_resolution import Entity, RORResolver, AcademicHPCResolver, EntityCache; print\\('✓ All imports successful'\\)\")",
+      "Bash(python3.13 -m py_compile src/research/entity_resolution/resolvers/*.py)",
+      "Bash(rm -f src/research/models.py)",
+      "Bash(rm -rf src/research/resolvers)"
     ],
     "additionalDirectories": [
-      "/home/mark/projects/baseline0/agent-tooling"
+      "/home/mark/projects/baseline0/agent-tooling",
+      "/home/mark/projects/baseline0/research/src/research/resolvers",
+      "/home/mark/projects/baseline0/research/src/research/entity_resolution",
+      "/home/mark/projects/baseline0/research/src/research",
+      "/home/mark/projects/baseline0/research/src/research/entity_resolution/resolvers"
     ]
   }
 }
