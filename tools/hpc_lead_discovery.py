@@ -1,14 +1,44 @@
 #!/usr/bin/env python3
 """
-HPC Faculty Discovery Pipeline for Membrane Computing Collaboration
+HPC Faculty Discovery Pipeline for Membrane Computing Collaboration.
 
 Orchestrates entity mapping, resolution, enrichment, and lead scoring to identify
 academic faculty with HPC allocations who could benefit from membrane computing
 collaboration.
 
+Pipeline stages:
+  1. Search: Web scraping or institution list input
+  2. Resolution: Normalize names → ROR IDs, ORCID identifiers (via entity mapping)
+  3. Enrichment: Query OpenAlex + ORCID for publications, affiliations, HPC access
+  4. Scoring: Rank leads by research relevance + HPC engagement + contact confidence
+  5. Export: CSV for manual review + personalized outreach
+
 Usage:
-    python tools/hpc_lead_discovery.py --institutions "UC San Diego" "Georgia Tech"
-    python tools/hpc_lead_discovery.py --institutions-file docs/outreach/target_institutions.txt
+    # Specific institutions
+    python tools/hpc_lead_discovery.py \\
+      --institutions "UC San Diego" "Georgia Tech" \\
+      --output leads.csv --top-n 20
+
+    # From file
+    python tools/hpc_lead_discovery.py \\
+      --institutions-file docs/outreach/target_institutions.txt \\
+      --output full_leads.csv
+
+Scoring formula:
+  score = (
+    research_relevance * 0.40 +     # Keywords: membrane, GPU, parallel, etc.
+    hpc_engagement * 0.30 +         # HPC publications + allocations
+    contact_confidence * 0.10 +     # Email verified
+    data_confidence * 0.20          # Source reliability (OpenAlex, ORCID, etc.)
+  )
+
+Next steps after discovery:
+  1. Verify emails via institution directories
+  2. Personalize from EMAIL_TEMPLATES.md (5 templates provided)
+  3. Log activity in OUTREACH_LOG.md
+  4. Follow 12-week plan in GETTING_STARTED.md
+
+Integrates with: baseline0/research/src/research/resolvers/academic_hpc.py
 """
 
 import argparse
@@ -48,15 +78,26 @@ def validate_dependencies():
 
 def score_lead(row: pd.Series) -> float:
     """
-    Score a faculty lead for outreach priority.
+    Score a faculty lead for outreach priority (0.0–1.0).
 
-    Higher scores indicate better collaboration fit + contact reliability.
+    Scoring breakdown:
+      - Research relevance (40%): membrane, p-system, GPU, parallel, HPC keywords
+      - HPC engagement (30%): confirmed allocations (ACCESS, PRACE, etc.)
+      - Contact confidence (10%): verified email address
+      - Data confidence (20%): source reliability (OpenAlex, ORCID, etc.)
+
+    Higher scores = better collaboration fit + more reliable contact data.
+
+    Example score interpretation:
+      0.85+  : High priority (send email immediately)
+      0.70-0.84: Medium (verify email, personalize carefully)
+      <0.70  : Lower priority (skip or send follow-up batch)
 
     Args:
-        row: DataFrame row (lead record)
+        row: DataFrame row from discovery output
 
     Returns:
-        Score 0.0–1.0
+        Composite score 0.0–1.0
     """
     score = 0.0
 
@@ -279,6 +320,46 @@ def main():
 
         logger.info("\n✅ Discovery complete!")
         logger.info(f"Next: Review {output_path} and personalize outreach emails.")
+        logger.info("\n📧 EMAIL TEMPLATE (General Research Overlap):")
+        logger.info("""
+Dear Dr. [NAME],
+
+I've been following your work on [SPECIFIC_PAPER], particularly your approach to
+[THEIR_KEYWORD]. I'm developing membrane computing algorithms for [YOUR_AREA], and
+believe your expertise would be valuable.
+
+I'd like to propose an unpaid Adjunct Researcher position at [THEIR_UNIVERSITY]:
+- Institutional affiliation for my grants
+- Access to your HPC infrastructure
+- Co-authored publications leveraging your ACCESS/PRACE allocation
+
+In exchange, I'll contribute novel algorithms + grant proposal support.
+
+Would you be open to a 20-minute call? Looking forward to it.
+
+Best,
+Mark Alexiuk
+        """)
+        logger.info("📧 EMAIL TEMPLATE (Membrane Computing Research Hub):")
+        logger.info("""
+Dear Dr. [NAME],
+
+Your P-Systems group's work on [PAPER] aligns directly with my quantum-inspired
+membrane computing research. I believe combining your theoretical expertise with
+modern HPC could yield significant advances.
+
+I'm seeking Research Affiliate status to:
+1. Implement quantum-inspired P-system variants on supercomputers
+2. Run large-scale benchmarks on PRACE/ACCESS
+3. Co-author papers in top theoretical CS venues
+
+This offers zero cost to your lab while expanding your research scope.
+
+Would you be interested in discussing? Details: [PORTFOLIO_LINK]
+
+Best regards,
+Mark Alexiuk
+        """)
 
     _run_discovery(args.institutions, args.institutions_file, args.output, args.top_n, args.rate_limit_delay)
 
