@@ -2,17 +2,12 @@
 
 set default-list := true
 
-# Import shared recipes from tooling (fmt, lint, test, check, commit, clean)
-# TODO: uncomment once tooling/just/shared.just is ready
-# import "../tooling/just/shared.just"
+# Import shared recipes from agent-tooling (fmt, lint, test, check, commit)
+import "../agent-tooling/just/shared.just"
 
 import "just/mod.just"
 
 # --- Development ---
-
-# Run all test suites
-test:
-    uv run pytest tests/unit tests/integration tests/e2e --ignore=tests/cyprus -v
 
 # Run unit tests only (fast, safe to run frequently) with timing of slowest 5
 test-unit:
@@ -21,28 +16,6 @@ test-unit:
 # Run integration tests (slower, tests component interactions)
 test-integration:
     uv run pytest tests/integration -m integration -v --durations=5
-
-# Check import layer boundaries
-check-imports:
-    python scripts/dev/check_imports.py
-
-# Format code with ruff
-fmt:
-    uv run ruff format malta tests benchmarks scripts
-
-# Lint with ruff and check imports
-lint: check-imports
-    uv run ruff check malta tests benchmarks scripts
-
-# Verify all checks pass (lint + test)
-check: lint test
-    @echo "✓ All checks passed"
-
-# Auto-generate conventional commit message via local LLM and commit staged changes
-# Requires: pipx install commitmate
-# Uses local Ollama model to generate message from staged diff
-commit:
-    commitmate && git commit
 
 # Install the pre-commit git hook (run once per clone)
 pre-commit-install:

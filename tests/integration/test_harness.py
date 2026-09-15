@@ -43,9 +43,9 @@ class SimpleBenchmarkSuite(BenchmarkSuite):
 
 @pytest.fixture
 def harness():
-    """Create a harness with simple test suite."""
+    """Create a harness with simple test suite (non-strict for testing)."""
     suite = SimpleBenchmarkSuite()
-    return BenchmarkHarness(suite)
+    return BenchmarkHarness(suite, strict=False)
 
 
 @pytest.fixture

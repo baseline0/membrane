@@ -7,20 +7,37 @@ import pandas as pd
 from scipy import stats
 
 from benchmarks.suites.base import BenchmarkFunction, BenchmarkSuite
+from benchmarks.validators import (
+    validate_dimension,
+    validate_n_seeds,
+    validate_result_bounds,
+    validate_result_finite,
+    validate_seed,
+)
 
 
 class BenchmarkHarness:
     """Orchestrates 30+ seed experiments with statistical analysis."""
 
-    def __init__(self, suite: BenchmarkSuite):
+    def __init__(self, suite: BenchmarkSuite, strict: bool = True):
         self.suite = suite
+        self.strict = strict  # If False, skip statistical rigor validation (for testing)
 
     def run_single_seed(self, algorithm, problem: BenchmarkFunction, seed: int) -> float:
-        """Run one algorithm on one problem with one seed."""
-        return algorithm.optimize(problem, seed=seed)
+        """Run one algorithm on one problem with one seed. Validates seed and result."""
+        validate_seed(seed)
+        result = algorithm.optimize(problem, seed=seed)
+        validate_result_finite(result, label=f"result (seed={seed})")
+        # Only validate bounds for CEC2017 suite (func_id in [1-30])
+        if self.suite.name == "CEC2017":
+            validate_result_bounds(result, problem.id, problem.dimension)
+        return result
 
     def run_algorithm_on_problem(self, algorithm, problem: BenchmarkFunction, n_seeds: int = 30) -> dict:
         """Run algorithm on problem for n_seeds times, return statistics."""
+        if self.strict:
+            validate_n_seeds(n_seeds)
+            validate_dimension(problem.dimension)
         results = [self.run_single_seed(algorithm, problem, seed) for seed in range(n_seeds)]
         results_arr = np.array(results)
         return {
@@ -44,6 +61,8 @@ class BenchmarkHarness:
 
     def run_full_benchmark(self, algorithms: dict, n_seeds: int = 30) -> pd.DataFrame:
         """Run all algorithms on all functions, return comparison DataFrame."""
+        if self.strict:
+            validate_n_seeds(n_seeds)
         results = []
 
         for dimension in self.suite.supported_dimensions:

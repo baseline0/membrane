@@ -5,7 +5,11 @@
       "Bash(just --list)",
       "Bash(git add *)",
       "Bash(just commit *)",
-      "Bash(git commit -m 'feat\\(malta\\): add hardening—path validation, benchmark validators, domain exceptions *)"
+      "Bash(git commit -m 'feat\\(malta\\): add hardening—path validation, benchmark validators, domain exceptions *)",
+      "Bash(uv sync *)"
+    ],
+    "additionalDirectories": [
+      "/home/mark/projects/baseline0/agent-tooling"
     ]
   }
 }

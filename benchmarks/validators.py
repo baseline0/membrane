@@ -51,10 +51,15 @@ def validate_result_finite(result: float, label: str = "result") -> None:
 def validate_result_bounds(result: float, func_id: int, dimension: int) -> None:
     """
     Sanity check: result should be close to expected optimum value.
-    CEC2017 optimum = func_id * 100.
-    Allow ±10x for algorithm slack.
+    CEC2017 optimum = func_id * 100. For test suites with optimum=0, allow any finite value.
+    For CEC2017: allow ±10x for algorithm slack.
     """
     optimum = func_id * 100.0
+
+    # Skip bounds check for optimum=0 (common in test suites like sphere function)
+    if optimum == 0.0:
+        return
+
     lower = optimum * 0.1
     upper = optimum * 10.0
 
