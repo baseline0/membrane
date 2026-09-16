@@ -31,12 +31,16 @@ def validate_function_id(func_id: int, max_id: int = 30) -> None:
         raise ValidationError("Function 2 (F2) was removed from CEC2017 benchmark")
 
 
-def validate_n_seeds(n_seeds: int, min_seeds: int = 30) -> None:
-    """Ensure n_seeds meets statistical rigor threshold."""
+def validate_n_seeds(n_seeds: int, min_seeds: int = 30, test_mode: bool = False) -> None:
+    """Ensure n_seeds meets statistical rigor threshold (relaxed in test_mode)."""
+    if test_mode and n_seeds >= 1:
+        # In test mode, accept any n_seeds >= 1
+        return
     if n_seeds < min_seeds:
         raise ValidationError(
             f"n_seeds={n_seeds} below statistical minimum ({min_seeds}). "
-            f"Wilcoxon tests require >=30 samples for robustness."
+            f"Wilcoxon tests require >=30 samples for robustness. "
+            f"Use test_mode=True to skip validation for testing."
         )
 
 

@@ -11,15 +11,18 @@ from benchmarks.suites.cec2017 import CEC2017Suite
 
 def main(n_seeds: int = 3, n_functions: int = 5, dimension: int = 10):
     """Run example benchmark on subset of CEC2017."""
+    # Use non-strict mode for quick testing (relaxes statistical rigor requirements)
+    strict_mode = n_seeds >= 30
     print(f"Running benchmark: {n_functions} functions, {dimension}D, {n_seeds} seeds per run")
+    print(f"Mode: {'strict (publication-ready)' if strict_mode else 'testing (relaxed)'}")
     print("-" * 70)
 
     suite = CEC2017Suite()
-    harness = BenchmarkHarness(suite)
+    harness = BenchmarkHarness(suite, strict=strict_mode)
 
     algorithms = {
-        "GA": GeneticAlgorithm(pop_size=50, generations=100),
-        "PSO": ParticleSwarmOptimizer(pop_size=30, generations=100),
+        "GA": GeneticAlgorithm(pop_size=100, generations=300),
+        "PSO": ParticleSwarmOptimizer(pop_size=50, generations=300),
     }
 
     functions = suite.list_functions(dimension)[:n_functions]
