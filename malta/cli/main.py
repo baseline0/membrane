@@ -3,11 +3,13 @@ from typing import Annotated
 import typer
 
 from malta.cli.dev import dev_app
+from malta.cli.benchmark import benchmark_app
 from malta.core.simulation import run as run_simulation
 
 app = typer.Typer(name="malta", help="Membrane-computing (P System) simulation CLI.")
 
 app.add_typer(dev_app, name="dev")
+app.add_typer(benchmark_app, name="benchmark")
 
 
 @app.command("run")
