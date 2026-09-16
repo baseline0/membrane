@@ -6,9 +6,6 @@ Supports:
 - Gray code: Reduce Hamming distance jumps in encoding
 """
 
-import math
-from typing import Optional
-
 
 class BinaryEncoding:
     """Encode/decode binary strings to continuous variables."""
@@ -56,7 +53,7 @@ class BinaryEncoding:
         fraction = max(0.0, min(1.0, fraction))  # Clip to [0, 1]
 
         # Convert to integer
-        max_int = 2 ** n_bits - 1
+        max_int = 2**n_bits - 1
         as_int = int(round(fraction * max_int))
 
         # Convert to binary string (zero-padded)
@@ -160,22 +157,18 @@ class MultibitEncoder:
             Binary string of length total_bits
         """
         if len(solution) != self.n_dims:
-            raise ValueError(
-                f"Solution has {len(solution)} dims, expected {self.n_dims}"
-            )
+            raise ValueError(f"Solution has {len(solution)} dims, expected {self.n_dims}")
 
         bits = ""
         for dim in range(self.n_dims):
-            dim_bits = BinaryEncoding.value_to_bits(
-                solution[dim], self.bounds, self.n_bits_per_dim
-            )
+            dim_bits = BinaryEncoding.value_to_bits(solution[dim], self.bounds, self.n_bits_per_dim)
             bits += dim_bits
 
         return bits
 
     def get_basis_dimension(self) -> int:
         """Get the size of basis state space (2^total_bits)."""
-        return 2 ** self.total_bits
+        return 2**self.total_bits
 
     def random_basis_state(self) -> str:
         """Generate random basis state.
@@ -229,9 +222,7 @@ class ProgressiveEncoding:
 
         # Linear progression from min to max
         progress = current_gen / total_gens
-        self.current_bits = int(
-            self.min_bits + (self.max_bits - self.min_bits) * progress
-        )
+        self.current_bits = int(self.min_bits + (self.max_bits - self.min_bits) * progress)
         self.current_bits = max(self.min_bits, min(self.max_bits, self.current_bits))
 
     def get_encoder(self) -> MultibitEncoder:

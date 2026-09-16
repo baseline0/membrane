@@ -7,8 +7,8 @@ Implements:
 - Escape strategies from plateaus
 """
 
-import random
 import math
+import random
 from dataclasses import dataclass
 from typing import Optional
 
@@ -48,9 +48,7 @@ class MutationOperator:
         return "".join(mutated)
 
     @staticmethod
-    def gaussian_mutation(
-        basis_state: str, strength: float = 0.1
-    ) -> str:
+    def gaussian_mutation(basis_state: str, strength: float = 0.1) -> str:
         """Apply Gaussian-style mutation (bit clusters).
 
         Mutates clusters of bits (like Gaussian perturbation in continuous space).
@@ -119,9 +117,7 @@ class AdaptiveEvolutionController:
         if prev_best_fitness is not None:
             improvement = prev_best_fitness - current_best_fitness
             # Exponential moving average
-            self.state.improvement_trend = (
-                0.7 * self.state.improvement_trend + 0.3 * improvement
-            )
+            self.state.improvement_trend = 0.7 * self.state.improvement_trend + 0.3 * improvement
 
             # Detect stalling
             if improvement < 1e-6:
@@ -162,9 +158,7 @@ class AdaptiveEvolutionController:
 
     def _apply_escape_strategy(self) -> None:
         """Increase mutation strength when stalled."""
-        self.state.mutation_strength = min(
-            0.3, self.state.mutation_strength * 1.5
-        )
+        self.state.mutation_strength = min(0.3, self.state.mutation_strength * 1.5)
 
     def get_mutation_rate(self) -> float:
         """Get current mutation rate for bit-flip operations.
@@ -189,11 +183,7 @@ class AdaptiveEvolutionController:
             True if should restart with new random individuals
         """
         # Restart if diversity is very low and improvement is stalling
-        return (
-            self.state.diversity_score < 0.2
-            and self.state.improvement_trend < 1e-5
-            and self.state.generation > 50
-        )
+        return self.state.diversity_score < 0.2 and self.state.improvement_trend < 1e-5 and self.state.generation > 50
 
 
 class DiversityMetrics:

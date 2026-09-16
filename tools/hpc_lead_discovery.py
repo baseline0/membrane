@@ -42,8 +42,6 @@ Integrates with: baseline0/research/src/research/resolvers/academic_hpc.py
 """
 
 import argparse
-import asyncio
-import csv
 import logging
 import sys
 from pathlib import Path
@@ -113,20 +111,14 @@ def score_lead(row: pd.Series) -> float:
         "evolutionary",
         "unconventional",
     ]
-    research_text = (
-        (str(row.get("research_focus", "")).lower())
-        + " "
-        + (str(row.get("lab_url", "")).lower())
-    )
+    research_text = (str(row.get("research_focus", "")).lower()) + " " + (str(row.get("lab_url", "")).lower())
     keyword_matches = sum(1 for kw in research_keywords if kw in research_text)
     score += min(0.40, keyword_matches * 0.08)
 
     # HPC engagement (30%)
     if row.get("has_hpc_access"):
         score += 0.20
-    hpc_mentions = len(row.get("hpc_networks", "").split(";")) if row.get(
-        "hpc_networks"
-    ) else 0
+    hpc_mentions = len(row.get("hpc_networks", "").split(";")) if row.get("hpc_networks") else 0
     score += min(0.10, hpc_mentions * 0.05)
 
     # Contact confidence (10%)
@@ -147,9 +139,7 @@ def score_lead(row: pd.Series) -> float:
 
 def main():
     """Parse arguments and run discovery pipeline."""
-    parser = argparse.ArgumentParser(
-        description="Discover HPC faculty collaborators for membrane computing research"
-    )
+    parser = argparse.ArgumentParser(description="Discover HPC faculty collaborators for membrane computing research")
     parser.add_argument(
         "--institutions",
         nargs="+",
@@ -208,11 +198,7 @@ def main():
         if institutions_file:
             try:
                 with open(institutions_file) as f:
-                    file_institutions = [
-                        line.strip()
-                        for line in f
-                        if line.strip() and not line.startswith("#")
-                    ]
+                    file_institutions = [line.strip() for line in f if line.strip() and not line.startswith("#")]
                     target_institutions.extend(file_institutions)
             except FileNotFoundError:
                 logger.error(f"Institutions file not found: {institutions_file}")
@@ -303,8 +289,7 @@ def main():
 
         for idx, row in df.head(top_n).iterrows():
             logger.info(
-                f"\n{idx + 1}. {row['faculty_name']} "
-                f"({row['institution_name']}) — Score: {row['outreach_score']}"
+                f"\n{idx + 1}. {row['faculty_name']} ({row['institution_name']}) — Score: {row['outreach_score']}"
             )
             logger.info(f"   Research: {row['research_focus'][:80]}...")
             logger.info(f"   Email: {row['email']}")

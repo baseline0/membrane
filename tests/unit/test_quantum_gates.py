@@ -9,8 +9,6 @@ Tests verify:
 
 import math
 
-import pytest
-
 from malta.quantum_gates import HadamardGate, MeasurementGate, PhaseGate, QuantumState
 
 
@@ -106,9 +104,7 @@ class TestMeasurementGate:
     def test_measurement_collapses_superposition(self):
         """Measurement produces single basis state."""
         gate = MeasurementGate()
-        state = QuantumState(
-            state_vector={"A": 1.0 / math.sqrt(2), "B": 1.0 / math.sqrt(2)}
-        )
+        state = QuantumState(state_vector={"A": 1.0 / math.sqrt(2), "B": 1.0 / math.sqrt(2)})
 
         result = gate.apply_to_quantum_state(state)
 
@@ -124,9 +120,7 @@ class TestMeasurementGate:
 
         # Run 1000 measurements to test statistical distribution
         outcomes = {"A": 0, "B": 0}
-        state = QuantumState(
-            state_vector={"A": 1.0 / math.sqrt(2), "B": 1.0 / math.sqrt(2)}
-        )
+        state = QuantumState(state_vector={"A": 1.0 / math.sqrt(2), "B": 1.0 / math.sqrt(2)})
 
         for _ in range(1000):
             result = gate.apply_to_quantum_state(state)
@@ -175,7 +169,7 @@ class TestPhaseGate:
         assert abs(result.state_vector["A"] - expected_amp) < 1e-10
 
         # Probability is |amplitude|²
-        expected_prob = expected_amp ** 2
+        expected_prob = expected_amp**2
         actual_prob = result.state_vector["A"] ** 2
         assert abs(actual_prob - expected_prob) < 1e-10
 

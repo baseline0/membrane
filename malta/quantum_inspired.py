@@ -17,7 +17,7 @@ import math
 from dataclasses import dataclass
 from typing import Callable, Optional
 
-from malta.quantum_gates import HadamardGate, MeasurementGate, QuantumState
+from malta.quantum_gates import MeasurementGate, QuantumState
 
 
 @dataclass
@@ -54,7 +54,7 @@ class QuantumCompartment:
         """
         # Generate all binary basis states: "00", "01", "10", "11" for n_dims=2
         basis_states = {}
-        n_states = 2 ** n_dims
+        n_states = 2**n_dims
         amplitude = 1.0 / math.sqrt(n_states)
 
         for i in range(n_states):

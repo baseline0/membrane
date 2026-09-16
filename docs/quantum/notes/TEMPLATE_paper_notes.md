@@ -143,5 +143,5 @@ arxiv: []
 - Method: [genetic-algo, PSO, fuzzy, quantum-inspired]
 - Domain: [quantum-p-systems, membrane-computing, evolutionary-algo]
 
-**Last Updated:** [Date]  
+**Last Updated:** [Date]
 **Status:** [in-progress / completed]

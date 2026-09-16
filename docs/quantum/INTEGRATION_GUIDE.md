@@ -192,11 +192,11 @@ Addresses Problem #4: Dynamic Topology Algorithms
 
 class DynamicQuantumPSystem:
     """Quantum P-system that evolves compartment structure during execution."""
-    
+
     def evolve_with_division(self, compartment, strategy="entanglement_aware"):
         """Divides a compartment while maintaining quantum state."""
         ...
-    
+
     def benchmark_against_static(self, problem_suite):
         """Compares dynamic vs. static topologies on TSPLIB instances."""
         ...
@@ -297,7 +297,7 @@ class QuantumMembrane:
             amp = self.state_vector.pop(target_state)
             self.state_vector[new_state] = amp
             self.normalize()
-    
+
     def apply_pauli_z_rule(self, target_state: str) -> None:
         """Phase flip: |0⟩ → |0⟩, |1⟩ → -|1⟩"""
         if target_state.endswith("_1"):
@@ -452,7 +452,7 @@ Refer to:
 
 ---
 
-**Last Updated:** 2025-09-15  
-**Author:** Mark Alexiuk  
-**Project:** Malta (Membrane Computing Research Framework)  
+**Last Updated:** 2025-09-15
+**Author:** Mark Alexiuk
+**Project:** Malta (Membrane Computing Research Framework)
 **Status:** Ready for use

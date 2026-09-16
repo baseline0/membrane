@@ -283,6 +283,6 @@ Can Quantum P-systems learn optimization strategies dynamically? Can we adapt me
 
 ---
 
-**Last Updated:** 2025-09-15  
-**Maintained By:** Mark Alexiuk  
+**Last Updated:** 2025-09-15
+**Maintained By:** Mark Alexiuk
 **Related Files:** `literatura_database.md`, `../notes/`

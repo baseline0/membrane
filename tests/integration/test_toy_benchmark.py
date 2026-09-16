@@ -8,17 +8,13 @@ Tests verify:
 - Single vs multi-compartment comparison
 """
 
-import math
-
-import pytest
-
 from benchmarks.toy_benchmark import (
-    ToyBenchmark,
     BenchmarkResult,
-    sphere,
+    ToyBenchmark,
+    ackley,
     rastrigin,
     rosenbrock,
-    ackley,
+    sphere,
 )
 
 
@@ -130,9 +126,7 @@ class TestToyBenchmark:
     def test_run_single_stores_result(self):
         """run_single stores result in harness."""
         bench = ToyBenchmark()
-        result = bench.run_single(
-            sphere, "Test", 2, (-5.0, 5.0), n_generations=5
-        )
+        result = bench.run_single(sphere, "Test", 2, (-5.0, 5.0), n_generations=5)
 
         assert len(bench.results) == 1
         assert bench.results[0] == result
@@ -140,9 +134,7 @@ class TestToyBenchmark:
     def test_convergence_history_is_monotonic(self):
         """Convergence history is non-increasing (best so far)."""
         bench = ToyBenchmark()
-        result = bench.run_single(
-            sphere, "Sphere", 2, (-5.0, 5.0), n_generations=15
-        )
+        result = bench.run_single(sphere, "Sphere", 2, (-5.0, 5.0), n_generations=15)
 
         history = result.convergence_history
         for i in range(1, len(history)):
@@ -151,9 +143,7 @@ class TestToyBenchmark:
     def test_trace_generated(self):
         """Benchmark generates execution trace."""
         bench = ToyBenchmark()
-        result = bench.run_single(
-            sphere, "Sphere", 2, (-5.0, 5.0), n_generations=5
-        )
+        result = bench.run_single(sphere, "Sphere", 2, (-5.0, 5.0), n_generations=5)
 
         assert result.trace is not None
         assert len(result.trace.events) > 0
@@ -193,9 +183,7 @@ class TestToyBenchmark:
         """Benchmark runs on different dimensions."""
         bench = ToyBenchmark()
         for dim in [1, 2, 3]:
-            result = bench.run_single(
-                sphere, f"Sphere_dim{dim}", dim, (-5.0, 5.0), n_generations=5
-            )
+            result = bench.run_single(sphere, f"Sphere_dim{dim}", dim, (-5.0, 5.0), n_generations=5)
             assert result.dimension == dim
             assert len(result.best_solution) == dim
 
@@ -204,14 +192,10 @@ class TestToyBenchmark:
         bench = ToyBenchmark()
 
         # Sphere on smaller bounds
-        result_small = bench.run_single(
-            sphere, "Sphere_small", 2, (-1.0, 1.0), n_generations=5
-        )
+        result_small = bench.run_single(sphere, "Sphere_small", 2, (-1.0, 1.0), n_generations=5)
 
         # Sphere on larger bounds
-        result_large = bench.run_single(
-            sphere, "Sphere_large", 2, (-10.0, 10.0), n_generations=5
-        )
+        result_large = bench.run_single(sphere, "Sphere_large", 2, (-10.0, 10.0), n_generations=5)
 
         # Both should find valid solutions
         assert all(-1.0 <= v <= 1.0 for v in result_small.best_solution)
@@ -221,12 +205,7 @@ class TestToyBenchmark:
         """Rastrigin (multimodal) is typically harder than sphere."""
         bench = ToyBenchmark()
 
-        sphere_result = bench.run_single(
-            sphere, "Sphere", 2, (-5.0, 5.0), n_generations=20
-        )
-        rastrigin_result = bench.run_single(
-            rastrigin, "Rastrigin", 2, (-5.12, 5.12), n_generations=20
-        )
+        rastrigin_result = bench.run_single(rastrigin, "Rastrigin", 2, (-5.12, 5.12), n_generations=20)
 
         # Rastrigin's minimum is at 0, but multimodality makes it harder
         # (not guaranteed to find better solution, but typically worse)
@@ -236,12 +215,8 @@ class TestToyBenchmark:
         """Compare single vs multi-compartment results."""
         bench = ToyBenchmark()
 
-        single = bench.run_single(
-            sphere, "Sphere_single", 2, (-5.0, 5.0), n_compartments=1, n_generations=20
-        )
-        multi = bench.run_single(
-            sphere, "Sphere_multi", 2, (-5.0, 5.0), n_compartments=5, n_generations=20
-        )
+        single = bench.run_single(sphere, "Sphere_single", 2, (-5.0, 5.0), n_compartments=1, n_generations=20)
+        multi = bench.run_single(sphere, "Sphere_multi", 2, (-5.0, 5.0), n_compartments=5, n_generations=20)
 
         # Both should converge (fitness decreases over time)
         assert single.convergence_history[-1] <= single.convergence_history[0]

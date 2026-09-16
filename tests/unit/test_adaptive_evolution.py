@@ -7,12 +7,10 @@ Tests verify:
 - Diversity metrics are computed correctly
 """
 
-import pytest
-
 from malta.adaptive_evolution import (
-    MutationOperator,
     AdaptiveEvolutionController,
     DiversityMetrics,
+    MutationOperator,
 )
 
 
@@ -41,9 +39,7 @@ class TestMutationOperator:
     def test_bit_flip_stochastic(self):
         """Bit flip has stochastic variation."""
         original = "1010"
-        mutations = [
-            MutationOperator.bit_flip(original, 0.5) for _ in range(20)
-        ]
+        mutations = [MutationOperator.bit_flip(original, 0.5) for _ in range(20)]
         # Should have multiple different outcomes
         unique = set(mutations)
         assert len(unique) > 1

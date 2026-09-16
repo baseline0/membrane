@@ -4,6 +4,7 @@ Wraps malta.quantum_inspired for benchmark harness integration.
 """
 
 import random
+
 import numpy as np
 
 from benchmarks.suites.base import BenchmarkFunction

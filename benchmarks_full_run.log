@@ -1,0 +1,3 @@
+Running full CEC2017 benchmark (expect 1-2 hours)...
+uv run python -m benchmarks.run_example 30 29 10
+error: recipe `bench-full` failed on line 49 with exit code 143

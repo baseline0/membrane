@@ -3,17 +3,17 @@
 Provides reproducible experiment runs with proper seeding and result export.
 """
 
-from typing import Annotated, Optional
-from pathlib import Path
 import json
+from pathlib import Path
+from typing import Annotated, Optional
 
 import typer
 
-from benchmarks.harness import BenchmarkHarness
 from benchmarks.baselines.ga import GeneticAlgorithm
 from benchmarks.baselines.pso import ParticleSwarmOptimizer
 from benchmarks.baselines.quantum_inspired import QuantumInspiredBaseline
 from benchmarks.baselines.quantum_inspired_enhanced import EnhancedQuantumInspiredBaseline
+from benchmarks.harness import BenchmarkHarness
 from benchmarks.suites.cec2017 import CEC2017Suite
 from benchmarks.toy_benchmark import ToyBenchmark
 
@@ -114,10 +114,7 @@ def run_cec2017_benchmark(
     Note: 30 seeds recommended for statistical rigor (Wilcoxon test).
     Use lower seeds for quick validation during development.
     """
-    typer.echo(
-        f"Running CEC2017 benchmarks: {n_functions} functions, "
-        f"{dimension}D, {n_seeds} seeds"
-    )
+    typer.echo(f"Running CEC2017 benchmarks: {n_functions} functions, {dimension}D, {n_seeds} seeds")
 
     # Setup output
     if output_dir:
@@ -146,10 +143,12 @@ def run_cec2017_benchmark(
     }
 
     if include_baselines:
-        algorithms.update({
-            "GA": GeneticAlgorithm(pop_size=100, generations=1000),
-            "PSO": ParticleSwarmOptimizer(pop_size=50, generations=1000),
-        })
+        algorithms.update(
+            {
+                "GA": GeneticAlgorithm(pop_size=100, generations=1000),
+                "PSO": ParticleSwarmOptimizer(pop_size=50, generations=1000),
+            }
+        )
 
     # Run benchmarks
     results = []
@@ -161,22 +160,22 @@ def run_cec2017_benchmark(
 
             stats = harness.run_algorithm_on_problem(alg, func, n_seeds=n_seeds)
 
-            results.append({
-                "function_id": func.id,
-                "function_name": func.name,
-                "dimension": dimension,
-                "algorithm": alg_name,
-                "mean": stats["mean"],
-                "std": stats["std"],
-                "median": stats["median"],
-                "best": stats["best"],
-                "worst": stats["worst"],
-                "error_mean": stats["error_mean"],
-            })
-
-            typer.echo(
-                f" mean={stats['mean']:.2e}, best={stats['best']:.2e}"
+            results.append(
+                {
+                    "function_id": func.id,
+                    "function_name": func.name,
+                    "dimension": dimension,
+                    "algorithm": alg_name,
+                    "mean": stats["mean"],
+                    "std": stats["std"],
+                    "median": stats["median"],
+                    "best": stats["best"],
+                    "worst": stats["worst"],
+                    "error_mean": stats["error_mean"],
+                }
             )
+
+            typer.echo(f" mean={stats['mean']:.2e}, best={stats['best']:.2e}")
 
     # Export results
     output_file = out_path / f"cec2017_{dimension}d_{n_seeds}seeds.json"
@@ -194,7 +193,4 @@ def run_cec2017_benchmark(
         if alg_results:
             mean_error = sum(r["error_mean"] for r in alg_results) / len(alg_results)
             best_error = min(r["error_mean"] for r in alg_results)
-            typer.echo(
-                f"{alg_name:20s}: mean_error={mean_error:10.2e}, "
-                f"best_error={best_error:10.2e}"
-            )
+            typer.echo(f"{alg_name:20s}: mean_error={mean_error:10.2e}, best_error={best_error:10.2e}")

@@ -7,9 +7,9 @@ Provides tools to:
 - Export convergence data for visualization
 """
 
+import statistics
 from dataclasses import dataclass
 from typing import Optional
-import statistics
 
 
 @dataclass
@@ -102,9 +102,7 @@ class ConvergenceAnalyzer:
         # Compute point-wise differences (b - a, so positive means b better)
         differences = [b_norm[i] - a_norm[i] for i in range(min_len)]
         avg_diff = statistics.mean(differences)
-        std_diff = (
-            statistics.stdev(differences) if len(differences) > 1 else 0
-        )
+        std_diff = statistics.stdev(differences) if len(differences) > 1 else 0
 
         return {
             "algorithm_a": {

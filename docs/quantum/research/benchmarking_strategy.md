@@ -219,11 +219,11 @@ results = []
 for seed in range(30):  # 30 independent runs
     random.seed(seed)
     np.random.seed(seed)
-    
+
     start_time = time.time()
     solution, fitness_history = algorithm.solve(problem, timeout=3600)
     elapsed = time.time() - start_time
-    
+
     results.append({
         "algorithm": algorithm_config["name"],
         "problem": problem.name,
@@ -323,20 +323,20 @@ File: `reports/[suite_name]_[date]/summary.json`
 ### 3. Visualizations
 
 #### Figure 1: Convergence Curves
-X-axis: Function evaluations  
-Y-axis: Best fitness found so far  
+X-axis: Function evaluations
+Y-axis: Best fitness found so far
 Separate subplots for each problem.
 
 #### Figure 2: Box Plots
 Compare solution quality distributions across algorithms.
 
 #### Figure 3: Runtime vs Quality (Pareto)
-Scatter: each point = algorithm/problem pair  
+Scatter: each point = algorithm/problem pair
 Highlight non-dominated solutions.
 
 #### Figure 4: Statistical Significance Heatmap
-Rows/Cols = algorithms  
-Color = p-value from pairwise Wilcoxon test  
+Rows/Cols = algorithms
+Color = p-value from pairwise Wilcoxon test
 Red = statistically significant difference
 
 ### 4. Publication-Quality Report
@@ -403,6 +403,6 @@ File: `reports/[suite_name]_[date]/publication.pdf` (auto-generated from LaTeX t
 
 ---
 
-**Last Updated:** 2025-09-15  
-**Maintained By:** Mark Alexiuk  
+**Last Updated:** 2025-09-15
+**Maintained By:** Mark Alexiuk
 **Project:** Malta (Membrane Computing Research Framework)

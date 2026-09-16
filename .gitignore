@@ -19,6 +19,8 @@ tests/out/
 
 benchmarks/c_src/cec2017/libcec2017.so
 benchmarks/c_src/cec2017/input_data/
+cyprus/benchmarks/c_src/cec2017/libcec2017.so
+cyprus/benchmarks/c_src/cec2017/input_data/
 
 # Fleet-ops evaluation outputs (Phase 1-3)
 results/

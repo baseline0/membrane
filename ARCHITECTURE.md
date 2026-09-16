@@ -194,10 +194,10 @@ docs/quantum/
 
 1. **Year 1–2:** Benchmark Malta against SOTA on CEC/TSPLIB (no quantum yet)
    - Publication: "Membrane Evolutionary Algorithms: Empirical Analysis vs GA/PSO"
-   
+
 2. **Year 2–3:** Implement Quantum-Inspired Membrane Algorithms (QMEAs)
    - Publication: "Quantum-Inspired Fuzzy Reasoning P-Systems for Combinatorial Optimization"
-   
+
 3. **Year 3+:** Theoretical Quantum P-Systems (distributed quantum architecture model)
    - Publication: "Membrane Compartmentalization as a Model for Distributed Quantum Computing"
 

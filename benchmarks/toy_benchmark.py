@@ -13,7 +13,6 @@ from typing import Callable
 
 from malta.quantum_inspired import QuantumInspiredEvolutionaryAlgorithm
 from malta.trace import MembraneTrace
-from malta.exporters import SimulationExporter
 
 
 # Standard test functions
@@ -42,10 +41,7 @@ def rosenbrock(x: list[float]) -> float:
     Global minimum: 0.0 at (1, 1, ...)
     Difficulty: Medium (valley-shaped, requires directional search)
     """
-    return sum(
-        100 * (x[i + 1] - x[i] ** 2) ** 2 + (1 - x[i]) ** 2
-        for i in range(len(x) - 1)
-    )
+    return sum(100 * (x[i + 1] - x[i] ** 2) ** 2 + (1 - x[i]) ** 2 for i in range(len(x) - 1))
 
 
 def ackley(x: list[float]) -> float:
@@ -57,12 +53,7 @@ def ackley(x: list[float]) -> float:
     n = len(x)
     sum_sq = sum(xi**2 for xi in x)
     sum_cos = sum(math.cos(2 * math.pi * xi) for xi in x)
-    return (
-        -20 * math.exp(-0.2 * math.sqrt(sum_sq / n))
-        - math.exp(sum_cos / n)
-        + 20
-        + math.e
-    )
+    return -20 * math.exp(-0.2 * math.sqrt(sum_sq / n)) - math.exp(sum_cos / n) + 20 + math.e
 
 
 @dataclass
@@ -114,9 +105,7 @@ class ToyBenchmark:
         Returns:
             BenchmarkResult with trace
         """
-        trace = MembraneTrace(
-            description=f"{function_name} (dim={n_dims}, compartments={n_compartments})"
-        )
+        trace = MembraneTrace(description=f"{function_name} (dim={n_dims}, compartments={n_compartments})")
 
         algo = QuantumInspiredEvolutionaryAlgorithm(
             n_compartments=n_compartments,

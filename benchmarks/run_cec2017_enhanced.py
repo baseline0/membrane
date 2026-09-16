@@ -7,15 +7,15 @@ Example:
     python -m benchmarks.run_cec2017_enhanced 10 3 10  # 10 seeds, 3 functions, 10D
 """
 
-import sys
 import json
+import sys
 from pathlib import Path
 
-from benchmarks.harness import BenchmarkHarness
 from benchmarks.baselines.ga import GeneticAlgorithm
 from benchmarks.baselines.pso import ParticleSwarmOptimization
 from benchmarks.baselines.quantum_inspired import QuantumInspiredBaseline
 from benchmarks.baselines.quantum_inspired_enhanced import EnhancedQuantumInspiredBaseline
+from benchmarks.harness import BenchmarkHarness
 from benchmarks.suites.cec2017 import CEC2017Suite
 
 
@@ -36,9 +36,7 @@ def main(n_seeds: int = 10, n_functions: int = 3, dimension: int = 10):
 
     # Get functions (skip F2)
     function_ids = [1, 3, 4, 5, 6][:n_functions]
-    functions = [
-        suite.get_function(fid, dimension) for fid in function_ids
-    ]
+    functions = [suite.get_function(fid, dimension) for fid in function_ids]
 
     # Algorithm configuration
     algorithms = {
@@ -60,18 +58,20 @@ def main(n_seeds: int = 10, n_functions: int = 3, dimension: int = 10):
 
             stats = harness.run_algorithm_on_problem(alg, func, n_seeds=n_seeds)
 
-            results.append({
-                "function_id": func.id,
-                "function_name": func.name,
-                "dimension": dimension,
-                "algorithm": alg_name,
-                "mean": stats["mean"],
-                "std": stats["std"],
-                "median": stats["median"],
-                "best": stats["best"],
-                "worst": stats["worst"],
-                "error_mean": stats["error_mean"],
-            })
+            results.append(
+                {
+                    "function_id": func.id,
+                    "function_name": func.name,
+                    "dimension": dimension,
+                    "algorithm": alg_name,
+                    "mean": stats["mean"],
+                    "std": stats["std"],
+                    "median": stats["median"],
+                    "best": stats["best"],
+                    "worst": stats["worst"],
+                    "error_mean": stats["error_mean"],
+                }
+            )
 
             print(f"mean={stats['mean']:.2e}, best={stats['best']:.2e}")
 
@@ -82,9 +82,7 @@ def main(n_seeds: int = 10, n_functions: int = 3, dimension: int = 10):
     output_dir.mkdir(exist_ok=True)
 
     # JSON export
-    output_file = (
-        output_dir / f"cec2017_{dimension}d_{n_seeds}seeds.json"
-    )
+    output_file = output_dir / f"cec2017_{dimension}d_{n_seeds}seeds.json"
     with open(output_file, "w") as f:
         json.dump(results, f, indent=2)
     print(f"Results saved to: {output_file}")

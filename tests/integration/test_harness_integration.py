@@ -6,9 +6,6 @@ Tests verify:
 - Produces valid results
 """
 
-import pytest
-
-from benchmarks.harness import BenchmarkHarness
 from benchmarks.baselines.quantum_inspired import QuantumInspiredBaseline
 from benchmarks.suites.cec2017 import CEC2017Suite
 
@@ -105,8 +102,6 @@ class TestHarnessIntegration:
 
     def test_harness_multiple_seeds(self):
         """Harness runs multiple seeds and computes stats."""
-        # Use strict=False to skip validation
-        harness = BenchmarkHarness(CEC2017Suite(), strict=False)
         algo = QuantumInspiredBaseline(generations=5)
         problem = CEC2017Suite().get_function(1, 10)
 

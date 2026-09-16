@@ -11,13 +11,13 @@ import math
 import random
 from dataclasses import dataclass
 
-from malta.quantum_gates import HadamardGate, MeasurementGate, QuantumState
-from malta.encoding import MultibitEncoder, ProgressiveEncoding
 from malta.adaptive_evolution import (
-    MutationOperator,
     AdaptiveEvolutionController,
     DiversityMetrics,
+    MutationOperator,
 )
+from malta.encoding import MultibitEncoder, ProgressiveEncoding
+from malta.quantum_gates import MeasurementGate, QuantumState
 
 
 @dataclass
@@ -203,9 +203,7 @@ class EnhancedQuantumInspiredAlgorithm:
         for generation in range(self.max_generations):
             # Update encoding resolution if progressive
             if self.use_progressive:
-                self.progressive_encoder.set_generation(
-                    generation, self.max_generations
-                )
+                self.progressive_encoder.set_generation(generation, self.max_generations)
                 self.bits_per_dim = self.progressive_encoder.current_bits
                 # Reinit compartments with new encoding
                 self._reinit_compartments()

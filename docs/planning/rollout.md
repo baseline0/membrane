@@ -74,14 +74,14 @@ SHAP provides *post-hoc* explanations:
   age_of_home → 5 (fuzzy membership: "moderate age")
   claims_history → 3 (fuzzy: "some claims")
   location_risk → 0.7 (fuzzy: "high hazard area")
-  
+
   [Underwriting Rules (inner membrane)]
     Rule 1: IF (claims_history > 2) AND (location_risk > 0.6)
             THEN flag_for_review = 1.0 (high confidence)
-    
+
     Rule 2: IF (age_of_home > 40) AND (claims_history > 1)
             THEN premium_adjustment = +15% (confidence 0.85)
-    
+
   [Output membrane]
     decision_trace = [Rule2 fired → Rule1 fired → APPROVED]
     final_premium = base_rate × 1.15
@@ -131,7 +131,7 @@ SHAP provides *post-hoc* explanations:
 - Same regulatory pressure; same SHAP problem
 - Similar TAM, different vertical
 
-**Serviceable Addressable Market (SAM):** 
+**Serviceable Addressable Market (SAM):**
 - Focus on mid-market (10–100M premium base) where SHAP is too expensive, rules aren't sophisticated enough
 - ~50–100 insurers × $200k–$1M per year = **$10M–$100M/year potential**
 
@@ -293,7 +293,7 @@ If POC is green:
 
 ---
 
-**Document Version:** 0.1  
-**Last Updated:** 2025-09-14  
-**Owner:** Mark Alexiuk  
+**Document Version:** 0.1
+**Last Updated:** 2025-09-14
+**Owner:** Mark Alexiuk
 **Status:** Draft — Ready for stakeholder review

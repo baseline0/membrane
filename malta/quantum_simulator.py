@@ -12,11 +12,11 @@ Usage:
     >>> run_experiment_and_log("./obsidian_vault")
 """
 
-import os
 import math
+import os
 import random
-from datetime import datetime
 from dataclasses import dataclass, field
+from datetime import datetime
 
 
 @dataclass
@@ -103,9 +103,7 @@ class QuantumMembrane:
         return "\n".join(parts) if parts else "Empty state"
 
 
-def write_obsidian_note(
-    vault_path: str, title: str, tags: list[str], content: str
-) -> str:
+def write_obsidian_note(vault_path: str, title: str, tags: list[str], content: str) -> str:
     """
     Creates a Markdown file with YAML frontmatter in the specified Obsidian vault.
 
@@ -169,7 +167,6 @@ def run_experiment_and_log(vault_path: str) -> str:
     skin_membrane.apply_hadamard_rule("A_1")  # A_1 -> A_1_0 + A_1_1
 
     # Capture state before measurement
-    pre_measurement_state = skin_membrane.state_vector.copy()
     pre_measurement_str = skin_membrane.get_state_str()
 
     # Measure (collapse the state)
@@ -247,7 +244,7 @@ This validates the core concept of **Quantum-Inspired Membrane Algorithms (QMA)*
 ---
 
 ## Metadata
-- **Simulation Date**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+- **Simulation Date**: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 - **Randomness**: Measurement outcome is stochastic; results vary across runs
 - **Next Steps**: Run ensemble of experiments; compute aggregate statistics; publish results
 

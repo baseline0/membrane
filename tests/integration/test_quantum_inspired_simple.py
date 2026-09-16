@@ -7,10 +7,6 @@ Tests verify:
 - Multi-compartment cooperation improves results
 """
 
-import math
-
-import pytest
-
 from malta.quantum_inspired import (
     Candidate,
     QuantumCompartment,
@@ -34,7 +30,7 @@ def sphere_2d(x: list[float]) -> float:
     Global minimum at x=(0, 0) with f=0.
     Simple convex benchmark.
     """
-    return sum(xi ** 2 for xi in x)
+    return sum(xi**2 for xi in x)
 
 
 class TestCandidate:
@@ -63,17 +59,13 @@ class TestQuantumCompartment:
 
     def test_compartment_initialization(self):
         """Compartment initializes with ID and empty state."""
-        compartment = QuantumCompartment(
-            compartment_id=0, quantum_state=QuantumState({}), candidates=[]
-        )
+        compartment = QuantumCompartment(compartment_id=0, quantum_state=QuantumState({}), candidates=[])
         assert compartment.compartment_id == 0
         assert compartment.candidates == []
 
     def test_superposition_initialization(self):
         """Initialize superposition creates equal amplitudes."""
-        compartment = QuantumCompartment(
-            compartment_id=0, quantum_state=QuantumState({}), candidates=[]
-        )
+        compartment = QuantumCompartment(compartment_id=0, quantum_state=QuantumState({}), candidates=[])
         compartment.initialize_superposition(n_dims=2)
 
         # After Hadamard on 2 dimensions, should have 4 basis states
@@ -83,9 +75,7 @@ class TestQuantumCompartment:
 
     def test_measure_and_decode(self):
         """Measurement collapses to valid candidate."""
-        compartment = QuantumCompartment(
-            compartment_id=0, quantum_state=QuantumState({}), candidates=[]
-        )
+        compartment = QuantumCompartment(compartment_id=0, quantum_state=QuantumState({}), candidates=[])
         compartment.initialize_superposition(n_dims=2)
 
         bounds = (-5.0, 5.0)
@@ -98,9 +88,7 @@ class TestQuantumCompartment:
 
     def test_multiple_measurements_vary(self):
         """Multiple measurements produce different outcomes (stochastic)."""
-        compartment = QuantumCompartment(
-            compartment_id=0, quantum_state=QuantumState({}), candidates=[]
-        )
+        compartment = QuantumCompartment(compartment_id=0, quantum_state=QuantumState({}), candidates=[])
         bounds = (-5.0, 5.0)
 
         # Run multiple measurements
@@ -143,9 +131,7 @@ class TestQuantumInspiredEvolutionaryAlgorithm:
     def test_optimize_produces_valid_candidates(self):
         """Optimization results respect bounds."""
         bounds = (-2.0, 2.0)
-        algo = QuantumInspiredEvolutionaryAlgorithm(
-            n_compartments=2, n_dims=2, bounds=bounds, max_generations=10
-        )
+        algo = QuantumInspiredEvolutionaryAlgorithm(n_compartments=2, n_dims=2, bounds=bounds, max_generations=10)
 
         best = algo.optimize(sphere_2d)
 
@@ -154,9 +140,7 @@ class TestQuantumInspiredEvolutionaryAlgorithm:
 
     def test_optimize_tracks_best_candidate(self):
         """Algorithm tracks and returns best candidate found."""
-        algo = QuantumInspiredEvolutionaryAlgorithm(
-            n_compartments=3, n_dims=2, bounds=(-5.0, 5.0), max_generations=15
-        )
+        algo = QuantumInspiredEvolutionaryAlgorithm(n_compartments=3, n_dims=2, bounds=(-5.0, 5.0), max_generations=15)
 
         # Manually run optimization and verify best tracking
         best = None
@@ -164,9 +148,7 @@ class TestQuantumInspiredEvolutionaryAlgorithm:
         for generation in range(algo.max_generations):
             all_candidates = []
             for compartment in algo.compartments:
-                candidate = compartment.measure_and_decode(
-                    algo.n_dims, algo.bounds
-                )
+                candidate = compartment.measure_and_decode(algo.n_dims, algo.bounds)
                 candidate.fitness = sphere_2d(candidate.values)
                 all_candidates.append(candidate)
 
@@ -195,9 +177,7 @@ class TestQuantumInspiredEvolutionaryAlgorithm:
         best_single = algo_single.optimize(sphere_2d)
 
         # Multiple compartments
-        algo_multi = QuantumInspiredEvolutionaryAlgorithm(
-            n_compartments=5, n_dims=2, bounds=bounds, max_generations=20
-        )
+        algo_multi = QuantumInspiredEvolutionaryAlgorithm(n_compartments=5, n_dims=2, bounds=bounds, max_generations=20)
         best_multi = algo_multi.optimize(sphere_2d)
 
         # Both should find valid solutions
@@ -209,13 +189,11 @@ class TestQuantumInspiredEvolutionaryAlgorithm:
     def test_algorithm_dimensions_configurable(self):
         """Algorithm works with different dimensionalities."""
         for n_dims in [1, 2, 3, 4]:
-            algo = QuantumInspiredEvolutionaryAlgorithm(
-                n_compartments=2, n_dims=n_dims, max_generations=5
-            )
+            algo = QuantumInspiredEvolutionaryAlgorithm(n_compartments=2, n_dims=n_dims, max_generations=5)
 
             # Define objective for n_dims
             def obj(x):
-                return sum(xi ** 2 for xi in x)
+                return sum(xi**2 for xi in x)
 
             best = algo.optimize(obj)
             assert len(best.values) == n_dims

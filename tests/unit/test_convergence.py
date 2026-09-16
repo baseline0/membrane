@@ -8,7 +8,7 @@ Tests verify:
 
 import pytest
 
-from malta.convergence import ConvergenceAnalyzer, ConvergenceMetrics
+from malta.convergence import ConvergenceAnalyzer
 
 
 class TestConvergenceAnalyzer:
@@ -29,9 +29,7 @@ class TestConvergenceAnalyzer:
         """Analyze trajectory that converges early then stalls."""
         trajectory = [10.0, 5.0, 2.0, 1.9, 1.85, 1.84, 1.84, 1.84]
 
-        metrics = ConvergenceAnalyzer.analyze_trajectory(
-            trajectory, convergence_threshold=0.1, stall_window=3
-        )
+        metrics = ConvergenceAnalyzer.analyze_trajectory(trajectory, convergence_threshold=0.1, stall_window=3)
 
         # Should detect convergence around generation 4
         assert metrics.generations_to_convergence is not None
@@ -67,9 +65,7 @@ class TestConvergenceAnalyzer:
         traj_a = [10.0, 8.0, 6.0, 4.0, 2.0]
         traj_b = [10.0, 7.0, 4.5, 2.5, 1.0]
 
-        comparison = ConvergenceAnalyzer.compare_trajectories(
-            traj_a, traj_b, labels=("Linear", "Exponential")
-        )
+        comparison = ConvergenceAnalyzer.compare_trajectories(traj_a, traj_b, labels=("Linear", "Exponential"))
 
         assert "algorithm_a" in comparison
         assert "algorithm_b" in comparison
@@ -82,11 +78,9 @@ class TestConvergenceAnalyzer:
     def test_compare_identifies_better(self):
         """Comparison identifies better algorithm."""
         traj_better = [10.0, 5.0, 1.0]  # Better
-        traj_worse = [10.0, 8.0, 6.0]   # Worse
+        traj_worse = [10.0, 8.0, 6.0]  # Worse
 
-        comparison = ConvergenceAnalyzer.compare_trajectories(
-            traj_worse, traj_better, labels=("Worse", "Better")
-        )
+        comparison = ConvergenceAnalyzer.compare_trajectories(traj_worse, traj_better, labels=("Worse", "Better"))
 
         # Better should have lower final fitness
         assert comparison["algorithm_b"]["final_fitness"] < comparison["algorithm_a"]["final_fitness"]
@@ -96,9 +90,7 @@ class TestConvergenceAnalyzer:
         # Linear improvement: 10 -> 0 over 10 generations
         trajectory = [10.0 - i for i in range(11)]
 
-        speed = ConvergenceAnalyzer.convergence_speed(
-            trajectory, percentiles=[25, 50, 75, 100]
-        )
+        speed = ConvergenceAnalyzer.convergence_speed(trajectory, percentiles=[25, 50, 75, 100])
 
         assert "reached_25%" in speed
         assert "reached_50%" in speed
@@ -166,14 +158,10 @@ class TestConvergenceAnalyzer:
         trajectory = [10.0, 5.0, 4.9, 4.85, 4.84, 4.84]
 
         # Strict threshold
-        strict = ConvergenceAnalyzer.analyze_trajectory(
-            trajectory, convergence_threshold=0.01, stall_window=2
-        )
+        strict = ConvergenceAnalyzer.analyze_trajectory(trajectory, convergence_threshold=0.01, stall_window=2)
 
         # Loose threshold
-        loose = ConvergenceAnalyzer.analyze_trajectory(
-            trajectory, convergence_threshold=1.0, stall_window=2
-        )
+        loose = ConvergenceAnalyzer.analyze_trajectory(trajectory, convergence_threshold=1.0, stall_window=2)
 
         # Loose should detect stall earlier
         if strict.generations_to_convergence and loose.generations_to_convergence:

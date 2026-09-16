@@ -7,6 +7,7 @@ Tests verify:
 """
 
 import json
+
 from malta.trace import MembraneTrace, TraceEvent
 
 
@@ -110,9 +111,7 @@ class TestMembraneTrace:
     def test_record_membrane_created(self):
         """Record membrane creation."""
         trace = MembraneTrace()
-        trace.record_membrane_created(
-            step=1, parent_membrane_id="root", new_membrane_id="inner_1"
-        )
+        trace.record_membrane_created(step=1, parent_membrane_id="root", new_membrane_id="inner_1")
 
         assert len(trace.events) == 1
         event = trace.events[0]

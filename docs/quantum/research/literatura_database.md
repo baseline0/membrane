@@ -21,7 +21,7 @@ This document aggregates foundational papers, surveys, open problems, and public
 - **Venue:** *Theoretical Computer Science*
 - **Key Contribution:** Formal mathematical models integrating quantum state registers (wave functions) into P system compartments. Introduced quantum superposition and measurement rules as object rewriting operations.
 - **Relevance:** Foundational for understanding how quantum states propagate through membrane hierarchies.
-- **Citation:** 
+- **Citation:**
   ```bibtex
   @article{Nishida2006,
     author = {Nishida, T. Y.},
@@ -146,7 +146,7 @@ git clone https://github.com/pqueteg/QASMBench.git
 ### 3. Inter-Compartmental Decoherence
 **Challenge:** Design fault-tolerant quantum channels that pass quantum states between membrane walls without environmental decoherence.
 
-**Why It Matters:** 
+**Why It Matters:**
 - Quantum state transfer through physical membranes currently induces ~90% error rates
 - No established quantum error correction scheme for "membrane crossing" operations
 - Long-distance entanglement distribution across compartments remains unsolved
@@ -217,6 +217,6 @@ When citing papers from this database, use the BibTeX entries provided above. Fo
 
 ---
 
-**Last Updated:** 2025-09-15  
-**Maintained By:** Mark Alexiuk  
+**Last Updated:** 2025-09-15
+**Maintained By:** Mark Alexiuk
 **Related Files:** `open_problems.md`, `notes/`, `obsidian_integration.py`

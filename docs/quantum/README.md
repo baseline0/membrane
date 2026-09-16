@@ -175,18 +175,18 @@ literatura_database.md (Papers + Benchmarks)
 ## 🎓 Quick Reference: Three Research Workflows
 
 ### Workflow A: Literature → Notes → Publication
-**Time:** 2–6 months per paper/synthesis  
-**Output:** Conference/journal paper  
+**Time:** 2–6 months per paper/synthesis
+**Output:** Conference/journal paper
 **Use:** [`literature_database.md`](./research/literatura_database.md) + [`TEMPLATE_paper_notes.md`](./notes/TEMPLATE_paper_notes.md)
 
 ### Workflow B: Simulation → Benchmarking → Report
-**Time:** 1–3 months per experiment  
-**Output:** Publication-quality results + statistical analysis  
+**Time:** 1–3 months per experiment
+**Output:** Publication-quality results + statistical analysis
 **Use:** [`quantum_simulator.py`](../../malta/quantum_simulator.py) + [`benchmarking_strategy.md`](./research/benchmarking_strategy.md)
 
 ### Workflow C: Open Problem → Implementation → Publication
-**Time:** 3–12 months per problem  
-**Output:** Novel algorithm + theoretical contributions  
+**Time:** 3–12 months per problem
+**Output:** Novel algorithm + theoretical contributions
 **Use:** [`open_problems.md`](./research/open_problems.md) + `benchmarking_strategy.md`
 
 **See full details:** [`INTEGRATION_GUIDE.md`](./INTEGRATION_GUIDE.md)
@@ -353,9 +353,9 @@ run_experiment_and_log():
 
 ---
 
-**Last Updated:** 2025-09-15  
-**Maintained By:** Mark Alexiuk  
-**Project:** Malta (Membrane Computing Research Framework)  
+**Last Updated:** 2025-09-15
+**Maintained By:** Mark Alexiuk
+**Project:** Malta (Membrane Computing Research Framework)
 **Status:** 🟢 Active & Ready for Use
 
 Next: Read [`INTEGRATION_GUIDE.md`](./INTEGRATION_GUIDE.md) for detailed workflows.

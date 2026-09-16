@@ -503,7 +503,7 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap_external>", line 883, in exec_module
   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
   File "/home/mark/projects/baseline0/cyprus/cyprus/parser.py", line 1, in <module>
-    from funcparserlib.parser import (some, maybe, many, finished, skip, 
+    from funcparserlib.parser import (some, maybe, many, finished, skip,
   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
   File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed

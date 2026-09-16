@@ -13,9 +13,9 @@ from pathlib import Path
 
 import pytest
 
-from malta.trace import MembraneTrace
 from malta.exporters import SimulationExporter
 from malta.quantum_inspired import Candidate
+from malta.trace import MembraneTrace
 
 
 class TestSimulationExporter:
@@ -40,7 +40,7 @@ class TestSimulationExporter:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             output_path = Path(tmpdir) / "trace.json"
-            json_str = SimulationExporter.export_trace_to_json(trace, output_path)
+            SimulationExporter.export_trace_to_json(trace, output_path)
 
             # File should exist and be readable
             assert output_path.exists()
@@ -63,9 +63,7 @@ class TestSimulationExporter:
         candidate = Candidate(values=[1.5, 2.5], fitness=10.0)
         final_multiset = {"A": 3, "B": 1}
 
-        result_str = SimulationExporter.export_optimization_result(
-            candidate, final_multiset, format="json"
-        )
+        result_str = SimulationExporter.export_optimization_result(candidate, final_multiset, format="json")
 
         data = json.loads(result_str)
         assert data["result"]["best_fitness"] == 10.0
@@ -95,9 +93,7 @@ class TestSimulationExporter:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             output_path = Path(tmpdir) / "result.json"
-            SimulationExporter.export_optimization_result(
-                candidate, multiset, output_path=output_path, format="json"
-            )
+            SimulationExporter.export_optimization_result(candidate, multiset, output_path=output_path, format="json")
 
             assert output_path.exists()
             data = json.loads(output_path.read_text())
@@ -107,9 +103,7 @@ class TestSimulationExporter:
         """Export quantum state snapshot."""
         state = {"00": 0.5, "11": 0.5}
 
-        json_str = SimulationExporter.export_quantum_state(
-            state, step=5, membrane_id="root"
-        )
+        json_str = SimulationExporter.export_quantum_state(state, step=5, membrane_id="root")
 
         data = json.loads(json_str)
         assert data["step"] == 5
@@ -124,9 +118,7 @@ class TestSimulationExporter:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             output_path = Path(tmpdir) / "quantum.json"
-            SimulationExporter.export_quantum_state(
-                state, step=1, membrane_id="inner", output_path=output_path
-            )
+            SimulationExporter.export_quantum_state(state, step=1, membrane_id="inner", output_path=output_path)
 
             assert output_path.exists()
             data = json.loads(output_path.read_text())
@@ -152,9 +144,7 @@ class TestSimulationExporter:
         multiset = {"X": 1}
 
         with pytest.raises(ValueError, match="Unsupported format"):
-            SimulationExporter.export_optimization_result(
-                candidate, multiset, format="xml"
-            )
+            SimulationExporter.export_optimization_result(candidate, multiset, format="xml")
 
     def test_export_round_trip_json(self):
         """Export and re-import preserves data."""

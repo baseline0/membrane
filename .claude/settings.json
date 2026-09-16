@@ -30,7 +30,9 @@
       "Bash(python3.13 -c \"from research.entity_resolution import Entity, RORResolver, AcademicHPCResolver, EntityCache; print\\('✓ All imports successful'\\)\")",
       "Bash(python3.13 -m py_compile src/research/entity_resolution/resolvers/*.py)",
       "Bash(rm -f src/research/models.py)",
-      "Bash(rm -rf src/research/resolvers)"
+      "Bash(rm -rf src/research/resolvers)",
+      "Bash(MESSAGE='feat: wire FleetOrchestrator into modular architecture \\(Phase 5a\\) *)",
+      "Bash(MESSAGE='feat: Phase 5b Dashboard - TUI observability for fleet operations *)"
     ],
     "additionalDirectories": [
       "/home/mark/projects/baseline0/agent-tooling",

@@ -7,11 +7,9 @@ Tests verify:
 - Progressive encoding increases resolution
 """
 
-import pytest
-
 from malta.quantum_inspired_enhanced import (
-    EnhancedQuantumInspiredAlgorithm,
     EnhancedCandidate,
+    EnhancedQuantumInspiredAlgorithm,
 )
 
 
@@ -22,10 +20,7 @@ def sphere(x):
 
 def rosenbrock(x):
     """Rosenbrock function."""
-    return sum(
-        100 * (x[i + 1] - x[i] ** 2) ** 2 + (1 - x[i]) ** 2
-        for i in range(len(x) - 1)
-    )
+    return sum(100 * (x[i + 1] - x[i] ** 2) ** 2 + (1 - x[i]) ** 2 for i in range(len(x) - 1))
 
 
 class TestEnhancedCandidate:
@@ -33,18 +28,14 @@ class TestEnhancedCandidate:
 
     def test_initialization(self):
         """Candidate initializes with values and fitness."""
-        candidate = EnhancedCandidate(
-            values=[1.0, 2.0], fitness=5.0, basis_state="1010"
-        )
+        candidate = EnhancedCandidate(values=[1.0, 2.0], fitness=5.0, basis_state="1010")
         assert candidate.values == [1.0, 2.0]
         assert candidate.fitness == 5.0
         assert candidate.basis_state == "1010"
 
     def test_copy(self):
         """Copy creates independent candidate."""
-        original = EnhancedCandidate(
-            values=[1.0, 2.0], fitness=5.0, basis_state="1010"
-        )
+        original = EnhancedCandidate(values=[1.0, 2.0], fitness=5.0, basis_state="1010")
         copy = original.copy()
 
         copy.values[0] = 99.0
@@ -68,9 +59,7 @@ class TestEnhancedQuantumInspiredAlgorithm:
 
     def test_optimize_sphere(self):
         """Algorithm optimizes sphere function."""
-        algo = EnhancedQuantumInspiredAlgorithm(
-            n_compartments=3, n_dims=2, bits_per_dim=4, max_generations=20
-        )
+        algo = EnhancedQuantumInspiredAlgorithm(n_compartments=3, n_dims=2, bits_per_dim=4, max_generations=20)
 
         best = algo.optimize(sphere)
 
@@ -139,9 +128,7 @@ class TestEnhancedQuantumInspiredAlgorithm:
 
     def test_adaptation_controller_updates(self):
         """Adaptation controller tracks progress."""
-        algo = EnhancedQuantumInspiredAlgorithm(
-            n_compartments=2, n_dims=2, max_generations=10
-        )
+        algo = EnhancedQuantumInspiredAlgorithm(n_compartments=2, n_dims=2, max_generations=10)
         algo.optimize(sphere)
 
         # Should have history
@@ -150,17 +137,13 @@ class TestEnhancedQuantumInspiredAlgorithm:
     def test_different_compartment_counts(self):
         """Algorithm works with different compartment counts."""
         for n_comp in [1, 3, 5]:
-            algo = EnhancedQuantumInspiredAlgorithm(
-                n_compartments=n_comp, n_dims=2, max_generations=5
-            )
+            algo = EnhancedQuantumInspiredAlgorithm(n_compartments=n_comp, n_dims=2, max_generations=5)
             best = algo.optimize(sphere)
             assert best.fitness >= 0
 
     def test_higher_dimensions(self):
         """Algorithm works on higher-dimensional problems."""
-        algo = EnhancedQuantumInspiredAlgorithm(
-            n_compartments=3, n_dims=5, bits_per_dim=4, max_generations=15
-        )
+        algo = EnhancedQuantumInspiredAlgorithm(n_compartments=3, n_dims=5, bits_per_dim=4, max_generations=15)
 
         best = algo.optimize(sphere)
 
@@ -169,9 +152,7 @@ class TestEnhancedQuantumInspiredAlgorithm:
 
     def test_basis_state_tracking(self):
         """Algorithm tracks basis state of solutions."""
-        algo = EnhancedQuantumInspiredAlgorithm(
-            n_compartments=2, n_dims=2, bits_per_dim=4, max_generations=10
-        )
+        algo = EnhancedQuantumInspiredAlgorithm(n_compartments=2, n_dims=2, bits_per_dim=4, max_generations=10)
 
         best = algo.optimize(sphere)
 

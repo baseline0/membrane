@@ -6,9 +6,9 @@ Logs all rule applications, state transitions, and measurements to enable:
 - Analysis (evolution of multiset, membrane structure over time)
 """
 
-from dataclasses import dataclass, field, asdict
-from typing import Any, Optional
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
+from typing import Optional
 
 
 @dataclass

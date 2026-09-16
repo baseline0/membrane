@@ -81,9 +81,7 @@ class QuantumGate(Rule):
             rule_output=rule_output or MMultiset(),
         )
 
-    def apply_to_quantum_state(
-        self, state: QuantumState, target: str
-    ) -> QuantumState:
+    def apply_to_quantum_state(self, state: QuantumState, target: str) -> QuantumState:
         """Apply quantum operation to state vector.
 
         Subclasses override this to implement specific gates.
@@ -123,9 +121,7 @@ class HadamardGate(QuantumGate):
             descr=f"Hadamard gate: |{target_state}⟩ → (|{self.target_0}⟩ + |{self.target_1}⟩)/√2",
         )
 
-    def apply_to_quantum_state(
-        self, state: QuantumState, target: str
-    ) -> QuantumState:
+    def apply_to_quantum_state(self, state: QuantumState, target: str) -> QuantumState:
         """Split target state into superposition.
 
         If state exists in vector, replace with two states at 1/√2 amplitude each.
@@ -160,9 +156,7 @@ class MeasurementGate(QuantumGate):
             descr="Measurement: collapse superposition to classical state",
         )
 
-    def apply_to_quantum_state(
-        self, state: QuantumState, target: str = None
-    ) -> QuantumState:
+    def apply_to_quantum_state(self, state: QuantumState, target: str = None) -> QuantumState:
         """Collapse to single classical state.
 
         Randomly selects basis state weighted by probability (|amplitude|²).
@@ -215,9 +209,7 @@ class PhaseGate(QuantumGate):
             descr=f"Phase gate: rotation by {phase_radians:.4f} rad",
         )
 
-    def apply_to_quantum_state(
-        self, state: QuantumState, target: str
-    ) -> QuantumState:
+    def apply_to_quantum_state(self, state: QuantumState, target: str) -> QuantumState:
         """Apply phase rotation to target state.
 
         Note: Phase does NOT change |amplitude|² (probability).

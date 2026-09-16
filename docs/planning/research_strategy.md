@@ -79,7 +79,7 @@ Malta evolves from a research simulator into a **publication-quality benchmarkin
   - Speak at Natural Computing workshops
   - Editor/reviewer for JMC, Natural Computing
   - Possibly curate a special issue on quantum P-systems
-  
+
 ### Product / Licensing Decision
 - **Insurance consulting:** Mature; passive revenue ($500k–$2M ARR if scaled)
 - **Malta licensing:** Decide whether to:

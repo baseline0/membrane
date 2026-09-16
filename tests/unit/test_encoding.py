@@ -153,7 +153,7 @@ class TestMultibitEncoder:
     def test_get_basis_dimension(self):
         """Basis dimension is 2^total_bits."""
         encoder = MultibitEncoder(2, 4, (-5.0, 5.0))
-        assert encoder.get_basis_dimension() == 2 ** 8
+        assert encoder.get_basis_dimension() == 2**8
 
     def test_invalid_solution_length(self):
         """Wrong solution length raises error."""

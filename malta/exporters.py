@@ -9,8 +9,8 @@ Enables external analysis, visualization, and persistence.
 """
 
 import json
-from typing import Any, Optional
 from pathlib import Path
+from typing import Any, Optional
 
 from malta.trace import MembraneTrace
 
@@ -19,9 +19,7 @@ class SimulationExporter:
     """Export simulation results and traces to structured formats."""
 
     @staticmethod
-    def export_trace_to_json(
-        trace: MembraneTrace, output_path: Optional[Path] = None
-    ) -> str:
+    def export_trace_to_json(trace: MembraneTrace, output_path: Optional[Path] = None) -> str:
         """Export trace to JSON string.
 
         Args:
@@ -40,9 +38,7 @@ class SimulationExporter:
         return json_str
 
     @staticmethod
-    def export_trace_to_yaml(
-        trace: MembraneTrace, output_path: Optional[Path] = None
-    ) -> str:
+    def export_trace_to_yaml(trace: MembraneTrace, output_path: Optional[Path] = None) -> str:
         """Export trace to YAML string.
 
         Args:
@@ -102,13 +98,9 @@ class SimulationExporter:
             try:
                 import yaml
 
-                output_str = yaml.dump(
-                    result, default_flow_style=False, sort_keys=False
-                )
+                output_str = yaml.dump(result, default_flow_style=False, sort_keys=False)
             except ImportError:
-                raise ImportError(
-                    "PyYAML not installed. Install with: pip install pyyaml"
-                )
+                raise ImportError("PyYAML not installed. Install with: pip install pyyaml")
         else:
             raise ValueError(f"Unsupported format: {format}")
 
@@ -139,9 +131,7 @@ class SimulationExporter:
             "step": step,
             "membrane_id": membrane_id,
             "amplitudes": quantum_state,
-            "probabilities": {
-                basis: amp**2 for basis, amp in quantum_state.items()
-            },
+            "probabilities": {basis: amp**2 for basis, amp in quantum_state.items()},
         }
 
         json_str = json.dumps(snapshot, indent=2)
