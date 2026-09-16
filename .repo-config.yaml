@@ -1,0 +1,147 @@
+# membrane/.repo-config.yaml
+# Repo-specific policy and configuration
+# Generated from fleet-manifest + observed facts in Phase 1
+
+repo:
+  name: membrane
+  fleet_category: research
+  risk_level: medium  # Exploratory algorithms, but rigorous testing
+  owner: mark
+  description: "Quantum-inspired membrane computing algorithms & benchmarking framework"
+  data_sensitivity: research  # Public algorithm research, publication-intended
+
+execution:
+  # Phase 1: static-only (discovery only, no code execution)
+  # Phase 3+: safe-execute (run tests, lints, audits with safety guards)
+  mode: safe-execute
+
+  # Safety constraints for safe-execute mode
+  allow_network_for_audits: true       # OK to run pip-audit, npm audit over network
+  allow_dependency_install: true       # OK to run: uv sync
+  allow_docker: false                  # NO: Docker builds can execute arbitrary code
+  allow_database_migrations: false     # N/A: no database
+  allow_file_writes: false             # NO: agent stays read-only
+
+  timeout_per_command_seconds: 300     # 5 min per command
+  timeout_per_phase_seconds: 900       # 15 min per lint/test/audit phase
+  timeout_total_seconds: 1800          # 30 min total evaluation
+
+policy:
+  # Which lenses to run
+  lenses:
+    security: true
+    test_quality: true
+    architecture: true
+    maintainability: true
+    ci_cd: true
+    dependency_health: true
+
+  # Severity gates: what blocks commit vs. warns vs. reports
+  severity_gates:
+    critical: block          # Critical findings: reject
+    high: warn               # High findings: warn but allow
+    medium: report           # Medium findings: report only
+    low: report              # Low findings: report only
+
+  # Quality thresholds (from observed facts Phase 1)
+  thresholds:
+    min_test_coverage_percent: 75      # Observed: 87.3%, policy: 75%
+    max_file_lines: 500                # Observed: max 465 lines, policy: 500
+    max_cyclomatic_complexity: 10      # Complexity threshold
+    require_type_hints: true           # Python type annotations required
+    require_docstrings: true           # Docstrings on public functions
+
+discovery:
+  # Where to find commands (priority order: use, don't guess)
+  command_sources:
+    - ci_configs          # .github/workflows, .gitlab-ci.yml, etc.
+    - justfile            # just recipe names
+    - package_config      # pyproject.toml, package.json scripts
+    - heuristics          # Last resort: infer from file patterns
+
+  # For membrane: justfile + pyproject.toml are primary
+  # (No GitHub Actions found in Phase 1)
+  known_build_command: "python -m pytest tests/"
+  known_lint_commands:
+    - "ruff check ."
+    - "mypy malta/"
+  known_security_command: "pip-audit"
+
+waivers:
+  # Accepted risks with expiry dates and rationale
+
+  - id: toy-benchmark-runtime
+    lens: maintainability
+    rule_id: "file_exceeds_complexity"
+    path_globs: ["tests/integration/test_toy_benchmark.py"]
+    severity_suppressed: medium
+    owner: mark
+    rationale: |
+      Toy benchmark tests run multiple optimization algorithms across
+      4 functions × 2 compartment configs = inherent runtime cost.
+      Validates end-to-end correctness. Runtime is acceptable trade-off.
+    created_at: "2026-09-16"
+    expires_at: "2027-03-16"  # 6 months to re-evaluate
+    evidence: "Phase 3 testing showed runtime <40s per test file"
+    linked_issue: ""
+
+  - id: benchmark-runner-file-size
+    lens: maintainability
+    rule_id: "file_exceeds_line_count"
+    path_globs: ["benchmarks/run_cec2017_enhanced.py"]
+    severity_suppressed: low
+    owner: mark
+    rationale: |
+      Benchmark runner is thin orchestration layer with repetitive setup
+      for multiple algorithms × functions. Refactoring would reduce clarity.
+      File size is acceptable trade-off for readability.
+    created_at: "2026-09-16"
+    expires_at: "2027-03-16"
+    evidence: ""
+    linked_issue: ""
+
+  - id: encoding-module-undocumented-args
+    lens: maintainability
+    rule_id: "missing_docstring"
+    path_globs: ["malta/encoding.py"]
+    severity_suppressed: low
+    owner: mark
+    rationale: |
+      Encoding module has comprehensive module and class docstrings,
+      but some helper functions lack individual docstrings. Low priority
+      for research-stage code. Will add in documentation pass.
+    created_at: "2026-09-16"
+    expires_at: "2027-03-16"
+    evidence: ""
+    linked_issue: ""
+
+excluded_paths:
+  # Don't analyze these paths
+  - ".venv/**"
+  - "__pycache__/**"
+  - "*.egg-info/**"
+  - "results/**"  # Benchmark results, not source
+  - ".pytest_cache/**"
+  - "*.pyc"
+
+reporting:
+  # Where to store evaluation results
+  output_format: "json"                # Machine-readable
+  output_dir: "results/"               # Local only, git-ignored
+
+  # Don't commit timestamped reports; only .repo-config.yaml goes to git
+  commit_reports: false
+
+  include_unknowns: true               # Surface ambiguities
+  include_waivers: true                # Show applied suppressions
+
+cross_repo:
+  # Linkages to other repos in fleet
+  depends_on: [agent-tooling]
+
+  # Weak linkages (informational, no automated testing)
+  weak_linkages:
+    - target: baseline0-cv
+      type: publication
+      description: "Membrane papers feed into CV publication list"
+      requires_validation: false
