@@ -48,6 +48,14 @@ bench-full:
     @echo "Running full CEC2017 benchmark (expect 1-2 hours)..."
     uv run python -m benchmarks.run_example 30 29 10
 
+# Collect benchmark metrics for dashboard (parse benchmarks_example.csv)
+bench-metrics:
+    @echo "Collecting benchmark metrics..."
+    uv run python -m benchmarks.collect_results
+
+# Run full benchmark and collect metrics for dashboard
+bench-full-metrics: bench-full bench-metrics
+
 # Remove generated artifacts: caches, simulation output, build byproducts
 clean:
     rm -rf sims/ out/ malta/output/ malta/sims/ tests/out/ tests/_trial_temp/
