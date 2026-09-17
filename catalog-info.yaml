@@ -1,0 +1,21 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: membrane
+  description: Coordination and workspace management (task tracking, projects, collaboration, workflows)
+  links:
+    - url: https://github.com/baseline0/membrane
+      title: Repository
+    - url: https://github.com/baseline0/membrane/blob/main/BOUNDARIES.md
+      title: Charter
+spec:
+  type: service
+  owner: malexiuk@gmail.com
+  dependsOn:
+    - component:fleet-base
+  providesApis:
+    - GET /api/tasks
+    - POST /api/projects
+    - GET /api/teams
+  consumesApis: []
+  lifecycle: production
