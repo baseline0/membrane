@@ -1,0 +1,22 @@
+[importlinter]
+root_package = src.membrane
+
+[forbidden]
+name = Layer 2 isolation (membrane app)
+condition = root_package
+modules_forbidden_to_import =
+    flashcards
+    cv
+    income_ops
+    research
+    demos
+    sites
+    rope_mcp
+    vscode_workspace_mcp
+
+[forbidden]
+name = Configuration via FleetSettings (not os.getenv)
+condition = root_package
+modules_forbidden_to_import =
+    os -> getenv
+    os -> environ
