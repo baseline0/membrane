@@ -50,6 +50,9 @@ class PaperSource:
     authors: str
     year: int
     sources: Dict[str, str]  # {source_type: url/id}
+    doi: Optional[str] = None
+    is_open_access: bool = False  # True if genuinely open-access (MDPI, IEEE Access, arXiv)
+    requires_library: bool = False  # True if needs UofM library access
 
 
 @dataclass
@@ -179,6 +182,25 @@ class PaperFetcher:
         logger.info(f"\n📄 {paper.title}")
         logger.info(f"   Authors: {paper.authors} ({paper.year})")
 
+        # Skip papers that require library access
+        if paper.requires_library and not paper.is_open_access:
+            msg = "   [Library access required — see lookup list]"
+            print(msg)
+            result = FetchResult(
+                paper_name=paper.name,
+                title=paper.title,
+                success=False,
+                source=None,
+                filepath=None,
+                content_hash=None,
+                timestamp=datetime.now().isoformat(),
+                url=None,
+                error=f"Requires UofM library access (DOI: {paper.doi})",
+            )
+            self.manifest[paper.name] = result
+            self._save_manifest()
+            return result
+
         sources_to_try = [
             ("arXiv", paper.sources.get("arxiv")),
             ("MDPI", paper.sources.get("mdpi")),
@@ -236,6 +258,33 @@ class PaperFetcher:
         logger.warning(f"⚠️  {paper.name} — could not fetch from any source")
         return result
 
+    def generate_library_lookup(self, papers: List[PaperSource]):
+        """Generate file for papers requiring UofM library access."""
+        library_papers = [p for p in papers if p.requires_library and not p.is_open_access]
+
+        if not library_papers:
+            return
+
+        lookup_path = self.output_dir / "LIBRARY_LOOKUP.txt"
+        with open(lookup_path, "w") as f:
+            f.write("=" * 80 + "\n")
+            f.write("PAPERS REQUIRING UOFM LIBRARY ACCESS\n")
+            f.write("=" * 80 + "\n\n")
+            f.write("These papers are paywalled. Access via:\n")
+            f.write("  1. UofM Libraries website (alumni login)\n")
+            f.write("  2. On-campus access to full databases\n")
+            f.write("  3. Interlibrary loan (ILL) request\n\n")
+
+            for i, paper in enumerate(library_papers, 1):
+                f.write(f"{i}. {paper.title}\n")
+                f.write(f"   Authors: {paper.authors} ({paper.year})\n")
+                if paper.doi:
+                    f.write(f"   DOI: {paper.doi}\n")
+                f.write("   → Search via UofM Libraries\n")
+                f.write("\n")
+
+        logger.info(f"📋 Library lookup: {lookup_path}")
+
     def generate_status_report(self):
         """Generate summary of fetch status."""
         total = len(self.manifest)
@@ -261,16 +310,17 @@ class PaperFetcher:
 
 
 def load_paper_sources() -> List[PaperSource]:
-    """Load curated paper list."""
+    """Load curated paper list with access status."""
     return [
         PaperSource(
             name="Zhang_QuantumInspiredMembrane_2023",
             title="Quantum-Inspired Membrane Computing: A Survey and Perspective",
             authors="Gexiang Zhang, Marian Gheorghe, Chao Wu",
             year=2023,
+            doi="10.3390/e25020xxx",
+            is_open_access=True,  # MDPI Entropy is open-access
             sources={
                 "mdpi": "https://www.mdpi.com/journal/entropy",
-                "scholar": "https://scholar.google.com/scholar?q=Zhang+Gheorghe+Wu+Quantum+Inspired+Membrane+Computing",
             },
         ),
         PaperSource(
@@ -278,37 +328,37 @@ def load_paper_sources() -> List[PaperSource]:
             title="Real-Coded Quantum-Inspired Evolutionary Membrane Algorithm for Numerical Optimization",
             authors="Gexiang Zhang, Haina Rong, Ferrante Neri, Mario J. Pérez-Jiménez",
             year=2021,
-            sources={
-                "arxiv": "https://arxiv.org/search/?query=Zhang+Real+Coded+Quantum+Inspired&searchtype=author",
-                "scholar": "https://scholar.google.com/scholar?q=Real+Coded+Quantum+Inspired+Evolutionary+Membrane",
-            },
+            doi="10.1016/j.ins.2021.xxx",
+            requires_library=True,  # Information Sciences (paywalled)
+            sources={},
         ),
         PaperSource(
             name="Diaz_SoftwareToolsMembraneComputing_2010",
             title="Software Tools for Membrane Computing: P-Lingua and MeCoSim",
             authors="Diego Díaz-Pernil, Agustín Berciano, Fernando Peña-Cantillana, Miguel A. Gutiérrez-Naranjo",
             year=2010,
-            sources={
-                "scholar": "https://scholar.google.com/scholar?q=Diaz+Pernil+P-Lingua+MeCoSim",
-            },
+            doi="10.15837/ijccc.2010.2.xxx",
+            requires_library=True,
+            sources={},
         ),
         PaperSource(
             name="Leporati_SimulatingQuantumCircuits_2005",
             title="Simulating Quantum Circuits with P Systems with Active Membranes",
             authors="Alberto Leporati, Claudio Zandron, Ferruccio Ferretti, Giancarlo Mauri",
             year=2005,
-            sources={
-                "scholar": "https://scholar.google.com/scholar?q=Leporati+Simulating+Quantum+Circuits+P+Systems",
-            },
+            doi="10.1016/j.tcs.2004.xxx",
+            requires_library=True,  # TCS (paywalled)
+            sources={},
         ),
         PaperSource(
             name="Xiao_QuantumInspiredMembrane_2022",
             title="A Quantum-Inspired Membrane Algorithm for Combinatorial Optimization Problems",
             authors="Jiao Xiao, Gexiang Zhang, Xiyu Liu",
             year=2022,
+            doi="10.3390/math10010xxx",
+            is_open_access=True,  # MDPI Mathematics (open-access)
             sources={
-                "mdpi": "https://www.mdpi.com/journal/mathematics/articles?sort=pubdate",
-                "scholar": "https://scholar.google.com/scholar?q=Xiao+Zhang+Liu+Quantum+Inspired+Membrane+Combinatorial",
+                "mdpi": "https://www.mdpi.com/journal/mathematics",
             },
         ),
         PaperSource(
@@ -316,18 +366,19 @@ def load_paper_sources() -> List[PaperSource]:
             title="Open Problems in Membrane Computing: A Retrospective and Future Outlook",
             authors="Gheorghe Păun, Linqiang Pan, Mario J. Pérez-Jiménez",
             year=2019,
-            sources={
-                "scholar": "https://scholar.google.com/scholar?q=Paun+Open+Problems+Membrane+Computing",
-            },
+            doi="10.1007/s41965-019-xxxxx",
+            requires_library=True,  # Springer (likely paywalled)
+            sources={},
         ),
         PaperSource(
             name="Liu_NovelHybridQuantum_2021",
             title="A Novel Hybrid Quantum-Inspired Membrane Algorithm for Global Numerical Optimization",
             authors="Xiangrong Liu, Gexiang Zhang, Thomas Back",
             year=2021,
+            doi="10.1109/ACCESS.2021.xxxxx",
+            is_open_access=True,  # IEEE Access (open-access)
             sources={
-                "ieee": "https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=6287639",
-                "scholar": "https://scholar.google.com/scholar?q=Liu+Gexiang+Hybrid+Quantum+Inspired+Membrane",
+                "ieee": "https://ieeexplore.ieee.org/document/xxxxx/",
             },
         ),
         PaperSource(
@@ -335,9 +386,10 @@ def load_paper_sources() -> List[PaperSource]:
             title="Quantum P Systems: Theoretical Framework and Computational Power",
             authors="Harumichi Nishimura, Jiang Zhao",
             year=2022,
+            doi="10.1016/j.ijuc.2022.xxx",
+            requires_library=True,  # IJUC (check arXiv first)
             sources={
                 "arxiv": "https://arxiv.org/search/?query=Nishimura+Zhao+Quantum+P+Systems",
-                "scholar": "https://scholar.google.com/scholar?q=Nishimura+Zhao+Quantum+P+Systems+Framework",
             },
         ),
         PaperSource(
@@ -345,9 +397,10 @@ def load_paper_sources() -> List[PaperSource]:
             title="Parallel Implementation of Quantum-Inspired Membrane Algorithms on GPUs",
             authors="Luis Valencia-Cabrera, David Orellana-Martín, Mario J. Pérez-Jiménez",
             year=2023,
+            doi="10.3390/app13010xxx",
+            is_open_access=True,  # MDPI Applied Sciences (open-access)
             sources={
                 "mdpi": "https://www.mdpi.com/journal/applsci",
-                "scholar": "https://scholar.google.com/scholar?q=Valencia+Cabrera+Parallel+Membrane+Algorithms+GPUs",
             },
         ),
         PaperSource(
@@ -355,9 +408,9 @@ def load_paper_sources() -> List[PaperSource]:
             title="Membrane Computing and Quantum Information Processing: A Synthesis",
             authors="Xiyu Liu, Thomas Hinze, Gexiang Zhang",
             year=2020,
-            sources={
-                "scholar": "https://scholar.google.com/scholar?q=Liu+Hinze+Membrane+Computing+Quantum+Information",
-            },
+            doi="10.1016/j.biosystems.2020.xxx",
+            requires_library=True,  # Biosystems (paywalled)
+            sources={},
         ),
     ]
 
@@ -390,6 +443,7 @@ def main():
 
         fetcher.fetch_paper(paper)
 
+    fetcher.generate_library_lookup(papers)
     fetcher.generate_status_report()
 
 
