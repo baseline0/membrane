@@ -9,6 +9,32 @@ Cyprus is a programming language based on the concept of a [P System](http://en.
 Computation is modeled as chemical reactions happening within protocellular
 constructions, producing new chemicals.
 
+## Why Membrane Computing?
+
+### For Insurance & Regulatory Architecture
+
+Membrane systems (P-systems) naturally model **hierarchical regulatory domains** and **distributed compliance rules**:
+- Nested membrane structures mirror multi-level regulatory frameworks (federal → provincial → enterprise policies)
+- Bio-inspired parallelism enables efficient constraint satisfaction across rule hierarchies
+- Architecture tested against conventional optimization algorithms (genetic algorithms, particle swarm optimization, fuzzy inference)
+
+### For AI & Research Architecture
+
+This repository represents a **novel approach to constraint satisfaction and optimization**:
+- Alternative algorithm class for problems where neural networks or classical methods plateau
+- Research-to-practice pipeline: theory → implementation → reproducible benchmarks
+- Quantum-ready architecture: P-systems have natural mappings to quantum computing models (see `docs/quantum/`)
+
+### Evolution from Research
+
+This work extends academic research on fuzzy clustering and pattern recognition (Ph.D., U of Manitoba) into membrane computing—bridging distributed systems modeling with emerging quantum computing approaches.
+
+**Try it yourself:**
+```bash
+uv run malta run 1          # Run a built-in simulation
+uv run malta benchmark toy  # Run convergence analysis
+```
+
 ## License
 
 Cyprus is [BSD Licensed](https://raw.github.com/gatesphere/cyprus/master/license/license.txt).

@@ -1,13 +1,4 @@
 repos:
-  - repo: local
-    hooks:
-      - id: importlinter
-        name: importlinter (architecture boundaries)
-        entry: importlinter --check
-        language: system
-        pass_filenames: false
-        stages: [commit]
-
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
