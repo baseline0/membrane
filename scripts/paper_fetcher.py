@@ -34,7 +34,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
     handlers=[
-        logging.FileHandler("docs/papers/.fetch.log"),
+        logging.FileHandler("reference/lit_review/.fetch.log"),
         logging.StreamHandler(sys.stdout),
     ],
 )
@@ -101,8 +101,8 @@ class PaperFetcher:
 
     def __init__(
         self,
-        output_dir: Path = Path("docs/papers"),
-        manifest_path: Path = Path("docs/papers/.manifest.json"),
+        output_dir: Path = Path("reference/lit_review"),
+        manifest_path: Path = Path("reference/lit_review/.manifest.json"),
     ):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)

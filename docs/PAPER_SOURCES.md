@@ -204,7 +204,7 @@ https://scholar.google.com/scholar?q=[TITLE]
 
 ## After Downloading
 
-1. **Save to:** `docs/papers/AuthorLastName_ShortTitle_Year.pdf`
+1. **Save to:** `reference/lit_review/AuthorLastName_ShortTitle_Year.pdf`
    - Example: `Zhang_QuantumInspiredSurvey_2023.pdf`
 
 2. **Update LITERATURE_REVIEW.md** with findings

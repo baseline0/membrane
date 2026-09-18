@@ -102,7 +102,7 @@ def generate_lit_review_hints(available: List):
         title_short = result["title"].split(":")[0][:50]
         print(f"  ## {name}")
         print(f"  - **Paper:** {title_short}...")
-        print(f"  - **Location:** docs/papers/{name}.pdf")
+        print(f"  - **Location:** reference/lit_review/{name}.pdf")
         print("  - **Key finding:** [TODO: read and extract]")
         print()
 
@@ -118,8 +118,8 @@ def generate_lit_review_hints(available: List):
 
 def main():
     """Generate status report."""
-    manifest_path = Path("docs/papers/.manifest.json")
-    papers_dir = Path("docs/papers")
+    manifest_path = Path("reference/lit_review/.manifest.json")
+    papers_dir = Path("reference/lit_review")
 
     manifest = load_manifest(manifest_path)
     available, unavailable, missing = generate_console_report(manifest, papers_dir)

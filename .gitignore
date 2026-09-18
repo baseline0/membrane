@@ -28,5 +28,4 @@ repo-observed.json
 repo-eval-report.md
 
 # Literature review papers (regenerated via paper_fetcher.py)
-docs/papers/*.pdf
-docs/papers/.fetch.log
+reference/lit_review/

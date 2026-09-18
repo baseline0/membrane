@@ -47,14 +47,14 @@ python scripts/paper_fetcher.py --clean
 The fetcher:
 1. **Attempts multiple sources per paper** (arXiv, MDPI, IEEE, DOI, Google Scholar)
 2. **Respects rate limits** (1-2s between requests per domain)
-3. **Caches locally** in `docs/papers/` with SHA256 hash verification
+3. **Caches locally** in `reference/lit_review/` with SHA256 hash verification
 4. **Maintains audit trail** in `.manifest.json` (what was fetched, from where, when)
 5. **Is resumable** (re-running skips already-fetched papers)
 
 ### What Gets Saved
 
 ```
-docs/papers/
+reference/lit_review/
 ├── .manifest.json              # Fetch audit trail (JSON)
 ├── .fetch.log                  # Fetch log (text)
 ├── Zhang_QuantumInspiredMembrane_2023.pdf    # Fetched paper
@@ -70,7 +70,7 @@ docs/papers/
     "title": "Quantum-Inspired Membrane Computing: A Survey and Perspective",
     "success": true,
     "source": "MDPI",
-    "filepath": "docs/papers/Zhang_QuantumInspiredMembrane_2023.pdf",
+    "filepath": "reference/lit_review/Zhang_QuantumInspiredMembrane_2023.pdf",
     "content_hash": "a1b2c3d4...",
     "timestamp": "2025-09-18T15:32:10.123456",
     "url": "https://www.mdpi.com/...",
@@ -86,7 +86,7 @@ docs/papers/
 | "No papers found" | Ensure `paper_fetcher.py` ran successfully: check `.fetch.log` |
 | Some papers failed | Run `python scripts/paper_fetcher.py --retry` |
 | Corrupted cache | Run `python scripts/paper_fetcher.py --clean` |
-| Want to manually add papers | Place PDF in `docs/papers/Name_Title_Year.pdf`, update `.manifest.json` |
+| Want to manually add papers | Place PDF in `reference/lit_review/Name_Title_Year.pdf`, update `.manifest.json` |
 
 ---
 
@@ -304,14 +304,14 @@ From the papers, you'll find these unsolved challenges:
 - **PAPER_SOURCES.md** — Direct links to download papers manually
 - **scripts/paper_fetcher.py** — Automated fetcher (handles caching, rate limits)
 - **scripts/paper_status.py** — Status report (which papers are ready)
-- **docs/papers/.manifest.json** — Audit trail (reproducible record of what was fetched)
+- **reference/lit_review/.manifest.json** — Audit trail (reproducible record of what was fetched)
 
 ---
 
 ## Questions?
 
-- **Papers not downloading?** Check `docs/papers/.fetch.log` for details
-- **Want to manually add a paper?** Save as `docs/papers/Author_Title_Year.pdf` and update `.manifest.json`
+- **Papers not downloading?** Check `reference/lit_review/.fetch.log` for details
+- **Want to manually add a paper?** Save as `reference/lit_review/Author_Title_Year.pdf` and update `.manifest.json`
 - **Need more papers?** Check citations in the 10 papers; arXiv often has related work
 - **Stuck on novelty?** Look for open problems sections — those are research gaps you could fill
 

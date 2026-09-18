@@ -5,7 +5,7 @@ Lightweight paper fetcher: arXiv + DOI lookup + semantic scholar API.
 Usage:
     python scripts/fetch_papers.py
 
-Fetches papers to docs/papers/ for offline review.
+Fetches papers to reference/lit_review/ for offline review.
 """
 
 import json
@@ -190,7 +190,7 @@ def fetch_paper(paper: dict, output_dir: Path) -> bool:
 
 def main():
     """Fetch all papers."""
-    output_dir = Path("docs/papers")
+    output_dir = Path("reference/lit_review")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print("🔍 Fetching Quantum-Inspired Membrane Computing Papers...\n")
