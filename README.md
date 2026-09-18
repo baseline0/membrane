@@ -35,6 +35,17 @@ uv run malta run 1          # Run a built-in simulation
 uv run malta benchmark toy  # Run convergence analysis
 ```
 
+## Malta: ML Algorithm Benchmarking Framework
+
+The **Malta framework** benchmarks P-systems against conventional ML optimization algorithms using standard test suites:
+
+- **Algorithms:** Genetic Algorithms, Particle Swarm Optimization, Fuzzy Inference Systems
+- **Benchmark suites:** CEC2017 (continuous), TSPLIB (combinatorial), UCI (classification), SAT (boolean)
+- **Metrics:** Mean, std, best, convergence rate, and statistical significance
+- **Reproducibility:** 230 passing tests, Docker isolation, CI/CD validation
+
+This is the same empirical evaluation approach used in production ML model selection and comparison studies. See `benchmarks/` for the harness and `docs/quantum/` for research applications.
+
 ## License
 
 Cyprus is [BSD Licensed](https://raw.github.com/gatesphere/cyprus/master/license/license.txt).
