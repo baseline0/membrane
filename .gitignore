@@ -26,3 +26,7 @@ cyprus/benchmarks/c_src/cec2017/input_data/
 results/
 repo-observed.json
 repo-eval-report.md
+
+# Literature review papers (regenerated via paper_fetcher.py)
+docs/papers/*.pdf
+docs/papers/.fetch.log
