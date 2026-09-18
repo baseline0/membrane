@@ -191,7 +191,7 @@ class PaperFetcher:
             if not source_url or source_url.endswith("xxx"):
                 continue
 
-            logger.info(f"   Trying {source_name}...", end=" ")
+            print(f"   Trying {source_name}...", end=" ", flush=True)
             domain = RateLimiter.extract_domain(source_url)
             content = self.try_fetch(source_url, domain)
 
@@ -217,7 +217,7 @@ class PaperFetcher:
                 logger.info(f"✅ {source_name} | {len(content)} bytes | hash: {content_hash[:8]}")
                 return result
 
-            logger.info("❌")
+            print("❌")
 
         # All sources failed
         result = FetchResult(
