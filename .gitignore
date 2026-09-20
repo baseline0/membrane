@@ -29,3 +29,8 @@ repo-eval-report.md
 
 # Literature review papers (regenerated via paper_fetcher.py)
 reference/lit_review/
+
+# Paper build artifacts (auto-generated via math-trace)
+paper/generated/
+paper/*.pdf
+paper/qips_equations.json

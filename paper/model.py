@@ -1,14 +1,17 @@
 """
-Quantum-Inspired P-Systems (QIPS) for Optimization
+P-Systems & Membrane Computing: From Biology to Algorithms
 
-This is the SOURCE OF TRUTH for all formulas and algorithms in the paper.
+This is the SOURCE OF TRUTH for all formulas and examples in the paper.
 All formulas are defined symbolically in SymPy and exported to Typst.
 
-After literature review, fill in:
-1. Quantum superposition encoding (how quantum states map to P-system particles)
-2. Quantum interference (how P-system rules implement quantum interference)
-3. Measurement operation (how collapse works in P-systems)
-4. Convergence properties (theoretical bounds if available)
+Gheorghe Păun's P-systems formalize membrane computing using:
+1. Hierarchical membrane structure (μ)
+2. Multisets of objects (chemical molecules)
+3. Evolution rules (chemical reactions)
+4. Maximal parallelism (all applicable rules fire simultaneously)
+
+This model captures the essence of computation-by-membrane-reaction,
+from simple multiplication (3 × 2 = 6) to complex optimization algorithms.
 """
 
 import json
@@ -17,7 +20,7 @@ from pathlib import Path
 
 import sympy as sp
 
-# === PLACEHOLDER: To be filled after literature review ===
+# === Formula metadata class ===
 
 
 @dataclass
@@ -43,29 +46,88 @@ class Formula:
         }
 
 
-# === Symbol definitions ===
+# === Symbol definitions for P-System formalism ===
 
-# Quantum-inspired concepts (to be defined after lit review)
-# TODO: Define quantum superposition encoding
-# TODO: Define quantum interference mechanics
-# TODO: Define measurement/collapse operation
-# TODO: Define convergence criteria
+# Core P-system symbols
+n = sp.Symbol("n", integer=True, positive=True)  # Number of objects (molecule count)
+m = sp.Symbol("m", integer=True, positive=True)  # Number of distinct object types
+k = sp.Symbol("k", integer=True, positive=True)  # Step/iteration counter
+r = sp.Symbol("r", integer=True, positive=True)  # Rule index
 
-# Placeholder: Standard optimization formula
-x = sp.Symbol("x", real=True)
-f = sp.Symbol("f", real=True)
-iteration = sp.Symbol("n", integer=True, positive=True)
+# Membrane structure: depth d (levels of nesting)
+d = sp.Symbol("d", integer=True, positive=True)
 
+# Computational complexity
+t = sp.Symbol("t", integer=True, positive=True)  # Time (number of steps)
 
-# === Formulas for paper (will be populated after lit review) ===
+# The Multiplication Example: 3 × 2 = 6
+# Input: three 'a' objects
+initial_a = sp.Integer(3)
+
+# Rule 1: a → b b (each 'a' becomes two 'b's)
+# After step 1: 3 × 2 = 6 'b' objects
+rule1_output = initial_a * 2
+
+# Rule 2: b → c (each 'b' becomes one 'c' and exits membrane)
+# After step 2: 6 'c' objects in output membrane
+final_c = rule1_output
+
+# === Core P-System Formulas ===
 
 FORMULAS = {
-    # TODO: Add quantum-inspired algorithm formulas
-    # Examples (replace with actual QIPS formulas):
-    # 'superposition': Formula(...),
-    # 'interference': Formula(...),
-    # 'measurement': Formula(...),
-    # 'convergence_bound': Formula(...),
+    # === 1. Membrane Structure ===
+    "membrane_hierarchy": Formula(
+        name="membrane_hierarchy",
+        expr=sp.Integer(2) ** d,  # 2^d possible nested structures with d levels
+        description="Maximum hierarchical depth in a P-system with d membrane levels",
+        source_line=59,
+    ),
+    # === 2. Multiset Operations ===
+    "multiset_cardinality": Formula(
+        name="multiset_cardinality",
+        expr=sp.binomial(n + m - 1, m),  # Stars and bars: distributing n objects among m types
+        description="Number of distinct multisets with n objects distributed among m types",
+        source_line=66,
+    ),
+    # === 3. Evolution Rules & Parallelism ===
+    "max_rules_per_step": Formula(
+        name="max_rules_per_step",
+        expr=n,  # In maximal parallelism, at most n rules fire (one per object)
+        description="Maximum number of rules that can fire simultaneously in maximal parallelism (upper bound: n)",
+        source_line=73,
+    ),
+    # === 4. The Multiplication Example (3 × 2) ===
+    "mult_example_input": Formula(
+        name="mult_example_input",
+        expr=initial_a,
+        description="Multiplication example: input count (three 'a' objects = 3)",
+        source_line=80,
+    ),
+    "mult_example_step1": Formula(
+        name="mult_example_step1",
+        expr=rule1_output,
+        description="Multiplication example: Step 1 output (Rule 1: a → bb, produces 3 × 2 = 6 b's)",
+        source_line=85,
+    ),
+    "mult_example_final": Formula(
+        name="mult_example_final",
+        expr=final_c,
+        description="Multiplication example: final output (Rule 2: b → c_out, produces 6 c's in output membrane)",
+        source_line=90,
+    ),
+    # === 5. Computational Complexity ===
+    "time_complexity_exponential": Formula(
+        name="time_complexity_exponential",
+        expr=2**t,  # Potential exponential speedup with parallelism
+        description="Theoretical computational power: O(2^t) with exponential parallelism over t steps",
+        source_line=97,
+    ),
+    "objects_created_per_step": Formula(
+        name="objects_created_per_step",
+        expr=n * 2,  # Each of n objects can create up to 2 new objects per step
+        description="Maximum objects created in one step (conservative bound: 2n)",
+        source_line=103,
+    ),
 }
 
 

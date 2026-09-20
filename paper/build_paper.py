@@ -40,9 +40,10 @@ def generate_formulas() -> bool:
     typst_lines = []
     for name, info in data.items():
         latex_str = info["latex"]
-        # Simple LaTeX to Typst conversion
+        # LaTeX to Typst conversion: handle special math functions
         typst_str = latex_str
-        typst_str = re.sub(r"\\frac\{([^}]+)\}\{([^}]+)\}", r"(\\1)/(\\2)", typst_str)
+        typst_str = re.sub(r"\\binom\{([^}]+)\}\{([^}]+)\}", lambda m: f"binom({m.group(1)}, {m.group(2)})", typst_str)
+        typst_str = re.sub(r"\\frac\{([^}]+)\}\{([^}]+)\}", lambda m: f"({m.group(1)})/({m.group(2)})", typst_str)
         typst_str = re.sub(r"\\left\(", "(", typst_str)
         typst_str = re.sub(r"\\right\)", ")", typst_str)
 
