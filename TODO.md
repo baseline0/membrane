@@ -30,10 +30,15 @@
 ### Phase 2: Conference Presentation & Friction Collection (NOW)
 
 **Before using for conference talk:**
-- [ ] Add CI template (GitHub Actions with `--strict` mode)
-- [ ] Create pre-commit hook (validates formulas on `presentation.md` changes)
+- [x] Add CI template (GitHub Actions with `--strict` mode) — DONE
+- [x] Create pre-commit hook (validates formulas on `presentation.md` changes) — DONE
+- [x] Stress test suite (5 tests, all passing) — DONE
+- [x] Friction log for collecting real-world feedback — DONE
+- [ ] Install pre-commit hook: `ln -sf ../../.git/hooks/pre-commit-formulas .git/hooks/pre-commit`
+- [ ] Verify CI passes on a PR with formula changes
 - [ ] Add README documentation with verification story
 - [ ] Document troubleshooting guide (symbol aliasing, assumptions, etc.)
+- [ ] Add QR code/link to feedback form on last slide
 - [ ] Implement formula index PDF appendix (append to presentation PDF)
 
 **During conference preparation:**
