@@ -79,3 +79,34 @@ build-cec2017:
     gcc -shared -fPIC -O3 -lm benchmarks/c_src/cec2017/cec17_test_func.c -o benchmarks/c_src/cec2017/libcec2017.so 2>/dev/null || \
     (echo "Note: gcc build requires cec17_test_func.c in benchmarks/c_src/cec2017/" && exit 1)
     @echo "libcec2017.so built successfully"
+
+# --- Paper & Presentation ---
+
+# Build formula-driven presentation (build slides + validate formulas + generate index)
+present:
+    @cd paper && \
+    echo "🚀 Building formula-driven presentation..." && \
+    uv run python model.py && \
+    uv run python build_slides.py && \
+    uv run python validate_formulas.py && \
+    echo "" && \
+    echo "✅ Presentation ready!" && \
+    echo "   Generated files:" && \
+    echo "     - presentation_generated.md (Marp)" && \
+    echo "     - formula_index.md (traceability)" && \
+    echo "     - qips_equations.json (formulas)" && \
+    echo "" && \
+    echo "📊 Next: Open in Marp VS Code extension or run:" && \
+    echo "   marp presentation_generated.md -o presentation.pdf"
+
+# Generate formula index (verify consistency)
+formula-check:
+    @cd paper && uv run python validate_formulas.py
+
+# Build paper (Typst) from formulas
+paper:
+    @cd paper && uv run python build_paper.py
+
+# Build everything: paper + presentation + checks
+paper-all: paper present
+    @echo "✅ All paper artifacts built successfully"

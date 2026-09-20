@@ -25,7 +25,11 @@ import sympy as sp
 
 @dataclass
 class Formula:
-    """A formula with metadata for traceability."""
+    """A formula with metadata for traceability.
+
+    Supports deterministic rendering with locked SymPy options,
+    symbol aliasing (display names), and assumption locking.
+    """
 
     id: str
     name: str
@@ -33,10 +37,45 @@ class Formula:
     description: str
     source_line: int
     parameters: dict = field(default_factory=dict)
+    # NEW: Locked rendering options for reproducibility
+    rendering_opts: dict = field(
+        default_factory=lambda: {
+            "mode": "plain",
+            "fold_short_frac": False,
+            "mul_symbol": "cdot",
+        }
+    )
+    # NEW: Symbol display mapping (code name → LaTeX display)
+    symbols: dict = field(default_factory=dict)  # e.g., {"n": r"\theta"}
+    # NEW: Locked assumptions per symbol
+    assumptions: dict = field(default_factory=dict)  # e.g., {"n": {"positive": True}}
 
     def to_latex(self) -> str:
-        """Convert SymPy expression to LaTeX string."""
-        return sp.latex(self.expr)
+        """Convert to LaTeX with locked rendering options.
+
+        Applies SymPy assumptions and renders with deterministic settings
+        for reproducibility across versions.
+        """
+        expr = self.expr
+
+        # Apply assumptions to symbols
+        if self.assumptions:
+            expr_dict = {}
+            for sym_name, sym_assumptions in self.assumptions.items():
+                expr_dict[sym_name] = sp.Symbol(sym_name, **sym_assumptions)
+            # Simple substitution (works for most cases)
+            for orig, assumed in expr_dict.items():
+                if hasattr(expr, "subs"):
+                    expr = expr.subs(sp.Symbol(orig), assumed)
+
+        # Render with locked options
+        latex_str = sp.latex(expr, **self.rendering_opts)
+
+        # Apply symbol display mapping (e.g., n → \theta)
+        for code_name, display_latex in self.symbols.items():
+            latex_str = latex_str.replace(code_name, display_latex)
+
+        return latex_str
 
     def to_dict(self) -> dict:
         """Export as dictionary for JSON serialization."""
@@ -47,6 +86,9 @@ class Formula:
             "description": self.description,
             "source_line": self.source_line,
             "parameters": list(self.parameters.keys()),
+            "rendering_opts": self.rendering_opts,
+            "symbols": self.symbols,
+            "assumptions": self.assumptions,
         }
 
 

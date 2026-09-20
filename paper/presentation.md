@@ -218,7 +218,7 @@ FORMULAS = {
 ```
 
 **Auto-generated in this presentation:**
-- Every formula substituted via `{{formula:id}}`
+- Every formula substituted via formula reference syntax
 - Source line reference added as comment
 - Change `model.py` → automatically updates this presentation
 
