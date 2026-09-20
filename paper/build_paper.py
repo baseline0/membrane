@@ -87,12 +87,8 @@ def generate_figures() -> bool:
 
 
 def build_pdf() -> bool:
-    """Compile Typst document to PDF."""
-    print("📝 Building Typst document...")
-
-    if not Path("main.typ").exists():
-        print("❌ main.typ not found")
-        return False
+    """Compile Typst documents to PDF (paper + presentation)."""
+    print("📝 Building Typst documents...")
 
     # Check if typst is available
     check_typst = subprocess.run(["which", "typst"], capture_output=True, text=True)
@@ -101,21 +97,32 @@ def build_pdf() -> bool:
         print("⚠️  Typst not found. To generate PDF:")
         print("   Run: cd ../.. && just install-typst")
         print("   Or visit: https://github.com/typst/typst/releases")
-        print("   (Typst file is ready at: main.typ)")
+        print("   (Typst files are ready at: main.typ, presentation.typ)")
         return True  # Not a hard failure
 
-    result = subprocess.run(["typst", "compile", "main.typ"], capture_output=True, text=True)
-
-    if result.returncode == 0:
-        if Path("main.pdf").exists():
+    # Compile main.typ (paper)
+    if Path("main.typ").exists():
+        result = subprocess.run(["typst", "compile", "main.typ"], capture_output=True, text=True)
+        if result.returncode == 0 and Path("main.pdf").exists():
             print("✅ Generated main.pdf")
-            return True
         else:
-            print("❌ Typst compiled but main.pdf not found")
+            print(f"❌ main.typ compilation failed:\n{result.stderr}")
             return False
     else:
-        print(f"❌ Typst compilation failed:\n{result.stderr}")
+        print("❌ main.typ not found")
         return False
+
+    # Compile presentation.typ (slides)
+    if Path("presentation.typ").exists():
+        result = subprocess.run(["typst", "compile", "presentation.typ"], capture_output=True, text=True)
+        if result.returncode == 0 and Path("presentation.pdf").exists():
+            print("✅ Generated presentation.pdf")
+        else:
+            print("⚠️  presentation.typ compilation skipped or failed (optional)")
+    else:
+        print("⚠️  presentation.typ not found (optional)")
+
+    return True
 
 
 def main() -> bool:

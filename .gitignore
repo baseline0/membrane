@@ -32,5 +32,6 @@ reference/lit_review/
 
 # Paper build artifacts (auto-generated via math-trace)
 paper/generated/
-paper/*.pdf
+paper/main.pdf
+paper/presentation.pdf
 paper/qips_equations.json
