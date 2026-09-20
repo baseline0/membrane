@@ -15,7 +15,7 @@ from simple multiplication (3 × 2 = 6) to complex optimization algorithms.
 """
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import sympy as sp
@@ -27,10 +27,12 @@ import sympy as sp
 class Formula:
     """A formula with metadata for traceability."""
 
+    id: str
     name: str
     expr: sp.Expr
     description: str
     source_line: int
+    parameters: dict = field(default_factory=dict)
 
     def to_latex(self) -> str:
         """Convert SymPy expression to LaTeX string."""
@@ -39,10 +41,12 @@ class Formula:
     def to_dict(self) -> dict:
         """Export as dictionary for JSON serialization."""
         return {
+            "id": self.id,
             "latex": self.to_latex(),
             "sympy": str(self.expr),
             "description": self.description,
             "source_line": self.source_line,
+            "parameters": list(self.parameters.keys()),
         }
 
 
@@ -77,63 +81,84 @@ final_c = rule1_output
 FORMULAS = {
     # === 1. Membrane Structure ===
     "membrane_hierarchy": Formula(
+        id="membrane_hierarchy",
         name="membrane_hierarchy",
-        expr=sp.Integer(2) ** d,  # 2^d possible nested structures with d levels
+        expr=sp.Integer(2) ** d,
         description="Maximum hierarchical depth in a P-system with d membrane levels",
-        source_line=59,
+        parameters={"d": d},
+        source_line=82,
     ),
     # === 2. Multiset Operations ===
     "multiset_cardinality": Formula(
+        id="multiset_cardinality",
         name="multiset_cardinality",
-        expr=sp.binomial(n + m - 1, m),  # Stars and bars: distributing n objects among m types
+        expr=sp.binomial(n + m - 1, m),
         description="Number of distinct multisets with n objects distributed among m types",
-        source_line=66,
+        parameters={"n": n, "m": m},
+        source_line=90,
     ),
     # === 3. Evolution Rules & Parallelism ===
     "max_rules_per_step": Formula(
+        id="max_rules_per_step",
         name="max_rules_per_step",
-        expr=n,  # In maximal parallelism, at most n rules fire (one per object)
-        description="Maximum number of rules that can fire simultaneously in maximal parallelism (upper bound: n)",
-        source_line=73,
+        expr=n,
+        description="Maximum number of rules that can fire simultaneously in maximal parallelism",
+        parameters={"n": n},
+        source_line=98,
     ),
     # === 4. The Multiplication Example (3 × 2) ===
-    "mult_example_input": Formula(
-        name="mult_example_input",
+    "mult_input": Formula(
+        id="mult_input",
+        name="mult_input",
         expr=initial_a,
-        description="Multiplication example: input count (three 'a' objects = 3)",
-        source_line=80,
+        description="Multiplication example: input count (three 'a' objects)",
+        source_line=106,
     ),
-    "mult_example_step1": Formula(
-        name="mult_example_step1",
+    "mult_rule1": Formula(
+        id="mult_rule1",
+        name="mult_rule1",
+        expr=sp.Lambda((n,), 2 * n),
+        description="Rule 1: a → bb (multiply by 2)",
+        parameters={"n": n},
+        source_line=113,
+    ),
+    "mult_step1_output": Formula(
+        id="mult_step1_output",
+        name="mult_step1_output",
         expr=rule1_output,
-        description="Multiplication example: Step 1 output (Rule 1: a → bb, produces 3 × 2 = 6 b's)",
-        source_line=85,
+        description="Multiplication example: Step 1 output (3 × 2 = 6)",
+        source_line=120,
     ),
-    "mult_example_final": Formula(
-        name="mult_example_final",
+    "mult_final": Formula(
+        id="mult_final",
+        name="mult_final",
         expr=final_c,
-        description="Multiplication example: final output (Rule 2: b → c_out, produces 6 c's in output membrane)",
-        source_line=90,
+        description="Multiplication example: final output (6 c's in output membrane)",
+        source_line=127,
     ),
     # === 5. Computational Complexity ===
-    "time_complexity_exponential": Formula(
-        name="time_complexity_exponential",
-        expr=2**t,  # Potential exponential speedup with parallelism
-        description="Theoretical computational power: O(2^t) with exponential parallelism over t steps",
-        source_line=97,
+    "time_complexity": Formula(
+        id="time_complexity",
+        name="time_complexity",
+        expr=2**t,
+        description="Theoretical computational power: O(2^t) with exponential parallelism",
+        parameters={"t": t},
+        source_line=134,
     ),
-    "objects_created_per_step": Formula(
-        name="objects_created_per_step",
-        expr=n * 2,  # Each of n objects can create up to 2 new objects per step
+    "objects_per_step": Formula(
+        id="objects_per_step",
+        name="objects_per_step",
+        expr=n * 2,
         description="Maximum objects created in one step (conservative bound: 2n)",
-        source_line=103,
+        parameters={"n": n},
+        source_line=141,
     ),
 }
 
 
 def export_json(output_path="qips_equations.json"):
     """Export formulas as JSON for build pipeline."""
-    data = {name: formula.to_dict() for name, formula in FORMULAS.items()}
+    data = {formula.id: formula.to_dict() for formula in FORMULAS.values()}
     Path(output_path).write_text(json.dumps(data, indent=2))
     return data
 
@@ -143,7 +168,7 @@ if __name__ == "__main__":
     print("✅ Exported qips_equations.json")
     if FORMULAS:
         print("\nFormulas:")
-        for name, formula in FORMULAS.items():
-            print(f"  {name}: {formula.to_latex()}")
+        for formula in FORMULAS.values():
+            print(f"  {formula.id}: {formula.to_latex()}")
     else:
         print("\n⚠️  No formulas defined yet. Complete literature review and update FORMULAS dict.")
