@@ -128,6 +128,7 @@ FORMULAS = {
         expr=sp.Integer(2) ** d,
         description="Maximum hierarchical depth in a P-system with d membrane levels",
         parameters={"d": d},
+        assumptions={"d": {"positive": True, "integer": True}},
         source_line=82,
     ),
     # === 2. Multiset Operations ===
@@ -137,6 +138,7 @@ FORMULAS = {
         expr=sp.binomial(n + m - 1, m),
         description="Number of distinct multisets with n objects distributed among m types",
         parameters={"n": n, "m": m},
+        assumptions={"n": {"positive": True, "integer": True}, "m": {"positive": True, "integer": True}},
         source_line=90,
     ),
     # === 3. Evolution Rules & Parallelism ===
@@ -146,6 +148,7 @@ FORMULAS = {
         expr=n,
         description="Maximum number of rules that can fire simultaneously in maximal parallelism",
         parameters={"n": n},
+        assumptions={"n": {"positive": True, "integer": True}},
         source_line=98,
     ),
     # === 4. The Multiplication Example (3 × 2) ===
@@ -162,6 +165,7 @@ FORMULAS = {
         expr=sp.Lambda((n,), 2 * n),
         description="Rule 1: a → bb (multiply by 2)",
         parameters={"n": n},
+        assumptions={"n": {"positive": True, "integer": True}},
         source_line=113,
     ),
     "mult_step1_output": Formula(
@@ -185,6 +189,7 @@ FORMULAS = {
         expr=2**t,
         description="Theoretical computational power: O(2^t) with exponential parallelism",
         parameters={"t": t},
+        assumptions={"t": {"positive": True, "integer": True}},
         source_line=134,
     ),
     "objects_per_step": Formula(
@@ -193,6 +198,7 @@ FORMULAS = {
         expr=n * 2,
         description="Maximum objects created in one step (conservative bound: 2n)",
         parameters={"n": n},
+        assumptions={"n": {"positive": True, "integer": True}},
         source_line=141,
     ),
 }
