@@ -1,63 +1,54 @@
-# Fleet Configuration for membrane repo
-# See: agent-tooling/docs/FLEETCONFIG-TEMPLATE.yaml for documentation
-
 type: research
-description: >
-  P-Systems/membrane computing research. Malta simulator for insurance POC
-  and quantum-inspired algorithms (Phase 1-2). Knowledge base building (Year 1+).
+description: 'P-Systems/membrane computing research. Malta simulator for insurance
+  POC and quantum-inspired algorithms (Phase 1-2). Knowledge base building (Year 1+).
+
+  '
 enabled: true
 test-strategy: none
 maintainers:
-  - mark@alexiuk.dev
-
+- mark@alexiuk.dev
 fixable-categories:
-  - fix
-  - style
-  - config
-  - doc
-
+- fix
+- style
+- config
+- doc
 non-approvable-categories:
-  - code
-  - arch
-  - security
-  - migration
-
+- code
+- arch
+- security
+- migration
 protected-always:
-  - .git/**
-  - .env*
-  - credentials.*
-  - secrets.json
-  - "**/*.lock"
-  - "**/__pycache__/**"
-  - "**/node_modules/**"
-  - "**/.pytest_cache/**"
-  - "**/.venv/**"
-
+- .git/**
+- .env*
+- credentials.*
+- secrets.json
+- '**/*.lock'
+- '**/__pycache__/**'
+- '**/node_modules/**'
+- '**/.pytest_cache/**'
+- '**/.venv/**'
 guard-rails:
   max-files-per-operation: 50
   max-lines-changed: 1000
   require-preview-above: 100
   undo-token-ttl-hours: 1
-
 integrations:
-  demos: "Malta simulator models for insurance underwriting POC"
-  research: "Shares entity resolution for knowledge base"
-
+  demos: Malta simulator models for insurance underwriting POC
+  research: Shares entity resolution for knowledge base
 fleet-agent:
   enable-auto-fix: true
   mode: staged
   auto-fix-categories:
-    - fix
-    - style
-    - config
-    - doc
+  - fix
+  - style
+  - config
+  - doc
   require-approval-for:
-    - code
-    - arch
-    - security
-    - migration
+  - code
+  - arch
+  - security
+  - migration
   rollback-window-hours: 24
-
 audit:
   log-all-changes: true
   log-location: ~/.cache/agent-tooling/logs
@@ -67,7 +58,6 @@ audit:
     no-lock-files: true
     size-check: true
   approval-logging: true
-
 validation:
   run-tests-after-fix: false
   fail-if-tests-fail: false
@@ -76,14 +66,14 @@ validation:
     black: true
     mypy: false
   required-checks:
-    - git-status-clean
-    - branch-up-to-date
-    - commit-message-valid
-
+  - git-status-clean
+  - branch-up-to-date
+  - commit-message-valid
 recovery:
   keep-undo-tokens: true
   git-history-retention: 365
   rollback-strategies:
-    - undo-token
-    - git-revert
-    - git-reset
+  - undo-token
+  - git-revert
+  - git-reset
+schema_version: '1.0'

@@ -1,0 +1,5 @@
+schema_version: '1.0'
+name: membrane
+title: 'Repository Boundaries: membrane'
+description: Boundary specification
+status: approved

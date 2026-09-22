@@ -2,6 +2,12 @@
 
 A membrane-computing oriented programming language
 
+## Test Status
+
+[![Unit Tests](https://github.com/anthropics/membrane/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/anthropics/membrane/actions)
+
+**Status:** All tests passing ✅
+
 ## Overview
 
 Cyprus is a programming language based on the concept of a [P System](http://en.wikipedia.org/wiki/P_system).
