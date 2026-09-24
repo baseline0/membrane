@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv sync --all-groups
-          npm install -g marp-cli
+          npm install -g @marp-team/marp-cli
 
       - name: Validate formulas (strict mode)
         run: cd paper && python validate_formulas.py --strict

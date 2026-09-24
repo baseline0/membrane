@@ -9,6 +9,12 @@ __pycache__/
 .venv/
 uv-cache/
 
+# Node/npm artifacts
+node_modules/
+package-lock.json
+.npm/
+.npm/_logs/
+
 .pytest_cache/
 .ruff_cache/
 _trial_temp/
