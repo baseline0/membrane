@@ -6,6 +6,7 @@ Orchestrates the full publication workflow:
 2. Convert LaTeX formulas to Typst snippets
 3. Generate benchmark figures (from membrane/benchmarks/results/)
 4. Compile Typst document to PDF
+5. Record artifacts in manifest.json
 """
 
 import json
@@ -13,6 +14,8 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+
+from artifact_manifest import record_artifact
 
 
 def generate_formulas() -> bool:
@@ -46,6 +49,10 @@ def generate_formulas() -> bool:
         typst_str = re.sub(r"\\frac\{([^}]+)\}\{([^}]+)\}", lambda m: f"({m.group(1)})/({m.group(2)})", typst_str)
         typst_str = re.sub(r"\\left\(", "(", typst_str)
         typst_str = re.sub(r"\\right\)", ")", typst_str)
+        # Common LaTeX symbols to Typst
+        typst_str = typst_str.replace(r"\mapsto", "arrow.r")
+        typst_str = typst_str.replace(r"\cdot", "dot")
+        typst_str = typst_str.replace(r"\times", "times")
 
         comment = f"// {info['description']} (from model.py:{info['source_line']})"
         definition = f"#let {name} = $ {typst_str} $"
@@ -100,11 +107,23 @@ def build_pdf() -> bool:
         print("   (Typst files are ready at: main.typ, presentation.typ)")
         return True  # Not a hard failure
 
+    # Resolve repo root for relative path calculations
+    repo_root = Path.cwd().parent.resolve()
+
     # Compile main.typ (paper)
     if Path("main.typ").exists():
         result = subprocess.run(["typst", "compile", "main.typ"], capture_output=True, text=True)
         if result.returncode == 0 and Path("main.pdf").exists():
             print("✅ Generated main.pdf")
+            # Record artifact in manifest (at repo root)
+            record_artifact(
+                pdf_path=Path("main.pdf"),
+                logical_id="paper-typst",
+                build_command="just paper",
+                title="Quantum-Inspired P-Systems Paper",
+                status="draft",
+                relative_to=repo_root,
+            )
         else:
             print(f"❌ main.typ compilation failed:\n{result.stderr}")
             return False
@@ -117,6 +136,15 @@ def build_pdf() -> bool:
         result = subprocess.run(["typst", "compile", "presentation.typ"], capture_output=True, text=True)
         if result.returncode == 0 and Path("presentation.pdf").exists():
             print("✅ Generated presentation.pdf")
+            # Record artifact in manifest (at repo root)
+            record_artifact(
+                pdf_path=Path("presentation.pdf"),
+                logical_id="presentation-typst",
+                build_command="just present",
+                title="Presentation Slides",
+                status="draft",
+                relative_to=repo_root,
+            )
         else:
             print("⚠️  presentation.typ compilation skipped or failed (optional)")
     else:

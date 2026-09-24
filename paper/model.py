@@ -167,6 +167,7 @@ FORMULAS = {
         parameters={"n": n},
         assumptions={"n": {"positive": True, "integer": True}},
         source_line=113,
+        rendering_opts={"mul_symbol": "cdot"},
     ),
     "mult_step1_output": Formula(
         id="mult_step1_output",
@@ -200,6 +201,7 @@ FORMULAS = {
         parameters={"n": n},
         assumptions={"n": {"positive": True, "integer": True}},
         source_line=141,
+        rendering_opts={"mul_symbol": "cdot"},
     ),
 }
 

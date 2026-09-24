@@ -2,8 +2,8 @@
 
 set default-list := true
 
-# Import shared recipes from agent-tooling (fmt, lint, test, check, commit)
-import "../agent-tooling/just/shared.just"
+# Shared recipes from agent-tooling commented out (path not available locally)
+# import "../agent-tooling/just/shared.just"
 
 import "just/mod.just"
 
@@ -110,3 +110,7 @@ paper:
 # Build everything: paper + presentation + checks
 paper-all: paper present
     @echo "✅ All paper artifacts built successfully"
+
+# Display artifact manifest (Artifact Contract v1)
+artifacts-list:
+    @uv run python scripts/display_artifacts.py
