@@ -35,17 +35,17 @@ jobs:
           npm install -g @marp-team/marp-cli
 
       - name: Validate formulas (strict mode)
-        run: cd paper && python validate_formulas.py --strict
+        run: cd paper && uv run python validate_formulas.py --strict
         continue-on-error: false
 
       - name: Export formulas
-        run: cd paper && python model.py
+        run: cd paper && uv run python model.py
 
       - name: Build presentation
         run: cd paper && marp presentation_generated.md -o presentation.pdf
 
       - name: Build paper
-        run: cd paper && python build_paper.py
+        run: cd paper && uv run python build_paper.py
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
