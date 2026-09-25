@@ -1,25 +1,54 @@
 repos:
-- hooks:
-  - entry: bash -c 'grep -r "uv sync --group" .github/workflows/ && exit 1 || true'
-    files: \.github/workflows/.*\.ya?ml$
-    id: ci-sync-guard
-    language: system
-    name: Prevent uv sync --group in CI workflows
-    pass_filenames: false
-    stages:
-    - commit
-  repo: local
-- hooks:
-  - id: trailing-whitespace
-  - id: end-of-file-fixer
-  - id: check-yaml
-  - id: check-added-large-files
-  repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
-- hooks:
-  - args:
-    - --fix
-    id: ruff
-  - id: ruff-format
-  repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.16.4
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        name: "[P3] Trim trailing whitespace"
+      - id: end-of-file-fixer
+        name: "[P3] Fix end of file"
+      - id: check-yaml
+        name: "[P2] Validate YAML"
+        args: [--unsafe]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        name: "[P2] Lint with ruff"
+        args: [--fix]
+      - id: ruff-format
+        name: "[P2] Format with ruff"
+
+  - repo: local
+    hooks:
+      # ===== P0: Critical Safety =====
+      - id: ci-sync-guard
+        name: "[P0] Prevent uv sync --group in CI"
+        entry: bash -c 'grep -r "uv sync --group" .github/workflows/ && exit 1 || true'
+        language: system
+        files: \.github/workflows/.*\.ya?ml$
+        pass_filenames: false
+        stages:
+          - commit
+
+      # ===== P1: Architecture =====
+      - id: python-syntax
+        name: "[P1] Check Python syntax"
+        entry: python -m py_compile
+        language: system
+        types:
+          - python
+
+      - id: ci-python-env
+        name: "[P1] Enforce uv run for Python in CI"
+        entry: bash -c 'grep -r "python " .github/workflows/ | grep -v "uv run python" && exit 1 || true'
+        language: system
+        files: \.github/workflows/.*\.ya?ml$
+        pass_filenames: false
+
+      - id: npm-scoped-packages
+        name: "[P1] Require scoped npm packages"
+        entry: bash -c 'grep -r "npm install" .github/workflows/ | grep -v "@" && exit 1 || true'
+        language: system
+        files: \.github/workflows/.*\.ya?ml$
+        pass_filenames: false

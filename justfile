@@ -2,8 +2,8 @@
 
 set default-list := true
 
-# Shared recipes from agent-tooling commented out (path not available locally)
-# import "../agent-tooling/just/shared.just"
+# Shared recipes from fleet-agents (includes ci-check for shift-left validation)
+import "../fleet-agents/just/shared.just"
 
 import "just/mod.just"
 
