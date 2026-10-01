@@ -32,7 +32,9 @@ packages = ["malta"]
 [dependency-groups]
 dev = [
     "deap>=1.4.1",
+    "narwhals>=2.0.0",
     "pandas>=2.2.0",
+    "plotly>=7.0.0",
     "pre-commit>=4.0.1",
     "pytest>=8.3.4",
     "ruff>=0.8.4",

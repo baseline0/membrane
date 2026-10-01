@@ -10,11 +10,13 @@ import "just/mod.just"
 # --- Development ---
 
 # Run unit tests only (fast, safe to run frequently) with timing of slowest 5
-test-unit:
+# Note: shared.just provides the base test-unit recipe; override here if needed
+_membrane-test-unit:
     uv run pytest tests/unit -m unit -v --durations=5
 
 # Run integration tests (slower, tests component interactions)
-test-integration:
+# Note: shared.just provides the base test-integration recipe; override here if needed
+_membrane-test-integration:
     uv run pytest tests/integration -m integration -v --durations=5
 
 # Install the pre-commit git hook (run once per clone)
