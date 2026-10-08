@@ -4,19 +4,58 @@ Research benchmarking + publication framework for P-Systems.
 
 ---
 
-## Phase 2: Conference Presentation (IN PROGRESS)
+## 📦 Publication Pipeline (Portfolio Phase 3+)
 
-Formula-driven slides (Phase 1 foundation complete). Prepare for membrane P-Systems conference talk.
+Membrane is the primary repository for publication-ready research outputs. The publication pipeline handles review, validation, archival, and release.
 
-- [ ] Verify CI passes on formula changes (GitHub Actions `--strict`)
-- [ ] Add README documentation with verification story
-- [ ] Document troubleshooting guide (symbol aliasing, assumptions)
-- [ ] Add QR code/link to feedback form on slides
-- [ ] Implement formula index PDF appendix
+### Phase 1: Manuscript Review & Quality Assurance ✅ COMPLETE
+- [x] Spell-check, structure, figure validation
+- [x] Reference validation (count, bibliography)
+- [x] Audit trail infrastructure for all pipeline steps
+- [x] Error handling & rollback for failed validations
 
-**During preparation:** Collect friction points (symbol aliasing, assumptions, CI/workflow, presentation clarity).
+**Available now:** `python -m fleet_toolbox.review.cli validate <manuscript>`
 
-**Exit criteria:** Conference talk delivered, 0 formula drift incidents, feedback logged.
+### Phase 2: Reproducibility & Metadata Validation (NEXT)
+- [ ] Code execution validator (sandbox, timeouts)
+- [ ] Data access validator (checksums, availability)
+- [ ] Results validator (output comparison ±5%)
+- [ ] License/author/keyword validators
+- [ ] Archive integrity checking
+
+**Effort:** 5–6h | **Tests:** ~50
+
+### Phase 3: Zenodo Integration & DOI Pipeline
+- [ ] Zenodo API client (upload archives, mint DOIs)
+- [ ] DOI minting with retry logic
+- [ ] Handle duplicate DOI detection
+- [ ] Publication state machine (draft → submitted → published)
+
+**Effort:** 3–4h | **Tests:** ~25
+
+### Phase 4: Release Automation
+- [ ] Tie together: review → upload → DOI → publish
+- [ ] Release notes generation
+- [ ] GitHub release + archive linkage
+
+**Blocked by:** Phases 1-3 completion
+
+---
+
+## Portfolio Phase 2 — Conference Submission
+
+- [ ] Prepare ICAI 2026 conference submission [TTV: 2h]
+  - Finalize paper section
+  - Extract 3–5 slides
+  - Draft abstract (250 words)
+
+## Current Work
+
+- [ ] Verify CI passes on formula changes [TTV: 1h]
+- [ ] Add README documentation with verification story [TTV: 1h]
+- [ ] Document troubleshooting guide (symbol aliasing, assumptions) [TTV: 1h]
+- [ ] Add QR code/link to feedback form on slides [TTV: 30m]
+- [ ] Implement formula index PDF appendix [TTV: 1h]
 
 ---
 
