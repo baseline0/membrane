@@ -9,10 +9,6 @@ Research benchmarking + publication framework for P-Systems.
 Membrane is the primary repository for publication-ready research outputs. The publication pipeline handles review, validation, archival, and release.
 
 ### Phase 1: Manuscript Review & Quality Assurance ✅ COMPLETE
-- [x] Spell-check, structure, figure validation
-- [x] Reference validation (count, bibliography)
-- [x] Audit trail infrastructure for all pipeline steps
-- [x] Error handling & rollback for failed validations
 
 **Available now:** `python -m fleet_toolbox.review.cli validate <manuscript>`
 
