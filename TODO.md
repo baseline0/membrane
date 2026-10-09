@@ -125,3 +125,8 @@ just bench-metrics        # Collect metrics from benchmarks_example.csv
 - **Formula-driven presentations:** See paper/presentation.md and math-trace/docs/FORMULA_SLIDES_MARKET_ASSESSMENT.md
 - **Benchmarking metrics:** See docs/BENCHMARK_METRICS_FORMAT.md for schema and dashboard integration
 - **P-Systems formulas:** See paper/model.py (source of truth)
+
+## Cleanup Leftovers (2026-10-09)
+
+- `algorithm_comparison_demo.html` and `convergence_curves_demo.html` are generated and untracked. Gitignore them, or move generation into a build step.
+- `benchmarks/visualization/` and `tests/unit/test_visualization_system.py` were committed as `wip:`. Review before relying on them.
