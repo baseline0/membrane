@@ -43,3 +43,5 @@ paper/presentation.pdf
 paper/presentation_generated.md
 paper/formula_index.md
 paper/qips_equations.json
+# generated/local artifacts
+.claude/worktrees/
