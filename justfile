@@ -109,6 +109,10 @@ formula-check:
 paper:
     @cd paper && uv run python build_paper.py
 
+# Render the formula index as a standalone PDF appendix (run formula-check first)
+formula-index-pdf:
+    @uv run python paper/build_formula_index_pdf.py
+
 # Build everything: paper + presentation + checks
 paper-all: paper present
     @echo "✅ All paper artifacts built successfully"

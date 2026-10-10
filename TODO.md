@@ -18,7 +18,6 @@ Research benchmarking + publication framework for P-Systems.
 - [ ] Add README documentation with verification story [TTV: 1h]
 - [ ] Document troubleshooting guide (symbol aliasing, assumptions) [TTV: 1h]
 - [ ] Add QR code or link to the feedback form on slides [TTV: 30m]
-- [ ] Implement formula index PDF appendix [TTV: 1h]. `paper/formula_index.md` exists; the PDF appendix does not.
 - [ ] Prepare ICAI 2026 conference submission [TTV: 2h]
   - Finalize paper section
   - Extract 3–5 slides
@@ -102,3 +101,4 @@ just bench-metrics        # Collect metrics from benchmarks_example.csv
 
 - Formula CI check passes locally (`uv run python validate_formulas.py --strict` in `paper/`). Not yet confirmed on GitHub Actions.
 - Gitignored the generated demo HTML files (`algorithm_comparison_demo.html`, `convergence_curves_demo.html`).
+- Formula index PDF appendix: `just formula-index-pdf` renders `paper/formula_index.md` to `paper/generated/formula_index_appendix.pdf`. Including it in `main.typ` is an open editorial call.
