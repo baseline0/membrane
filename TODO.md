@@ -15,7 +15,6 @@ Research benchmarking + publication framework for P-Systems.
 
 ## ⚡ Quick Wins - `quickwin`
 
-- [ ] Verify CI passes on formula changes [TTV: 1h]
 - [ ] Add README documentation with verification story [TTV: 1h]
 - [ ] Document troubleshooting guide (symbol aliasing, assumptions) [TTV: 1h]
 - [ ] Add QR code or link to the feedback form on slides [TTV: 30m]
@@ -101,4 +100,5 @@ just bench-metrics        # Collect metrics from benchmarks_example.csv
 
 ## Done (removed)
 
+- Formula CI check passes locally (`uv run python validate_formulas.py --strict` in `paper/`). Not yet confirmed on GitHub Actions.
 - Gitignored the generated demo HTML files (`algorithm_comparison_demo.html`, `convergence_curves_demo.html`).
