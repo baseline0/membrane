@@ -26,7 +26,6 @@ Research benchmarking + publication framework for P-Systems.
 ## 🔧 Tech Debt - `techdebt`
 
 
-- [ ] Review the `wip:` visualization work: `benchmarks/visualization/` and `tests/unit/test_visualization_system.py` were committed as `wip:` (4c6ac7f). Review before relying on them.
 
 ## 📋 Features - `feature`
 
