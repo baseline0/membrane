@@ -4,12 +4,10 @@ Generates interactive, browser-based charts for demos, exploration, and dashboar
 Supports hover tooltips, zoom, pan, range sliders, and HTML export.
 """
 
-from typing import Optional
-
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from .base import UseCase, VizStrategy
+from .base import VizStrategy
 
 
 class ConvergenceCurvesPlotly(VizStrategy):
@@ -62,9 +60,7 @@ class ConvergenceCurvesPlotly(VizStrategy):
             # Hover text with both convergence_ratio and error
             hover_text = [
                 f"<b>{name}</b><br>Convergence: {ratio:.4f}<br>Error: {error:.2f}"
-                for name, ratio, error in zip(
-                    function_names, convergence_ratios, error_means
-                )
+                for name, ratio, error in zip(function_names, convergence_ratios, error_means)
             ]
 
             fig.add_trace(
@@ -101,8 +97,7 @@ class ConvergenceCurvesPlotly(VizStrategy):
         )
         fig.add_hrect(
             y0=5.0,
-            y1=max([e["convergence_ratio"] for e in convergence_data]) * 1.1
-            or 10.0,
+            y1=max([e["convergence_ratio"] for e in convergence_data]) * 1.1 or 10.0,
             fillcolor="red",
             opacity=0.1,
             layer="below",
@@ -136,9 +131,7 @@ class ConvergenceCurvesPlotly(VizStrategy):
             filepath: Output path (e.g., 'convergence.html', 'convergence.png')
         """
         fig = self.render(metrics)
-        fig.write_html(filepath) if filepath.endswith(".html") else fig.write_image(
-            filepath
-        )
+        fig.write_html(filepath) if filepath.endswith(".html") else fig.write_image(filepath)
 
 
 class AlgorithmComparisonPlotly(VizStrategy):
@@ -220,6 +213,4 @@ class AlgorithmComparisonPlotly(VizStrategy):
     def render_and_save(self, metrics: dict, filepath: str):
         """Save comparison figure."""
         fig = self.render(metrics)
-        fig.write_html(filepath) if filepath.endswith(".html") else fig.write_image(
-            filepath
-        )
+        fig.write_html(filepath) if filepath.endswith(".html") else fig.write_image(filepath)

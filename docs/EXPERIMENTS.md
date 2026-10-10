@@ -163,12 +163,7 @@ from benchmarks.baselines.quantum_inspired_enhanced import EnhancedQuantumInspir
 from benchmarks.suites.cec2017 import CEC2017Suite
 
 harness = BenchmarkHarness(CEC2017Suite(), strict=False)
-algo = EnhancedQuantumInspiredBaseline(
-    n_compartments=5,
-    bits_per_dim=8,
-    use_progressive=True,
-    generations=1000
-)
+algo = EnhancedQuantumInspiredBaseline(n_compartments=5, bits_per_dim=8, use_progressive=True, generations=1000)
 
 problem = CEC2017Suite().get_function(1, 10)  # F1, 10D
 stats = harness.run_algorithm_on_problem(algo, problem, n_seeds=30)
@@ -188,10 +183,7 @@ results_file = Path("results/cec2017_10d_30seeds.json")
 data = json.loads(results_file.read_text())
 
 # Filter by algorithm
-enhanced_results = [
-    r for r in data["results"]
-    if r["algorithm"] == "QIEA-Enhanced"
-]
+enhanced_results = [r for r in data["results"] if r["algorithm"] == "QIEA-Enhanced"]
 
 # Compute custom metrics
 for func_id in [1, 3, 4]:

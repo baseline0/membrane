@@ -53,8 +53,7 @@ class VizRegistry:
         if key not in cls._strategies:
             available = [k for k in cls._strategies.keys() if k[0] == chart_type]
             raise KeyError(
-                f"No strategy registered for {key}. "
-                f"Available for '{chart_type}': {[k[1].value for k in available]}"
+                f"No strategy registered for {key}. Available for '{chart_type}': {[k[1].value for k in available]}"
             )
         strategy_class = cls._strategies[key]
         return strategy_class(use_case=use_case)

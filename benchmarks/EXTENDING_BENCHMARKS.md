@@ -38,7 +38,7 @@ class MyProblem(BaseProblem):
 
     def evaluate(self, x: list[float]) -> float:
         """Fitness evaluation. Lower is better."""
-        return sum(xi ** 2 for xi in x)
+        return sum(xi**2 for xi in x)
 
     @property
     def optimum(self) -> float:
@@ -192,7 +192,7 @@ validate_n_seeds(n_seeds=5, test_mode=True)  # ✓ Passes
 
 # Publication: require 30+ seeds
 validate_n_seeds(n_seeds=30, test_mode=False)  # ✓ Passes
-validate_n_seeds(n_seeds=5, test_mode=False)   # ✗ Raises error
+validate_n_seeds(n_seeds=5, test_mode=False)  # ✗ Raises error
 ```
 
 ### Result Bounds Validation
@@ -243,13 +243,15 @@ def evaluate(self, x: tuple) -> float:
 
 from benchmarks.harness import BaseProblem, BaseSuite
 
+
 class Sphere(BaseProblem):
     id = 201
     name = "Sphere"
     optimum = 0.0
 
     def evaluate(self, x):
-        return sum(xi ** 2 for xi in x)
+        return sum(xi**2 for xi in x)
+
 
 class Rastrigin(BaseProblem):
     id = 202
@@ -259,7 +261,8 @@ class Rastrigin(BaseProblem):
     def evaluate(self, x):
         A = 10
         n = len(x)
-        return A * n + sum(xi ** 2 - A * np.cos(2 * np.pi * xi) for xi in x)
+        return A * n + sum(xi**2 - A * np.cos(2 * np.pi * xi) for xi in x)
+
 
 class MyProblemSuite(BaseSuite):
     def list_functions(self, dimension):

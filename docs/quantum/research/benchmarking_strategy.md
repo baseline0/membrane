@@ -224,15 +224,17 @@ for seed in range(30):  # 30 independent runs
     solution, fitness_history = algorithm.solve(problem, timeout=3600)
     elapsed = time.time() - start_time
 
-    results.append({
-        "algorithm": algorithm_config["name"],
-        "problem": problem.name,
-        "seed": seed,
-        "final_fitness": fitness_history[-1],
-        "best_fitness": min(fitness_history),
-        "elapsed_time": elapsed,
-        "fitness_history": fitness_history,  # For convergence plots
-    })
+    results.append(
+        {
+            "algorithm": algorithm_config["name"],
+            "problem": problem.name,
+            "seed": seed,
+            "final_fitness": fitness_history[-1],
+            "best_fitness": min(fitness_history),
+            "elapsed_time": elapsed,
+            "fitness_history": fitness_history,  # For convergence plots
+        }
+    )
 ```
 
 **Why 30 runs?**

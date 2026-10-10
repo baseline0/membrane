@@ -6,7 +6,6 @@ requiring a full benchmark run.
 
 import json
 from pathlib import Path
-from typing import Optional
 
 
 class SampleMetrics:
@@ -27,8 +26,7 @@ class SampleMetrics:
         sample_file = cls._SAMPLE_DIR / "benchmark_sample_20260916.json"
         if not sample_file.exists():
             raise FileNotFoundError(
-                f"Sample data not found: {sample_file}\n"
-                f"Available samples: {list(cls._SAMPLE_DIR.glob('*.json'))}"
+                f"Sample data not found: {sample_file}\nAvailable samples: {list(cls._SAMPLE_DIR.glob('*.json'))}"
             )
         return json.loads(sample_file.read_text())
 
@@ -53,9 +51,7 @@ class SampleMetrics:
         sample_file = cls._SAMPLE_DIR / name
         if not sample_file.exists():
             available = sorted([f.stem for f in cls._SAMPLE_DIR.glob("*.json")])
-            raise FileNotFoundError(
-                f"Sample '{name}' not found.\nAvailable: {available}"
-            )
+            raise FileNotFoundError(f"Sample '{name}' not found.\nAvailable: {available}")
         return json.loads(sample_file.read_text())
 
     @classmethod

@@ -147,8 +147,8 @@ results = pd.read_csv("reports/cec2017_2025-09-15/results.csv")
 
 # Run statistical tests
 analysis = ComparisonAnalysis(results)
-print(analysis.wilcoxon_summary())   # Pairwise p-values
-print(analysis.friedman_summary())   # Ranking test
+print(analysis.wilcoxon_summary())  # Pairwise p-values
+print(analysis.friedman_summary())  # Ranking test
 analysis.plot_pareto_frontier().savefig("reports/pareto.png")
 ```
 
@@ -190,6 +190,7 @@ Create new Python module in `malta/`:
 Addresses Problem #4: Dynamic Topology Algorithms
 """
 
+
 class DynamicQuantumPSystem:
     """Quantum P-system that evolves compartment structure during execution."""
 
@@ -207,6 +208,7 @@ Add tests in `tests/`:
 def test_dynamic_division_preserves_fidelity():
     """Verify that compartment division maintains entanglement fidelity."""
     ...
+
 
 def test_dynamic_speedup_on_tsp():
     """Confirm speedup for TSP problems with dynamic topology."""
@@ -327,7 +329,7 @@ write_obsidian_note(
     vault_path="./obsidian_quantum_notes",
     title=f"Ensemble Experiment {100} runs",
     tags=["ensemble", "statistics"],
-    content=f"Outcomes:\n{outcome_counts}"
+    content=f"Outcomes:\n{outcome_counts}",
 )
 ```
 

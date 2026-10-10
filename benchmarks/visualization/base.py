@@ -73,6 +73,5 @@ class VizStrategy(ABC):
             filepath: Path to save (e.g., 'figure.pdf', 'chart.json')
         """
         raise NotImplementedError(
-            f"{self.__class__.__name__} does not support save(). "
-            f"Supported formats: {self.export_formats}"
+            f"{self.__class__.__name__} does not support save(). Supported formats: {self.export_formats}"
         )

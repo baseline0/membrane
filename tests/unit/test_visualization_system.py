@@ -42,9 +42,7 @@ class TestVizRegistry:
 
     def test_register_and_get(self):
         """Register and retrieve strategy."""
-        VizRegistry.register(
-            "test_chart", UseCase.DEMO, ConvergenceCurvesPlotly
-        )
+        VizRegistry.register("test_chart", UseCase.DEMO, ConvergenceCurvesPlotly)
         strategy = VizRegistry.get("test_chart", UseCase.DEMO)
         assert isinstance(strategy, ConvergenceCurvesPlotly)
         assert strategy.use_case == UseCase.DEMO
