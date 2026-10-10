@@ -4,6 +4,10 @@ Research benchmarking + publication framework for P-Systems.
 
 ---
 
+## 🧭 Decisions - `decision`
+
+- [ ] **RM-011 Lead discovery: wire to research, or drop the claim.** `tools/hpc_lead_discovery.py` says it integrates with `baseline0/research/src/research/resolvers/academic_hpc.py`. That path is wrong (the file is under `src/research/entity_resolution/resolvers/`). Its methods are placeholders: Scholar lookup and the HPC check are heuristics. Nothing is imported today. Pick one: finish the research resolver and call it, or remove the claim and keep the scoring standalone.
+
 ## 🚨 Blockers - `blocker`
 
 - [ ] **Phase 2: Reproducibility & metadata validators** (NEXT). Phases 3 and 4 depend on it. Effort 5–6h, tests ~50.
@@ -24,7 +28,7 @@ Research benchmarking + publication framework for P-Systems.
 
 ## 🔧 Tech Debt - `techdebt`
 
-
+- [ ] **RM-012 Placeholder outreach data.** `docs/outreach/discovered_leads.csv` and `full_lead_database.csv` hold three rows each, with names, ORCIDs, and emails that look like placeholders, and the discovery script's `mock_leads` is hard-coded. Nothing here is verified. Replace the mock path with real output, or mark the files as samples. Do not send outreach from these files until each contact is checked. Depends on RM-011.
 
 ## 📋 Features - `feature`
 
