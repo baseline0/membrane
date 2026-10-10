@@ -4,7 +4,7 @@ Research benchmarking + publication framework for P-Systems.
 
 ---
 
-## 🚨 Blockers
+## 🚨 Blockers - `blocker`
 
 - [ ] **Phase 2: Reproducibility & metadata validators** (NEXT). Phases 3 and 4 depend on it. Effort 5–6h, tests ~50.
   - Code execution validator (sandbox, timeouts)
@@ -13,7 +13,7 @@ Research benchmarking + publication framework for P-Systems.
   - License, author, and keyword validators
   - Archive integrity checking
 
-## ⚡ Quick Wins
+## ⚡ Quick Wins - `quickwin`
 
 - [ ] Verify CI passes on formula changes [TTV: 1h]
 - [ ] Add README documentation with verification story [TTV: 1h]
@@ -25,13 +25,13 @@ Research benchmarking + publication framework for P-Systems.
   - Extract 3–5 slides
   - Draft abstract (250 words)
 
-## 🔧 Tech Debt
+## 🔧 Tech Debt - `techdebt`
 
 - [ ] Move generation of `algorithm_comparison_demo.html` and `convergence_curves_demo.html` into a build step. For now they are gitignored.
 
 - [ ] Review the `wip:` visualization work: `benchmarks/visualization/` and `tests/unit/test_visualization_system.py` were committed as `wip:` (4c6ac7f). Review before relying on them.
 
-## 📋 Features
+## 📋 Features - `feature`
 
 ### Phase 3: Zenodo integration and DOI pipeline (blocked by Phase 2)
 
