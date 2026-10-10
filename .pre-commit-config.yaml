@@ -61,3 +61,12 @@ repos:
         pass_filenames: false
         files: '\.py$'
         stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: validate-formulas
+        name: "[P1] Validate formulas when presentation.md or model.py changes"
+        entry: bash -c 'cd paper && uv run python validate_formulas.py'
+        language: system
+        pass_filenames: false
+        files: '^paper/(presentation\.md|model\.py)$'
+        stages: [pre-commit]
