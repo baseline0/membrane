@@ -49,3 +49,9 @@ paper/qips_equations.json
 # Generated demo outputs (regenerate; do not commit)
 algorithm_comparison_demo.html
 convergence_curves_demo.html
+# Unit test / coverage reports
+.coverage
+.coverage.*
+*.cover
+coverage.xml
+htmlcov/
