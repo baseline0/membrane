@@ -16,7 +16,6 @@ Research benchmarking + publication framework for P-Systems.
 ## ⚡ Quick Wins - `quickwin`
 
 - [ ] Add README documentation with verification story [TTV: 1h]
-- [ ] Document troubleshooting guide (symbol aliasing, assumptions) [TTV: 1h]
 - [ ] Add QR code or link to the feedback form on slides [TTV: 30m]
 - [ ] Prepare ICAI 2026 conference submission [TTV: 2h]
   - Finalize paper section
