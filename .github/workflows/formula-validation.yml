@@ -41,6 +41,10 @@ jobs:
       - name: Export formulas
         run: cd paper && uv run python model.py
 
+      # Why: presentation_generated.md is produced by build_slides.py and is not tracked, so CI must generate it.
+      - name: Generate presentation markdown
+        run: cd paper && uv run python build_slides.py
+
       - name: Build presentation
         run: cd paper && marp presentation_generated.md -o presentation.pdf
 
