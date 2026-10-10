@@ -45,3 +45,7 @@ paper/formula_index.md
 paper/qips_equations.json
 # generated/local artifacts
 .claude/worktrees/
+
+# Generated demo outputs (regenerate; do not commit)
+algorithm_comparison_demo.html
+convergence_curves_demo.html

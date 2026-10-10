@@ -20,13 +20,14 @@ Research benchmarking + publication framework for P-Systems.
 - [ ] Document troubleshooting guide (symbol aliasing, assumptions) [TTV: 1h]
 - [ ] Add QR code or link to the feedback form on slides [TTV: 30m]
 - [ ] Implement formula index PDF appendix [TTV: 1h]. `paper/formula_index.md` exists; the PDF appendix does not.
-- [ ] Gitignore the generated `algorithm_comparison_demo.html` and `convergence_curves_demo.html`, or move their generation into a build step. Both are untracked.
 - [ ] Prepare ICAI 2026 conference submission [TTV: 2h]
   - Finalize paper section
   - Extract 3–5 slides
   - Draft abstract (250 words)
 
 ## 🔧 Tech Debt
+
+- [ ] Move generation of `algorithm_comparison_demo.html` and `convergence_curves_demo.html` into a build step. For now they are gitignored.
 
 - [ ] Review the `wip:` visualization work: `benchmarks/visualization/` and `tests/unit/test_visualization_system.py` were committed as `wip:` (4c6ac7f). Review before relying on them.
 
@@ -97,3 +98,7 @@ just bench-metrics        # Collect metrics from benchmarks_example.csv
 - **Formula-driven presentations:** See paper/presentation.md and math-trace/docs/FORMULA_SLIDES_MARKET_ASSESSMENT.md
 - **Benchmarking metrics:** See docs/BENCHMARK_METRICS_FORMAT.md for schema and dashboard integration
 - **P-Systems formulas:** See paper/model.py (source of truth)
+
+## Done (removed)
+
+- Gitignored the generated demo HTML files (`algorithm_comparison_demo.html`, `convergence_curves_demo.html`).
