@@ -25,7 +25,6 @@ Research benchmarking + publication framework for P-Systems.
 
 ## 🔧 Tech Debt - `techdebt`
 
-- [ ] Move generation of `algorithm_comparison_demo.html` and `convergence_curves_demo.html` into a build step. For now they are gitignored.
 
 - [ ] Review the `wip:` visualization work: `benchmarks/visualization/` and `tests/unit/test_visualization_system.py` were committed as `wip:` (4c6ac7f). Review before relying on them.
 

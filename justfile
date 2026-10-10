@@ -120,3 +120,7 @@ paper-all: paper present
 # Display artifact manifest (Artifact Contract v1)
 artifacts-list:
     @uv run python scripts/display_artifacts.py
+
+# Generate the interactive demo visualizations into generated/visualization/ (gitignored)
+@demo-visualizations:
+    uv run python -m benchmarks.visualization.demo
