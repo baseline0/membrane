@@ -1,0 +1,2 @@
+# Files that still import argparse. Convert each to Typer, then remove its line.
+scripts/paper_fetcher.py
