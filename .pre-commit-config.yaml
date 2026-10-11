@@ -29,7 +29,7 @@ repos:
         files: \.github/workflows/.*\.ya?ml$
         pass_filenames: false
         stages:
-          - commit
+          - pre-commit
 
       # ===== P1: Architecture =====
       - id: python-syntax
