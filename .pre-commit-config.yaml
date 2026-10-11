@@ -34,7 +34,7 @@ repos:
       # ===== P1: Architecture =====
       - id: python-syntax
         name: "[P1] Check Python syntax"
-        entry: python -m py_compile
+        entry: uv run python -m py_compile
         language: system
         types:
           - python
@@ -79,3 +79,11 @@ repos:
         pass_filenames: false
         files: '\.py$'
         stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: check-project-venv
+        name: "[P0] VIRTUAL_ENV must be this repo's .venv"
+        entry: bash ../fleet-base/scripts/check-project-venv.sh
+        language: system
+        pass_filenames: false
+        always_run: true

@@ -29,7 +29,7 @@ pre-commit:
 
 # Print tree with file/line counts (respects .gitignore)
 tree:
-    @python scripts/dev/tree_with_stats.py
+    @uv run python scripts/dev/tree_with_stats.py
 
 # Regenerate just/cli.just by introspecting the Typer CLI
 gen-just:
