@@ -2,6 +2,8 @@
 
 A membrane-computing oriented programming language
 
+**Scope:** this repo holds membrane-computing code and academic publications in this area. Partner discovery, entity resolution, and outreach live in `research` (`use_cases/academic_partners`).
+
 ## Test Status
 
 [![Unit Tests](https://github.com/anthropics/membrane/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/anthropics/membrane/actions)
