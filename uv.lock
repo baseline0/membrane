@@ -278,6 +278,15 @@ wheels = [
 ]
 
 [[package]]
+name = "funcparserlib"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/93/44/a21dfd9c45ad6909257e5186378a4fedaf41406824ce1ec06bc2a6c168e7/funcparserlib-1.0.1.tar.gz", hash = "sha256:a2c4a0d7942f7a0e7635c369d921066c8d4cae7f8b5bf7914466bec3c69837f4", size = 17238, upload-time = "2022-11-03T23:10:54.553Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/83/66/acd740d84f59c655935f586c113a863aa404dfe932052a68a1163d88ea63/funcparserlib-1.0.1-py2.py3-none-any.whl", hash = "sha256:95da15d3f0d00b9b6f4bf04005c708af3faa115f7b45692ace064ebe758c68e8", size = 17842, upload-time = "2022-11-03T23:10:53.434Z" },
+]
+
+[[package]]
 name = "identify"
 version = "2.6.19"
 source = { registry = "https://pypi.org/simple" }
@@ -394,6 +403,7 @@ source = { editable = "." }
 dependencies = [
     { name = "anytree" },
     { name = "deap" },
+    { name = "funcparserlib" },
     { name = "matplotlib" },
     { name = "multiset" },
     { name = "networkx" },
@@ -419,6 +429,7 @@ dev = [
 requires-dist = [
     { name = "anytree", specifier = ">=2.12.1" },
     { name = "deap", specifier = ">=1.4.1" },
+    { name = "funcparserlib", specifier = ">=1.0.1" },
     { name = "matplotlib", specifier = ">=3.10.0" },
     { name = "multiset", specifier = ">=3.1.0" },
     { name = "networkx", specifier = ">=3.4.2" },
