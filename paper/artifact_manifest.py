@@ -11,12 +11,12 @@ import hashlib
 import json
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 
-def get_git_metadata() -> Dict[str, Any]:
+def get_git_metadata() -> dict[str, Any]:
     """Capture current git commit, branch, and dirty state."""
     try:
         commit = subprocess.run(
@@ -55,7 +55,7 @@ def calculate_sha256(file_path: Path) -> str:
     return sha256_hash.hexdigest()
 
 
-def load_manifest(manifest_path: Path) -> Dict[str, Any]:
+def load_manifest(manifest_path: Path) -> dict[str, Any]:
     """Load existing manifest or create empty structure."""
     if manifest_path.exists():
         try:
@@ -67,13 +67,13 @@ def load_manifest(manifest_path: Path) -> Dict[str, Any]:
     return _empty_manifest()
 
 
-def _empty_manifest() -> Dict[str, Any]:
+def _empty_manifest() -> dict[str, Any]:
     """Create empty manifest structure."""
     return {
         "schema_version": "1.0",
         "repository": {"id": "membrane", "root": "."},
         "build": {
-            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "generated_at": datetime.now(UTC).isoformat(),
             "command": "",
             "git": {"commit": "", "branch": "", "dirty": False},
         },
@@ -85,10 +85,10 @@ def record_artifact(
     pdf_path: Path,
     logical_id: str,
     build_command: str,
-    manifest_path: Optional[Path] = None,
-    title: Optional[str] = None,
+    manifest_path: Path | None = None,
+    title: str | None = None,
     status: str = "draft",
-    relative_to: Optional[Path] = None,
+    relative_to: Path | None = None,
 ) -> bool:
     """
     Record a generated PDF artifact in the manifest.
@@ -133,7 +133,7 @@ def record_artifact(
     manifest = load_manifest(manifest_path)
 
     # Update build metadata
-    manifest["build"]["generated_at"] = datetime.now(timezone.utc).isoformat()
+    manifest["build"]["generated_at"] = datetime.now(UTC).isoformat()
     manifest["build"]["command"] = build_command
     manifest["build"]["git"] = git_meta
 
@@ -181,7 +181,7 @@ def record_artifact(
         return False
 
 
-def display_manifest(manifest_path: Optional[Path] = None) -> None:
+def display_manifest(manifest_path: Path | None = None) -> None:
     """Display manifest in human-readable format."""
     if manifest_path is None:
         manifest_path = Path("generated") / "manifest.json"

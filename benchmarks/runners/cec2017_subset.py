@@ -15,7 +15,6 @@ import csv
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
 
 import numpy as np
 
@@ -51,7 +50,7 @@ class TrialResult:
     mean_value: float
     std_value: float
     evaluations: int
-    convergence_curve: List[float]  # Best value per generation
+    convergence_curve: list[float]  # Best value per generation
 
     def to_dict(self) -> dict:
         """Convert to dictionary for JSON export."""
@@ -83,7 +82,7 @@ class CEC2017Runner:
     def __init__(self, output_dir: Path = Path("results")):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.results: List[TrialResult] = []
+        self.results: list[TrialResult] = []
 
     def run_trial(
         self,
@@ -127,7 +126,7 @@ class CEC2017Runner:
         self.results.append(result)
         return result
 
-    def run_suite(self, algorithms: List[AlgorithmConfig]):
+    def run_suite(self, algorithms: list[AlgorithmConfig]):
         """Run full benchmark suite on all functions."""
         print("\n🚀 Running CEC2017 Benchmark Suite")
         print(f"   Functions: {len(FUNCTIONS)}")

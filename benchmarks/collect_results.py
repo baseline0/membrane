@@ -157,7 +157,7 @@ def collect_benchmark_results(
 
     # Create algorithm profiles
     profiles_by_algo = {}
-    for algo in results_by_algo.keys():
+    for algo in results_by_algo:
         algo_metrics = [m for m in all_metrics if m.algorithm == algo]
         profile = create_algorithm_profile(algo, dimension, n_seeds, algo_metrics)
         profiles_by_algo[algo] = profile
@@ -167,10 +167,8 @@ def collect_benchmark_results(
 
     # Detect trends (comparing against historical baseline if available)
     trends = {
-        "ga_converging_well": profiles_by_algo.get("GA", None) is not None
-        and profiles_by_algo["GA"].success_rate >= 0.7,
-        "pso_converging_well": profiles_by_algo.get("PSO", None) is not None
-        and profiles_by_algo["PSO"].success_rate >= 0.7,
+        "ga_converging_well": profiles_by_algo.get("GA") is not None and profiles_by_algo["GA"].success_rate >= 0.7,
+        "pso_converging_well": profiles_by_algo.get("PSO") is not None and profiles_by_algo["PSO"].success_rate >= 0.7,
     }
 
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")

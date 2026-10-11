@@ -5,7 +5,7 @@ Provides reproducible experiment runs with proper seeding and result export.
 
 import json
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 
@@ -34,7 +34,7 @@ def run_toy_benchmark(
         typer.Option(help="Generations per run"),
     ] = 30,
     output: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(help="Output JSON file (optional)"),
     ] = None,
 ) -> None:
@@ -96,7 +96,7 @@ def run_cec2017_benchmark(
         typer.Option(help="Problem dimensionality"),
     ] = 10,
     output_dir: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(help="Output directory for results (default: benchmarks/results)"),
     ] = None,
     include_baselines: Annotated[
@@ -117,10 +117,7 @@ def run_cec2017_benchmark(
     typer.echo(f"Running CEC2017 benchmarks: {n_functions} functions, {dimension}D, {n_seeds} seeds")
 
     # Setup output
-    if output_dir:
-        out_path = Path(output_dir)
-    else:
-        out_path = Path("benchmarks") / "results"
+    out_path = Path(output_dir) if output_dir else Path("benchmarks") / "results"
     out_path.mkdir(parents=True, exist_ok=True)
 
     # Create harness
@@ -188,7 +185,7 @@ def run_cec2017_benchmark(
     typer.echo("SUMMARY BY ALGORITHM")
     typer.echo("=" * 70)
 
-    for alg_name in algorithms.keys():
+    for alg_name in algorithms:
         alg_results = [r for r in results if r["algorithm"] == alg_name]
         if alg_results:
             mean_error = sum(r["error_mean"] for r in alg_results) / len(alg_results)

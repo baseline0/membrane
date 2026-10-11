@@ -1,11 +1,9 @@
-from typing import List
-
 from cyprus.base import log_info
 
 
 # the clock, governs the system's operation
-class CyprusClock(object):
-    def __init__(self, envs: List):
+class CyprusClock:
+    def __init__(self, envs: list):
         # list of envs
         self._tick = 0
         self.envs = envs

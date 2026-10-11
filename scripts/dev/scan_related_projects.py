@@ -9,7 +9,6 @@ Output: Saved to scripts/dev/scan_findings.md
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 
 @dataclass
@@ -19,10 +18,10 @@ class ProjectScan:
     name: str
     path: Path
     has_pyproject: bool = False
-    python_version: Optional[str] = None
+    python_version: str | None = None
     dependencies: list = None
-    cli_framework: Optional[str] = None
-    testing_setup: Optional[str] = None
+    cli_framework: str | None = None
+    testing_setup: str | None = None
     interesting_patterns: list = None
 
     def __post_init__(self):

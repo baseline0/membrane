@@ -11,8 +11,8 @@ Generates, under generated/visualization/:
 
 from pathlib import Path
 
-from .registry import VizFactory
 from .base import UseCase
+from .registry import VizFactory
 from .sample_data import SampleMetrics
 
 
@@ -23,8 +23,8 @@ def main(output_dir: Path = Path("generated/visualization")):
     print("📊 Loading sample benchmark metrics...")
     metrics = SampleMetrics.load_default()
     print(f"   ✓ Loaded: {metrics['run_id']}")
-    print(f"   - Algorithms: {set(m['algorithm'] for m in metrics['convergence_metrics'])}")
-    print(f"   - Functions tested: {len(set(m['function_id'] for m in metrics['convergence_metrics']))}")
+    print(f"   - Algorithms: { {m['algorithm'] for m in metrics['convergence_metrics']} }")
+    print(f"   - Functions tested: {len({m['function_id'] for m in metrics['convergence_metrics']})}")
 
     # Demo 1: Convergence curves (interactive)
     print("\n📈 Generating convergence curves...")
@@ -44,10 +44,10 @@ def main(output_dir: Path = Path("generated/visualization")):
 
     # Info
     print("\n✨ Demo complete!")
-    print(f"   Open in browser:")
+    print("   Open in browser:")
     print(f"     - {output_1.absolute()}")
     print(f"     - {output_2.absolute()}")
-    print(f"\n   Available charts:")
+    print("\n   Available charts:")
     for chart_type, use_cases in sorted(VizFactory.list_charts().items()):
         print(f"     - {chart_type}: {', '.join(use_cases)}")
 

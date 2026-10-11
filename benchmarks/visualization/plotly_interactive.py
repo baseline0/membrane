@@ -71,8 +71,8 @@ class ConvergenceCurvesPlotly(VizStrategy):
                     name=algo_name,
                     hovertext=hover_text,
                     hoverinfo="text",
-                    line=dict(width=2),
-                    marker=dict(size=8),
+                    line={"width": 2},
+                    marker={"size": 8},
                 )
             )
 

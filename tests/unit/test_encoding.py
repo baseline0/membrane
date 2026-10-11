@@ -147,7 +147,7 @@ class TestMultibitEncoder:
         encoder = MultibitEncoder(5, 4, (-1.0, 1.0))
         basis = encoder.random_basis_state()
 
-        assert len(basis) == 20  # 5 dims × 4 bits
+        assert len(basis) == 20  # 5 dims x 4 bits
         assert all(b in "01" for b in basis)
 
     def test_get_basis_dimension(self):

@@ -13,7 +13,6 @@ from cyprus.utils import get_pretty_tree
 
 base = get_base()
 
-from typing import List
 
 from cyprus.clock import CyprusClock as Clock
 from cyprus.dissolve_particle import DissolveParticle
@@ -28,7 +27,7 @@ from cyprus.rule import Rule
 # -----------------
 
 
-class SimulationProgram(object):
+class SimulationProgram:
     # TODO
     # enum kw_exists
 
@@ -40,7 +39,7 @@ class SimulationProgram(object):
         log_info(envs)
         self.clock = Clock(envs)
 
-    def objectify(self) -> List[Environment]:
+    def objectify(self) -> list[Environment]:
         out = []
 
         for e in self.tree.kids:
@@ -164,10 +163,7 @@ class SimulationProgram(object):
                     osmose = True
                     continue
             if dissolve:
-                if not x:
-                    particle = DissolveParticle()
-                else:
-                    particle = DissolveParticle(x.value)
+                particle = DissolveParticle() if not x else DissolveParticle(x.value)
                 dissolve = False
             elif osmose:
                 if not osmosename:
@@ -195,7 +191,7 @@ class SimulationProgram(object):
 
         if name:
             if base.rule_table.get(name, None):
-                msg = "ERROR: Multiple reactions defined with name '%s'" % name
+                msg = f"ERROR: Multiple reactions defined with name '{name}'"
                 raise Exception(msg)
             base.rule_table[name] = rule
         return rule

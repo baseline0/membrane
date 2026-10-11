@@ -136,7 +136,7 @@ def export_benchmark_metrics(
     )
 
     # Convergence trends (per algorithm)
-    for algo in set(m.algorithm for m in run.convergence_metrics):
+    for algo in {m.algorithm for m in run.convergence_metrics}:
         algo_metrics = [m for m in run.convergence_metrics if m.algorithm == algo]
         trends = {
             "algorithm": algo,

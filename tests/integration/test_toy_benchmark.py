@@ -153,7 +153,7 @@ class TestToyBenchmark:
         bench = ToyBenchmark()
         results = bench.run_suite(n_dims=2, n_generations=10)
 
-        # Should have 4 functions × 2 (single + multi) = 8 results
+        # Should have 4 functions x 2 (single + multi) = 8 results
         assert len(results) == 8
         assert all(isinstance(r, BenchmarkResult) for r in results)
 

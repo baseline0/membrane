@@ -8,7 +8,7 @@ import numpy.typing as npt
 
 from benchmarks.suites.base import BenchmarkFunction, BenchmarkSuite
 
-# CEC2017 function names (F1–F30, excluding F2 which was removed)
+# CEC2017 function names (F1-F30, excluding F2 which was removed)
 CEC2017_NAMES: dict[int, str] = {
     1: "Shifted and Rotated Bent Cigar Function",
     3: "Shifted and Rotated Rosenbrock's Function",

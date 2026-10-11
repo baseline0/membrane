@@ -1,5 +1,4 @@
 import json
-from typing import List
 
 from anytree import Node
 
@@ -25,7 +24,7 @@ class Factory:
         return mi
 
     @staticmethod
-    def get_membrane_item_collection1() -> List[MembraneItem]:
+    def get_membrane_item_collection1() -> list[MembraneItem]:
         """
         digital ag genomics
         """
@@ -93,7 +92,7 @@ class Factory:
 
 class ContentItemFactory:
     @classmethod
-    def get_items_for_names(cls, names, colour: str = None):  # -> List(ContentItem):
+    def get_items_for_names(cls, names, colour: str | None = None):  # -> List(ContentItem):
         # all same colour
         items = []
         if colour is None:
@@ -104,7 +103,7 @@ class ContentItemFactory:
         return items
 
     @classmethod
-    def get_items(cls, n: int = 10, colour: str = None):  # -> List(ContentItem):
+    def get_items(cls, n: int = 10, colour: str | None = None):  # -> List(ContentItem):
         # same colour
 
         items = []

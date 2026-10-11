@@ -3,7 +3,6 @@ import random
 import string
 from pathlib import Path
 from string import ascii_lowercase
-from typing import List
 
 import networkx
 import networkx as nx
@@ -22,18 +21,15 @@ class NameGenerator:
     # use as prefix for cluster items
 
     @staticmethod
-    def get_rand_name(letters=string.ascii_lowercase, num_chars: int = 4, prefix: str = None) -> str:
-        if prefix:
-            name = prefix + "_"
-        else:
-            name = ""
+    def get_rand_name(letters=string.ascii_lowercase, num_chars: int = 4, prefix: str | None = None) -> str:
+        name = prefix + "_" if prefix else ""
 
         for i in range(num_chars):
             name += random.choice(letters)
         return name
 
 
-def get_alphabet1(num: int) -> List[str]:
+def get_alphabet1(num: int) -> list[str]:
     """
     return a list of 1 character strings
     """
@@ -78,7 +74,7 @@ def hierarchy_pos(g: networkx.Graph, root=None, width=1.0, vert_gap=0.2, vert_lo
     if root is None:
         root = random.choice(list(g.nodes))
 
-    def _hierarchy_pos(G, root, width=1.0, vert_gap=0.2, vert_loc=0, xcenter=0.5, pos=None, parent=None):
+    def _hierarchy_pos(g, root, width=1.0, vert_gap=0.2, vert_loc=0, xcenter=0.5, pos=None, parent=None):
         """
         see hierarchy_pos docstring for most arguments
 
@@ -91,8 +87,8 @@ def hierarchy_pos(g: networkx.Graph, root=None, width=1.0, vert_gap=0.2, vert_lo
             pos = {root: (xcenter, vert_loc)}
         else:
             pos[root] = (xcenter, vert_loc)
-        children = list(G.neighbors(root))
-        if not isinstance(G, nx.DiGraph) and parent is not None:
+        children = list(g.neighbors(root))
+        if not isinstance(g, nx.DiGraph) and parent is not None:
             children.remove(parent)
         if len(children) != 0:
             dx = width / len(children)
@@ -100,7 +96,7 @@ def hierarchy_pos(g: networkx.Graph, root=None, width=1.0, vert_gap=0.2, vert_lo
             for child in children:
                 nextx += dx
                 pos = _hierarchy_pos(
-                    G,
+                    g,
                     child,
                     width=dx,
                     vert_gap=vert_gap,

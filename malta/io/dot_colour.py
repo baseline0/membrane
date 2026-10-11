@@ -1,6 +1,5 @@
 from enum import Enum
 from random import sample
-from typing import List
 
 
 class DotColour(str, Enum):
@@ -692,7 +691,7 @@ def get_rand_colour() -> str:
     return str(sample(colors, 1).pop())
 
 
-def get_rand_colours(n: int = 10) -> List[str]:
+def get_rand_colours(n: int = 10) -> list[str]:
     # of course random colours could be quite garish
     # example output.
     #   yellow DotColour.yellow

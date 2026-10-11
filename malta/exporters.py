@@ -10,7 +10,7 @@ Enables external analysis, visualization, and persistence.
 
 import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from malta.trace import MembraneTrace
 
@@ -19,7 +19,7 @@ class SimulationExporter:
     """Export simulation results and traces to structured formats."""
 
     @staticmethod
-    def export_trace_to_json(trace: MembraneTrace, output_path: Optional[Path] = None) -> str:
+    def export_trace_to_json(trace: MembraneTrace, output_path: Path | None = None) -> str:
         """Export trace to JSON string.
 
         Args:
@@ -38,7 +38,7 @@ class SimulationExporter:
         return json_str
 
     @staticmethod
-    def export_trace_to_yaml(trace: MembraneTrace, output_path: Optional[Path] = None) -> str:
+    def export_trace_to_yaml(trace: MembraneTrace, output_path: Path | None = None) -> str:
         """Export trace to YAML string.
 
         Args:
@@ -65,8 +65,8 @@ class SimulationExporter:
     def export_optimization_result(
         best_candidate: Any,
         final_multiset: dict,
-        trace: Optional[MembraneTrace] = None,
-        output_path: Optional[Path] = None,
+        trace: MembraneTrace | None = None,
+        output_path: Path | None = None,
         format: str = "json",
     ) -> str:
         """Export optimization result (best candidate + final state).
@@ -114,7 +114,7 @@ class SimulationExporter:
         quantum_state: dict,
         step: int,
         membrane_id: str,
-        output_path: Optional[Path] = None,
+        output_path: Path | None = None,
     ) -> str:
         """Export quantum state snapshot.
 

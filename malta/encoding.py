@@ -54,7 +54,7 @@ class BinaryEncoding:
 
         # Convert to integer
         max_int = 2**n_bits - 1
-        as_int = int(round(fraction * max_int))
+        as_int = round(fraction * max_int)
 
         # Convert to binary string (zero-padded)
         return format(as_int, f"0{n_bits}b")

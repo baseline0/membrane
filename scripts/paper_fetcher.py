@@ -27,7 +27,6 @@ import urllib.request
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import typer
 
@@ -61,8 +60,8 @@ class PaperSource:
     title: str
     authors: str
     year: int
-    sources: Dict[str, str]  # {source_type: url/id}
-    doi: Optional[str] = None
+    sources: dict[str, str]  # {source_type: url/id}
+    doi: str | None = None
     is_open_access: bool = False  # True if genuinely open-access (MDPI, IEEE Access, arXiv)
     requires_library: bool = False  # True if needs UofM library access
 
@@ -74,12 +73,12 @@ class FetchResult:
     paper_name: str
     title: str
     success: bool
-    source: Optional[str]  # Which source succeeded
-    filepath: Optional[str]  # Where saved locally
-    content_hash: Optional[str]  # SHA256 of PDF
+    source: str | None  # Which source succeeded
+    filepath: str | None  # Where saved locally
+    content_hash: str | None  # SHA256 of PDF
     timestamp: str  # ISO 8601
-    url: Optional[str]  # URL fetched from
-    error: Optional[str]  # Error message if failed
+    url: str | None  # URL fetched from
+    error: str | None  # Error message if failed
     retry_count: int = 0
 
     def to_dict(self) -> dict:
@@ -123,10 +122,10 @@ class PaperFetcher:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         self.manifest_path = manifest_path
-        self.manifest: Dict[str, FetchResult] = self._load_manifest()
+        self.manifest: dict[str, FetchResult] = self._load_manifest()
         self.rate_limiter = RateLimiter(min_delay=2.0)
 
-    def _load_manifest(self) -> Dict[str, FetchResult]:
+    def _load_manifest(self) -> dict[str, FetchResult]:
         """Load fetch history from manifest."""
         if not self.manifest_path.exists():
             logger.info("No manifest found, starting fresh")
@@ -156,7 +155,7 @@ class PaperFetcher:
                 sha256.update(chunk)
         return sha256.hexdigest()
 
-    def try_fetch(self, url: str, domain: str, timeout: int = 10) -> Optional[bytes]:
+    def try_fetch(self, url: str, domain: str, timeout: int = 10) -> bytes | None:
         """Attempt to fetch URL with rate limiting and retry logic."""
         self.rate_limiter.wait(domain)
 
@@ -270,7 +269,7 @@ class PaperFetcher:
         logger.warning(f"⚠️  {paper.name} — could not fetch from any source")
         return result
 
-    def generate_library_lookup(self, papers: List[PaperSource]):
+    def generate_library_lookup(self, papers: list[PaperSource]):
         """Generate file for papers requiring UofM library access."""
         library_papers = [p for p in papers if p.requires_library and not p.is_open_access]
 
@@ -321,7 +320,7 @@ class PaperFetcher:
         logger.info("=" * 80)
 
 
-def load_paper_sources() -> List[PaperSource]:
+def load_paper_sources() -> list[PaperSource]:
     """Load curated paper list with access status."""
     return [
         PaperSource(
@@ -427,7 +426,7 @@ def load_paper_sources() -> List[PaperSource]:
     ]
 
 
-def papers_to_fetch(papers: List[PaperSource], manifest: Dict[str, FetchResult], retry: bool) -> List[PaperSource]:
+def papers_to_fetch(papers: list[PaperSource], manifest: dict[str, FetchResult], retry: bool) -> list[PaperSource]:
     """Select papers to attempt. Successful cached papers are skipped unless retry is set."""
     if retry:
         return list(papers)
@@ -441,7 +440,7 @@ def clear_manifest(fetcher: PaperFetcher) -> None:
     fetcher._save_manifest()
 
 
-def run_session(fetcher: PaperFetcher, papers: List[PaperSource], retry: bool, clean: bool) -> None:
+def run_session(fetcher: PaperFetcher, papers: list[PaperSource], retry: bool, clean: bool) -> None:
     """Fetch the selected papers, then write the library lookup and status report."""
     if clean:
         clear_manifest(fetcher)

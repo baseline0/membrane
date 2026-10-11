@@ -2,7 +2,7 @@ from malta.types.mmultiset import MMultiset, make_mmultiset
 
 
 class Rule:
-    __slots__ = ["name", "descr", "catalyst", "rule_input", "rule_output"]
+    __slots__ = ["catalyst", "descr", "name", "rule_input", "rule_output"]
 
     def __init__(self, name: str, descr: str, catalyst: MMultiset, rule_input: MMultiset, rule_output: MMultiset):
 
@@ -40,15 +40,15 @@ class Rule:
 
     def set_from_dict(self, d: dict):
 
-        if "name" in d.keys():
+        if "name" in d:
             self.name = d["name"]
-        if "descr" in d.keys():
+        if "descr" in d:
             self.descr = d["descr"]
-        if "catalyst" in d.keys():
+        if "catalyst" in d:
             self.catalyst = d["catalyst"]
-        if "rule_input" in d.keys():
+        if "rule_input" in d:
             self.rule_input = d["rule_input"]
-        if "rule_output" in d.keys():
+        if "rule_output" in d:
             self.rule_output = d["rule_output"]
 
     def json_serialize(self):
@@ -93,12 +93,10 @@ def rule_will_fire(r: Rule, m: MMultiset) -> bool:
         otherwise: False
     """
 
-    if r.catalyst.issubset(m):
-        # catalysts present
-        if r.rule_input.issubset(m):
-            print(f"firing rule: {r}")
-            # inputs also present. rule will fire.
-            return True
+    # catalysts present and inputs present: rule will fire.
+    if r.catalyst.issubset(m) and r.rule_input.issubset(m):
+        print(f"firing rule: {r}")
+        return True
     return False
 
 

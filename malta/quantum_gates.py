@@ -12,7 +12,6 @@ quantum-inspired parallelism.
 
 import math
 from dataclasses import dataclass
-from typing import Optional
 
 from malta.core.rule import Rule
 from malta.types.mmultiset import MMultiset
@@ -60,9 +59,9 @@ class QuantumGate(Rule):
         self,
         name: str,
         descr: str,
-        catalyst: Optional[MMultiset] = None,
-        rule_input: Optional[MMultiset] = None,
-        rule_output: Optional[MMultiset] = None,
+        catalyst: MMultiset | None = None,
+        rule_input: MMultiset | None = None,
+        rule_output: MMultiset | None = None,
     ):
         """Initialize quantum gate rule.
 
@@ -156,7 +155,7 @@ class MeasurementGate(QuantumGate):
             descr="Measurement: collapse superposition to classical state",
         )
 
-    def apply_to_quantum_state(self, state: QuantumState, target: str = None) -> QuantumState:
+    def apply_to_quantum_state(self, state: QuantumState, target: str | None = None) -> QuantumState:
         """Collapse to single classical state.
 
         Randomly selects basis state weighted by probability (|amplitude|²).

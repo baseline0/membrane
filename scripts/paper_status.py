@@ -11,10 +11,9 @@ Outputs:
 import json
 import sys
 from pathlib import Path
-from typing import Dict, List
 
 
-def load_manifest(manifest_path: Path) -> Dict:
+def load_manifest(manifest_path: Path) -> dict:
     """Load fetch manifest."""
     if not manifest_path.exists():
         print("❌ No manifest found. Run: python scripts/paper_fetcher.py")
@@ -24,7 +23,7 @@ def load_manifest(manifest_path: Path) -> Dict:
         return json.load(f)
 
 
-def generate_console_report(manifest: Dict, papers_dir: Path):
+def generate_console_report(manifest: dict, papers_dir: Path):
     """Generate console report of available papers."""
     print("\n" + "=" * 80)
     print("📚 LITERATURE REVIEW STATUS")
@@ -89,7 +88,7 @@ def generate_console_report(manifest: Dict, papers_dir: Path):
     return available, unavailable, missing
 
 
-def generate_lit_review_hints(available: List):
+def generate_lit_review_hints(available: list):
     """Generate hints for updating LITERATURE_REVIEW.md."""
     if not available:
         return

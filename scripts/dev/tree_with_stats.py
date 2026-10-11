@@ -10,10 +10,9 @@ Usage:
 import fnmatch
 import sys
 from pathlib import Path
-from typing import Set
 
 
-def parse_gitignore(root: Path) -> Set[str]:
+def parse_gitignore(root: Path) -> set[str]:
     """Parse .gitignore patterns into a set."""
     patterns = set()
     gitignore = root / ".gitignore"
@@ -30,7 +29,7 @@ def parse_gitignore(root: Path) -> Set[str]:
     return patterns
 
 
-def should_ignore(path: Path, root: Path, patterns: Set[str]) -> bool:
+def should_ignore(path: Path, root: Path, patterns: set[str]) -> bool:
     """Check if path should be ignored based on .gitignore patterns or system dirs."""
     # Always skip VCS and system directories regardless of .gitignore
     always_skip = {".git", ".hg", ".svn", ".venv", "venv", "node_modules", ".env"}
@@ -62,7 +61,7 @@ def count_lines(filepath: Path) -> int:
         return 0
 
 
-def tree_with_stats(root: Path, prefix: str = "", patterns: Set[str] = None, root_path: Path = None):
+def tree_with_stats(root: Path, prefix: str = "", patterns: set[str] | None = None, root_path: Path | None = None):
     """Recursively print tree with stats."""
     if patterns is None:
         patterns = set()

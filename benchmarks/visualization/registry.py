@@ -3,7 +3,7 @@
 Allows registration of new viz backends and routing by chart type + use case.
 """
 
-from typing import Dict, Type
+from typing import ClassVar
 
 from .base import UseCase, VizStrategy
 
@@ -12,14 +12,14 @@ class VizRegistry:
     """Registry of visualization strategies, keyed by (chart_type, use_case)."""
 
     # Map: (chart_type, use_case) -> VizStrategy class
-    _strategies: Dict[tuple[str, UseCase], Type[VizStrategy]] = {}
+    _strategies: ClassVar[dict[tuple[str, UseCase], type[VizStrategy]]] = {}
 
     @classmethod
     def register(
         cls,
         chart_type: str,
         use_case: UseCase,
-        strategy_class: Type[VizStrategy],
+        strategy_class: type[VizStrategy],
     ):
         """Register a visualization strategy.
 
@@ -51,7 +51,7 @@ class VizRegistry:
         """
         key = (chart_type, use_case)
         if key not in cls._strategies:
-            available = [k for k in cls._strategies.keys() if k[0] == chart_type]
+            available = [k for k in cls._strategies if k[0] == chart_type]
             raise KeyError(
                 f"No strategy registered for {key}. Available for '{chart_type}': {[k[1].value for k in available]}"
             )
@@ -59,7 +59,7 @@ class VizRegistry:
         return strategy_class(use_case=use_case)
 
     @classmethod
-    def list_strategies(cls) -> Dict[str, list[str]]:
+    def list_strategies(cls) -> dict[str, list[str]]:
         """List all registered strategies by chart type.
 
         Returns:
@@ -96,7 +96,7 @@ class VizFactory:
         return VizRegistry.get(chart_type, use_case)
 
     @staticmethod
-    def list_charts() -> Dict[str, list[str]]:
+    def list_charts() -> dict[str, list[str]]:
         """List all available charts and their supported use cases.
 
         Returns:

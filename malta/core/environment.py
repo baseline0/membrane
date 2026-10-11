@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, TextIO
+from typing import TextIO
 
 from anytree import Node, PostOrderIter
 
@@ -23,7 +23,7 @@ class Environment:
     # FUTURE - make ENUM and do proper hook
     STOP_CRITERION = "NO_RULES_FIRED"
 
-    def __init__(self, tree: Node, rules: RuleSet, all_items: List[MembraneItem]):
+    def __init__(self, tree: Node, rules: RuleSet, all_items: list[MembraneItem]):
 
         self.tree = tree
 
@@ -137,8 +137,5 @@ class Environment:
             raise ValueError
 
         if isinstance(c, str):
-            if c:
-                s = f"\n{name}[color={c}]\n"
-            else:
-                s = f"{name}\n"
+            s = f"\n{name}[color={c}]\n" if c else f"{name}\n"
         return s

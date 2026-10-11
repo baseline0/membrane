@@ -1,5 +1,4 @@
 import json
-from typing import List
 
 from malta.io.dot_colour import get_rand_colour
 
@@ -16,9 +15,9 @@ class MembraneItem:
     Thus, the apply_rule(r, m) method that is called by Environment has the same types for set operations on catalyst, rule_inputs and rule_outputs.
     """
 
-    __slots__ = ["name", "symbol", "descr", "colour"]
+    __slots__ = ["colour", "descr", "name", "symbol"]
 
-    def __init__(self, name: str, descr: str = None, colour: str = None):
+    def __init__(self, name: str, descr: str | None = None, colour: str | None = None):
         #
         if isinstance(name, str):
             self.name = name
@@ -50,13 +49,13 @@ class MembraneItem:
             self.colour = colour
 
     def set_from_dict(self, d: dict):
-        if "name" in d.keys():
+        if "name" in d:
             self.name = d["name"]
-        if "descr" in d.keys():
+        if "descr" in d:
             self.descr = d["descr"]
-        if "symbol" in d.keys():
+        if "symbol" in d:
             self.symbol = d["symbol"]
-        if "colour" in d.keys():
+        if "colour" in d:
             self.colour = d["colour"]
 
     def __eq__(self, other):
@@ -77,19 +76,19 @@ class MembraneItem:
 def membrane_item_deserialize(d: dict) -> MembraneItem:
     mi = MembraneItem("temp")
 
-    if "name" in d.keys():
+    if "name" in d:
         mi.name = d["name"]
-    if "descr" in d.keys():
+    if "descr" in d:
         mi.descr = d["descr"]
-    if "symbol" in d.keys():
+    if "symbol" in d:
         mi.symbol = d["symbol"]
-    if "colour" in d.keys():
+    if "colour" in d:
         mi.colour = d["colour"]
 
     return mi
 
 
-def load_membrane_items_from_file(fname: str) -> (List[MembraneItem], List[str]):
+def load_membrane_items_from_file(fname: str) -> (list[MembraneItem], list[str]):
     """
     file is in json format.
         key must be from alphabet that is used in rules

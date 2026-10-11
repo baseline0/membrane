@@ -1,7 +1,5 @@
 """Benchmarking validators: ensure reproducibility and result sanity."""
 
-from typing import Tuple
-
 
 class ValidationError(ValueError):
     """Raised when benchmark parameters or results fail validation."""
@@ -17,7 +15,7 @@ def validate_seed(seed: int) -> None:
         raise ValidationError(f"seed must be in [0, 2^31-1], got {seed}")
 
 
-def validate_dimension(dimension: int, supported: Tuple[int, ...] = (10, 30, 50, 100)) -> None:
+def validate_dimension(dimension: int, supported: tuple[int, ...] = (10, 30, 50, 100)) -> None:
     """Ensure dimension is supported by the benchmark suite."""
     if dimension not in supported:
         raise ValidationError(f"dimension {dimension} not supported. Choose from {supported}")

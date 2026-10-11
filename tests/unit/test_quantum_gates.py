@@ -124,7 +124,7 @@ class TestMeasurementGate:
 
         for _ in range(1000):
             result = gate.apply_to_quantum_state(state)
-            outcome = list(result.state_vector.keys())[0]
+            outcome = next(iter(result.state_vector.keys()))
             outcomes[outcome] += 1
 
         # Both outcomes should occur roughly 50% each (within 10% margin)

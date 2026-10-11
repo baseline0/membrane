@@ -9,7 +9,6 @@ Provides tools to:
 
 import statistics
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -20,7 +19,7 @@ class ConvergenceMetrics:
     best_initial_fitness: float
     total_improvement: float  # absolute value decrease
     improvement_rate: float  # improvement per generation
-    generations_to_convergence: Optional[int]  # when stalled at threshold
+    generations_to_convergence: int | None  # when stalled at threshold
     convergence_threshold: float  # fitness change threshold
     stall_generations: int  # consecutive generations with < threshold change
     trajectory: list[float]  # fitness at each generation
@@ -168,7 +167,7 @@ class ConvergenceAnalyzer:
     @staticmethod
     def efficiency_score(
         trajectory: list[float],
-        ideal_trajectory: Optional[list[float]] = None,
+        ideal_trajectory: list[float] | None = None,
     ) -> float:
         """Score algorithm efficiency on convergence.
 

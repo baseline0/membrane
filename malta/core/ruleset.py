@@ -1,5 +1,4 @@
 import random
-from typing import List
 
 from malta.core.rule import Rule, make_rule
 from malta.core.util import NameGenerator
@@ -15,10 +14,10 @@ class RuleSet:
         # the set of rules
         self.rules = []
 
-    def set_alphabet(self, alphabet: List[str]) -> None:
+    def set_alphabet(self, alphabet: list[str]) -> None:
         self.alphabet = alphabet
 
-    def set_rules(self, rules: List[Rule]) -> None:
+    def set_rules(self, rules: list[Rule]) -> None:
 
         self.rules = rules
 
@@ -50,7 +49,7 @@ class RuleSet:
         self.alphabet = list(temp)
 
 
-def make_random_rule_from_alphabet(alphabet: List[str]) -> Rule:
+def make_random_rule_from_alphabet(alphabet: list[str]) -> Rule:
     """
     catalyst CANNOT be an input or output :)
 
@@ -87,7 +86,7 @@ def make_random_rule_from_alphabet(alphabet: List[str]) -> Rule:
         descr = "coin flip"
     else:
         selected = random.sample(alphabet, 3)
-        s = "".join([x for x in selected])
+        s = "".join(selected)
         descr = f"{name}: {s}"
 
         catalyst = {selected[0]: 1}
@@ -98,7 +97,7 @@ def make_random_rule_from_alphabet(alphabet: List[str]) -> Rule:
     return r
 
 
-def make_random_rules_from_alphabet(alphabet: List[str], n: int = 10) -> List[Rule]:
+def make_random_rules_from_alphabet(alphabet: list[str], n: int = 10) -> list[Rule]:
     """
     alphabet: a list of strings, each of which is the identifier of a membrane item
     n: the number of rules to make. its ok if we end up with duplicate rules here. if this happens,
@@ -118,7 +117,7 @@ def make_random_rules_from_alphabet(alphabet: List[str], n: int = 10) -> List[Ru
     return ruleset
 
 
-def get_ruleset_1(alphabet: List[str]) -> RuleSet:
+def get_ruleset_1(alphabet: list[str]) -> RuleSet:
     """
     alphabet - ideally this is defined by the json file of membrane items and is the keys (identifiers)
 

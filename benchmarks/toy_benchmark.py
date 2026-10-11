@@ -8,8 +8,8 @@ Tests algorithm on small, well-understood problems to validate:
 """
 
 import math
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 from malta.quantum_inspired import QuantumInspiredEvolutionaryAlgorithm
 from malta.trace import MembraneTrace

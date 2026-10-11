@@ -1,5 +1,3 @@
-from typing import List
-
 from malta.types.mmultiset import MMultiset
 
 
@@ -11,9 +9,9 @@ class Membrane:
 
     # https://pythonhosted.org/multiset/
 
-    __slots__ = ["name", "descr", "contents", "membranes"]
+    __slots__ = ["contents", "descr", "membranes", "name"]
 
-    def __init__(self, name: str, descr: str, contents=List[str]):
+    def __init__(self, name: str, descr: str, contents=list[str]):
         # =List[MembraneItem]):
         if isinstance(name, str):
             self.name = name
@@ -64,13 +62,13 @@ class Membrane:
 def deserialize(d: dict) -> Membrane:
     m = Membrane()
 
-    if "name" in d.keys():
+    if "name" in d:
         m.name = d["name"]
 
-    if "descr" in d.keys():
+    if "descr" in d:
         m.descr = d["descr"]
 
-    if "contents" in d.keys():
+    if "contents" in d:
         m.contents = d["contents"]
 
     return m

@@ -1,4 +1,4 @@
-class Rule(object):
+class Rule:
     def __init__(self, name: str, req, out, pri: int = 1) -> None:
 
         self.name = name
@@ -7,7 +7,7 @@ class Rule(object):
         self.priority = pri
 
     def __str__(self):
-        if self.name != None:
+        if self.name is not None:
             return f"{self.requirements} -> {self.output} ({self.priority})[{self.name}])"
         else:
             return f"{self.requirements} -> {self.output} ({self.priority})"

@@ -10,7 +10,6 @@ Implements:
 import math
 import random
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -98,7 +97,7 @@ class AdaptiveEvolutionController:
         self,
         generation: int,
         current_best_fitness: float,
-        prev_best_fitness: Optional[float] = None,
+        prev_best_fitness: float | None = None,
         population_diversity: float = 0.5,
     ) -> None:
         """Update adaptation state based on progress.
@@ -148,10 +147,7 @@ class AdaptiveEvolutionController:
         base_rate = 0.05 * (1.0 - 0.7 * progress)
 
         # Stalling penalty: increase mutation if stuck
-        if self.state.improvement_trend < 1e-6:
-            escape_boost = 0.02
-        else:
-            escape_boost = 0.0
+        escape_boost = 0.02 if self.state.improvement_trend < 1e-6 else 0.0
 
         self.state.mutation_rate = base_rate + escape_boost
         self.state.mutation_rate = max(0.001, min(0.2, self.state.mutation_rate))

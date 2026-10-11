@@ -158,5 +158,5 @@ class TestEnhancedQuantumInspiredAlgorithm:
 
         # Best solution should have basis state
         if best.basis_state:
-            assert len(best.basis_state) == 8  # 2 dims × 4 bits
+            assert len(best.basis_state) == 8  # 2 dims x 4 bits
             assert all(b in "01" for b in best.basis_state)

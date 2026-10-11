@@ -1,7 +1,7 @@
 import random
 from pathlib import Path
 from random import randint
-from typing import List, TextIO
+from typing import TextIO
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -103,7 +103,7 @@ def random_dag(nodes: int = 5):
     """
     g = nx.DiGraph()
 
-    # maximum number of edges in a directed graph with n vertices (which has no cycles):  n−1
+    # maximum number of edges in a directed graph with n vertices (which has no cycles):  n-1
     # proof left to reader
     edges = nodes - 1
 
@@ -162,11 +162,11 @@ class MultisetTreeFactory:
     def get_mt1() -> MultisetTreeNode:
         udo = Node("Udo")
         marc = Node("Marc", parent=udo)
-        lian = Node("Lian", parent=marc)
+        Node("Lian", parent=marc)
         dan = Node("Dan", parent=udo)
-        jet = Node("Jet", parent=dan)
-        jan = Node("Jan", parent=dan)
-        joe = Node("Joe", parent=dan)
+        Node("Jet", parent=dan)
+        Node("Jan", parent=dan)
+        Node("Joe", parent=dan)
 
         return udo
 
@@ -201,10 +201,10 @@ def add_items(mt: Node, items: dict):
 
 def show_multiset_tree(x: Node):
     for pre, fill, node in RenderTree(x):
-        print("%s%s" % (pre, node.name))
+        print(f"{pre}{node.name}")
 
 
-def get_random_selection_from_alphabet(num: int, alphabet: List[str], max_samples: int = 10) -> dict:
+def get_random_selection_from_alphabet(num: int, alphabet: list[str], max_samples: int = 10) -> dict:
     """
     num: the number of letters that should be selected from alphabet
     max_samples: the maximum multiplicity of the number selected
@@ -231,14 +231,14 @@ def get_random_selection_from_alphabet(num: int, alphabet: List[str], max_sample
     return d
 
 
-def randomly_populate(mt: MultisetTreeNode, alphabet: List[str]):
+def randomly_populate(mt: MultisetTreeNode, alphabet: list[str]):
     for node in PreOrderIter(mt):
         items = get_random_selection_from_alphabet(alphabet)
         for k, v in items.items():
             node.add(k, v)
 
 
-def get_rand_number_and_multiplicity_of_items(alphabet: List[str], max_multiplicity: int = 1):
+def get_rand_number_and_multiplicity_of_items(alphabet: list[str], max_multiplicity: int = 1):
     if not alphabet:
         raise ValueError
     if max_multiplicity < 1:
@@ -256,7 +256,7 @@ def get_rand_number_and_multiplicity_of_items(alphabet: List[str], max_multiplic
     return items
 
 
-def get_membrane_tree1(alphabet: List[str]) -> Node:
+def get_membrane_tree1(alphabet: list[str]) -> Node:
     """
     use anytree.node with additional attr: contents = multiset
     tree must have node named: root
@@ -282,12 +282,12 @@ def get_membrane_tree1(alphabet: List[str]) -> Node:
 
     contents = make_mmultiset(items)
 
-    s0 = Node(name="sub0", parent=root, contents=contents)
+    Node(name="sub0", parent=root, contents=contents)
 
     return root
 
 
-def get_membrane_tree2(alphabet: List[str]) -> (Node, nx.Graph):
+def get_membrane_tree2(alphabet: list[str]) -> (Node, nx.Graph):
     """
     a little more complex nesting
     done manually.
@@ -370,7 +370,7 @@ class MemStruct:
 
     """
 
-    def __init__(self, branches: List):
+    def __init__(self, branches: list):
         self.branches = branches
 
     def save_to_file(self, fname: str):
@@ -389,7 +389,7 @@ def get_leaf_nodes(g: nx.Graph) -> []:
     return leaf_nodes
 
 
-def remove_nodes(g: nx.Graph, nodes: List) -> nx.Graph:
+def remove_nodes(g: nx.Graph, nodes: list) -> nx.Graph:
     """
     use with leaf nodes
     """
@@ -429,7 +429,7 @@ def walk_dfs_post_order(g: nx.Graph):
     return retval
 
 
-def get_branches_from_g(g: nx.Graph) -> List:
+def get_branches_from_g(g: nx.Graph) -> list:
     # use with simplified visuals that show
     # nested structure only along one branch
 

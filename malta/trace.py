@@ -7,8 +7,7 @@ Logs all rule applications, state transitions, and measurements to enable:
 """
 
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import UTC, datetime
 
 
 @dataclass
@@ -48,17 +47,17 @@ class MembraneTrace:
         """
         self.description = description
         self.events: list[TraceEvent] = []
-        self.start_time = datetime.now(timezone.utc)
+        self.start_time = datetime.now(UTC)
 
     def record_rule_applied(
         self,
         step: int,
         membrane_id: str,
         rule_name: str,
-        input_multiset: Optional[dict] = None,
-        output_multiset: Optional[dict] = None,
-        quantum_state_before: Optional[dict] = None,
-        quantum_state_after: Optional[dict] = None,
+        input_multiset: dict | None = None,
+        output_multiset: dict | None = None,
+        quantum_state_before: dict | None = None,
+        quantum_state_after: dict | None = None,
     ) -> None:
         """Record a rule application.
 
@@ -72,7 +71,7 @@ class MembraneTrace:
             quantum_state_after: Quantum amplitudes after (optional)
         """
         event = TraceEvent(
-            timestamp=datetime.now(timezone.utc).isoformat() + "Z",
+            timestamp=datetime.now(UTC).isoformat() + "Z",
             event_type="rule_applied",
             step=step,
             membrane_id=membrane_id,
@@ -108,7 +107,7 @@ class MembraneTrace:
             probability: Probability of this outcome
         """
         event = TraceEvent(
-            timestamp=datetime.now(timezone.utc).isoformat() + "Z",
+            timestamp=datetime.now(UTC).isoformat() + "Z",
             event_type="measurement",
             step=step,
             membrane_id=membrane_id,
@@ -139,7 +138,7 @@ class MembraneTrace:
             reason: Why it changed (e.g., "rule_application", "membrane_creation")
         """
         event = TraceEvent(
-            timestamp=datetime.now(timezone.utc).isoformat() + "Z",
+            timestamp=datetime.now(UTC).isoformat() + "Z",
             event_type="state_transition",
             step=step,
             membrane_id=membrane_id,
@@ -157,7 +156,7 @@ class MembraneTrace:
         step: int,
         parent_membrane_id: str,
         new_membrane_id: str,
-        initial_multiset: Optional[dict] = None,
+        initial_multiset: dict | None = None,
     ) -> None:
         """Record membrane creation event.
 
@@ -168,7 +167,7 @@ class MembraneTrace:
             initial_multiset: Initial contents (optional)
         """
         event = TraceEvent(
-            timestamp=datetime.now(timezone.utc).isoformat() + "Z",
+            timestamp=datetime.now(UTC).isoformat() + "Z",
             event_type="membrane_created",
             step=step,
             membrane_id=new_membrane_id,
@@ -180,7 +179,7 @@ class MembraneTrace:
         )
         self.events.append(event)
 
-    def get_events(self, membrane_id: Optional[str] = None) -> list[TraceEvent]:
+    def get_events(self, membrane_id: str | None = None) -> list[TraceEvent]:
         """Get trace events, optionally filtered by membrane.
 
         Args:
@@ -214,7 +213,7 @@ class MembraneTrace:
         for event in self.events:
             event_counts[event.event_type] = event_counts.get(event.event_type, 0) + 1
 
-        duration = (datetime.now(timezone.utc) - self.start_time).total_seconds()
+        duration = (datetime.now(UTC) - self.start_time).total_seconds()
 
         return {
             "description": self.description,
@@ -222,7 +221,7 @@ class MembraneTrace:
             "event_counts": event_counts,
             "duration_seconds": duration,
             "start_time": self.start_time.isoformat() + "Z",
-            "end_time": datetime.now(timezone.utc).isoformat() + "Z",
+            "end_time": datetime.now(UTC).isoformat() + "Z",
         }
 
     def export_to_dict(self) -> dict:

@@ -39,7 +39,7 @@ def load_formulas_json(path="qips_equations.json") -> dict:
 
 
 def substitute_formulas(markdown: str, formulas_dict: dict) -> str:
-    """
+    r"""
     Replace {{formula:id}} and {{formula:id|param=value}} with LaTeX.
 
     Patterns:

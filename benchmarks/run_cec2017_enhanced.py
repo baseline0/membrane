@@ -92,7 +92,7 @@ def main(n_seeds: int = 10, n_functions: int = 3, dimension: int = 10):
     print("SUMMARY BY ALGORITHM")
     print("=" * 70)
 
-    for alg_name in algorithms.keys():
+    for alg_name in algorithms:
         alg_results = [r for r in results if r["algorithm"] == alg_name]
         mean_error = sum(r["error_mean"] for r in alg_results) / len(alg_results)
         best_error = min(r["error_mean"] for r in alg_results)

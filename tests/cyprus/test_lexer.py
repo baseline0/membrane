@@ -15,7 +15,7 @@ class LexerTest(unittest.TestCase):
         print(ts[0])
         self.assertEqual(str(ts[0]), "3,1-3,1: env_open '['")
 
-        correct = """
+        _correct = """
     3,1-3,1: env_open '['
     3,2-3,4: name 'env'
     4,3-4,3: membrane_open '('

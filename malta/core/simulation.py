@@ -1,7 +1,7 @@
 import json
 from enum import Enum
 from pathlib import Path
-from typing import List, TextIO
+from typing import TextIO
 
 from anytree import Node, search
 
@@ -128,18 +128,18 @@ class Simulation:
             self.write_branch(fname, branch=b)
 
     @staticmethod
-    def write_subgraph_starts(fp: TextIO, names: List[str]):
+    def write_subgraph_starts(fp: TextIO, names: list[str]):
         """
         helper
         pass in the name of the nodes for digraph subcluster.
         """
 
-        TAB = "\t"
+        tab = "\t"
         start_clause = "subgraph cluster_"
         depth = 1
 
         for name in names:
-            indent = TAB * depth
+            indent = tab * depth
             line = f"{indent}{start_clause}{name}"
             fp.write(line + "\t { \n")
             depth += 1
@@ -159,8 +159,8 @@ class Simulation:
             raise AttributeError
 
         # constant indent for now
-        TAB = "\t"
-        indent = TAB * 2
+        tab = "\t"
+        indent = tab * 2
         # node names are integers but we need char to start for dot so use node name as suffix
         suffix = node.name
 
@@ -181,7 +181,7 @@ class Simulation:
             # fp.write(f"label = \"membrane\" ")
         fp.write("} \n\n")
 
-    def write_branch(self, fname: str, branch: List[int]):
+    def write_branch(self, fname: str, branch: list[int]):
         """
         branch is a list of node identifiers from leaf to root
         output is a dot file
@@ -257,7 +257,7 @@ class Simulation:
         print("DONE.")
 
 
-def get_item_names_from_membrane_items(items: List[MembraneItem], names: List[str] = None) -> List[str]:
+def get_item_names_from_membrane_items(items: list[MembraneItem], names: list[str] | None = None) -> list[str]:
     """
     the environment needs a list of MembraneContents
     but the membrane and rule just use the names as identifiers.
@@ -272,7 +272,7 @@ def get_item_names_from_membrane_items(items: List[MembraneItem], names: List[st
         print(f"number of items is: {len(names)}")
         print(f"{names}")
         return names
-    elif isinstance(names, List):
+    elif isinstance(names, list):
         # we are appending to an existing list
         # convert the existing list into a set.
         # process the list.
@@ -283,7 +283,9 @@ def get_item_names_from_membrane_items(items: List[MembraneItem], names: List[st
         raise ValueError
 
 
-def get_multiset_of_item_names_from_membrane_items(items: List[MembraneItem], names: List[str] = None) -> MMultiset:
+def get_multiset_of_item_names_from_membrane_items(
+    items: list[MembraneItem], names: list[str] | None = None
+) -> MMultiset:
     """
     the environment needs a list of MembraneContents
     but the membrane and rule just use the names as identifiers.
@@ -296,7 +298,7 @@ def get_multiset_of_item_names_from_membrane_items(items: List[MembraneItem], na
         for mi in items:
             names.add(mi.name)
         return names
-    elif isinstance(names, List):
+    elif isinstance(names, list):
         # we are appending to an existing list
         # convert the existing list into a set.
         # process the list.
@@ -417,7 +419,7 @@ class SimulationFactory:
         fname = CONFIG_DIR / "sim3_items.json"
         all_items = load_membrane_items_from_file(fname)
 
-        alphabet = ["a", "b", "c", "w"]  # noqa: F841
+        alphabet = ["a", "b", "c", "w"]
         ruleset = get_ruleset_1(alphabet)
         root = get_membrane_tree1(alphabet)
 

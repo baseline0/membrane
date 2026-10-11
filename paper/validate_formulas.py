@@ -220,7 +220,7 @@ def main(strict: bool = False) -> bool:
 
     # Validate formula references
     print("✓ Validating formula references...")
-    success, errors = validate_formulas(references, formulas_dict)
+    _success, errors = validate_formulas(references, formulas_dict)
 
     if errors:
         print("\n❌ Validation failed:\n")

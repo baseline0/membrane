@@ -62,7 +62,7 @@ class TestFunctionIdValidation:
 
     def test_function_2_rejected(self):
         """F2 was removed from CEC2017."""
-        with pytest.raises(ValidationError, match="F2.* removed"):
+        with pytest.raises(ValidationError, match=r"F2.* removed"):
             validate_function_id(2)
 
     def test_out_of_range_rejected(self):

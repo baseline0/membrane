@@ -21,7 +21,7 @@ class MMultiset(Multiset):
         tokens = s.split(" ")
 
         for t in tokens:
-            if t in d.keys():
+            if t in d:
                 d[t] += 1
             else:
                 d[t] = 1
@@ -67,7 +67,7 @@ def json_serialize(m: Multiset) -> dict:
     tokens = s.split(" ")
 
     for t in tokens:
-        if t in d.keys():
+        if t in d:
             d[t] += 1
         else:
             d[t] = 1

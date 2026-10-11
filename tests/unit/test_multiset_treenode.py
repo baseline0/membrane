@@ -66,7 +66,7 @@ class TestMembraneTree(unittest.TestCase):
         print(udo)
 
         for pre, fill, node in RenderTree(udo):
-            print("%s%s" % (pre, node.name))
+            print(f"{pre}{node.name}")
 
         DotExporter(udo).to_picture("./udo.png")
 

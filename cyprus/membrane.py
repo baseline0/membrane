@@ -1,5 +1,3 @@
-from typing import List
-
 from cyprus.base import get_base, log_info
 from cyprus.environment import Environment
 
@@ -7,7 +5,7 @@ base = get_base()
 
 
 class Membrane(Environment):
-    def __init__(self, name=None, parent=None, contents: List = ..., membranes: List = ..., rules: List = ...) -> None:
+    def __init__(self, name=None, parent=None, contents: list = ..., membranes: list = ..., rules: list = ...) -> None:
         super().__init__(name, parent, contents, membranes, rules)
 
     def dissolve(self):

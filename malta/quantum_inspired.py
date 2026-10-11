@@ -14,8 +14,8 @@ Example: Rosenbrock function minimization
 """
 
 import math
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, Optional
 
 from malta.quantum_gates import MeasurementGate, QuantumState
 
@@ -44,7 +44,7 @@ class QuantumCompartment:
     compartment_id: int
     quantum_state: QuantumState
     candidates: list[Candidate]
-    best_candidate: Optional[Candidate] = None
+    best_candidate: Candidate | None = None
 
     def initialize_superposition(self, n_dims: int) -> None:
         """Create equal superposition over all basis states.

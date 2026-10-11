@@ -227,10 +227,7 @@ class EnhancedQuantumInspiredAlgorithm:
 
             # Phase 3: Compute diversity
             basis_states = [c.basis_state for c in all_candidates if c.basis_state]
-            if basis_states:
-                diversity = DiversityMetrics.hamming_diversity(basis_states)
-            else:
-                diversity = 0.0
+            diversity = DiversityMetrics.hamming_diversity(basis_states) if basis_states else 0.0
 
             # Phase 4: Update adaptation
             self.adaptation_controller.update(

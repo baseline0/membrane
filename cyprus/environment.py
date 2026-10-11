@@ -1,5 +1,4 @@
 from random import shuffle
-from typing import List
 
 from cyprus.base import get_base, log_info
 from cyprus.dissolve_particle import DissolveParticle
@@ -9,12 +8,12 @@ from cyprus.particle import Particle
 base = get_base()
 
 
-class Environment(object):
+class Environment:
     """
     An environment - a container object for rules and particles
     """
 
-    def __init__(self, name=None, parent=None, contents: List = [], membranes: List = [], rules: List = []) -> None:
+    def __init__(self, name=None, parent=None, contents: list = [], membranes: list = [], rules: list = []) -> None:
 
         self.name = name
         self.parent = parent
@@ -61,12 +60,9 @@ class Environment(object):
         pass  # environments cannot dissolve
 
     def rule_is_applicable(self, rule):
-        counts = set([(s.__str__(), rule.requirements.count(s)) for s in rule.requirements])
-        s_counts = dict([(s.__str__(), self.contents.count(s)) for s in self.contents])
-        for s, c in counts:
-            if s_counts.get(s, None) == None or s_counts[s] < c:
-                return False
-        return True
+        counts = {(s.__str__(), rule.requirements.count(s)) for s in rule.requirements}
+        s_counts = {s.__str__(): self.contents.count(s) for s in self.contents}
+        return all(not (s_counts.get(s) is None or s_counts[s] < c) for s, c in counts)
 
     def apply_rule(self, rule):
 
@@ -107,7 +103,7 @@ class Environment(object):
 
                 if s.target:
                     if not base.membrane_table.get(s.target, None):
-                        msg = "ERROR: No containers defined with name '%s'" % s.target
+                        msg = f"ERROR: No containers defined with name '{s.target}'"
                         raise Exception(msg)
                     base.membrane_table[s.target].dissolve()
                 else:
@@ -118,7 +114,7 @@ class Environment(object):
                 self.contents.remove(s)
                 if s.target:
                     if not base.membrane_table.get(s.target, None):
-                        msg = "ERROR: No containers defined with name '%s'" % s.target
+                        msg = f"ERROR: No containers defined with name '{s.target}'"
                         raise Exception(msg)
                     base.membrane_table[s.target].contents.append(Particle(s.payload))
                 elif self.parent:

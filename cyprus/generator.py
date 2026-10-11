@@ -3,7 +3,7 @@
 import json
 from io import FileIO
 from string import ascii_lowercase
-from typing import List, TextIO
+from typing import TextIO
 
 # concept
 # have the generator write json files.
@@ -134,7 +134,7 @@ class EnvironmentConcept:
     def add_membrane(self, m: MembraneConcept) -> None:
         self.membranes.append(m)
 
-    def add_contents(self, atoms: List[AtomConcept]) -> None:
+    def add_contents(self, atoms: list[AtomConcept]) -> None:
         self.contents = atoms
 
     def to_json(self) -> dict:

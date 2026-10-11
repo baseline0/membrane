@@ -106,12 +106,12 @@ d = sp.Symbol("d", integer=True, positive=True)
 # Computational complexity
 t = sp.Symbol("t", integer=True, positive=True)  # Time (number of steps)
 
-# The Multiplication Example: 3 × 2 = 6
+# The Multiplication Example: 3 x 2 = 6
 # Input: three 'a' objects
 initial_a = sp.Integer(3)
 
 # Rule 1: a → b b (each 'a' becomes two 'b's)
-# After step 1: 3 × 2 = 6 'b' objects
+# After step 1: 3 x 2 = 6 'b' objects
 rule1_output = initial_a * 2
 
 # Rule 2: b → c (each 'b' becomes one 'c' and exits membrane)
@@ -151,7 +151,7 @@ FORMULAS = {
         assumptions={"n": {"positive": True, "integer": True}},
         source_line=98,
     ),
-    # === 4. The Multiplication Example (3 × 2) ===
+    # === 4. The Multiplication Example (3 x 2) ===
     "mult_input": Formula(
         id="mult_input",
         name="mult_input",

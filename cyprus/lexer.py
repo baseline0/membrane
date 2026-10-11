@@ -37,6 +37,6 @@ def tokenize(str):
 
 
 def tokenize_file(fname: str):
-    with open(fname, "r") as fp:
+    with open(fname) as fp:
         res = tokenize(fp.read())
     return res

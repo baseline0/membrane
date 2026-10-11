@@ -16,7 +16,6 @@ import ast
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Set
 
 
 @dataclass
@@ -38,7 +37,7 @@ RULES = [
 ]
 
 
-def find_imports(file_path: Path) -> Set[str]:
+def find_imports(file_path: Path) -> set[str]:
     """Extract all imports from a Python file."""
     try:
         tree = ast.parse(file_path.read_text())
@@ -67,7 +66,7 @@ def get_rule_for_file(file_path: Path) -> Rule | None:
 
 def check_file(file_path: Path) -> list[str]:
     """Validate imports in a single file. Return list of violations."""
-    if not file_path.suffix == ".py" or file_path.name.startswith("__"):
+    if file_path.suffix != ".py" or file_path.name.startswith("__"):
         return []
 
     rule = get_rule_for_file(file_path)

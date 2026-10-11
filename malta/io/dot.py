@@ -1,6 +1,6 @@
 import json
 import sys
-from typing import List, TextIO
+from typing import TextIO
 
 from malta.core.util import NameGenerator
 from malta.io.dot_colour import get_rand_colour
@@ -21,7 +21,7 @@ class ContentItem:
     # in dot/graphviz format,
     #   abc [color = red]
 
-    def __init__(self, name: str = None, colour: str = None) -> None:
+    def __init__(self, name: str | None = None, colour: str | None = None) -> None:
         # colour is string but we expect it to be :
         #   str(colour:DotColour.name)
 
@@ -62,7 +62,7 @@ def write_cluster(fp: TextIO, c: Base):
         fp.write(c.get_label())
         fp.writelines(c.end())
 
-    except IOError:
+    except OSError:
         sys.exit()
 
 
@@ -179,7 +179,7 @@ class DigraphGenerator:
     def save_json(self, fname: str) -> None:
         try:
             json.load(fname)
-        except IOError:
+        except OSError:
             print(f"unable to load digraph from: {fname}")
 
         self._reset()
@@ -191,7 +191,7 @@ class DigraphGenerator:
         try:
             data = json.load(fname)
             self.digraph = data
-        except IOError:
+        except OSError:
             print(f"unable to load digraph from: {fname}")
 
     # def save_png(self, fname: str) -> None:
@@ -234,7 +234,7 @@ class ClusterFactory:
         return c
 
     @classmethod
-    def get_cluster_2(cls) -> List[Cluster]:
+    def get_cluster_2(cls) -> list[Cluster]:
         c = Cluster(name="top")
         c.contents = ["a", "b", "c"]
 

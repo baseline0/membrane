@@ -1,4 +1,4 @@
-class Particle(object):
+class Particle:
     def __init__(self, name: str, charge: str = ""):
         self.name = name
         self.charge = charge

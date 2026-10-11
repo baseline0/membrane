@@ -12,7 +12,6 @@ import json
 import urllib.error
 import urllib.request
 from pathlib import Path
-from typing import Optional
 
 PAPERS = [
     {
@@ -91,7 +90,7 @@ PAPERS = [
 ]
 
 
-def try_arxiv(arxiv_id: str) -> Optional[str]:
+def try_arxiv(arxiv_id: str) -> str | None:
     """Try to fetch PDF from arXiv."""
     if not arxiv_id or arxiv_id.endswith("xxxxx"):
         return None
@@ -107,7 +106,7 @@ def try_arxiv(arxiv_id: str) -> Optional[str]:
         return None
 
 
-def try_doi(doi: str) -> Optional[str]:
+def try_doi(doi: str) -> str | None:
     """Try to fetch PDF via DOI resolver (sci-hub fallback)."""
     if not doi or doi.endswith("xxx"):
         return None
@@ -136,7 +135,7 @@ def try_doi(doi: str) -> Optional[str]:
         return None
 
 
-def try_semantic_scholar(title: str, authors: str) -> Optional[str]:
+def try_semantic_scholar(title: str, authors: str) -> str | None:
     """Query Semantic Scholar API for paper metadata."""
     try:
         print(f"  Trying Semantic Scholar: {title[:40]}...", end=" ", flush=True)

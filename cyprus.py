@@ -26,7 +26,7 @@ def usage():
 
 def version():
     cyprus_version = 20220113
-    print("cyprus version %s" % cyprus_version)
+    print(f"cyprus version {cyprus_version}")
     print("Jacob Peck (suspended-chord)")
     print("   http://github.com/gatesphere/cyprus")
     print("fork for python3:")
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     try:
         opts, args = getopt.getopt(args, "pVvh")
-    except:
+    except getopt.GetoptError:
         usage()
         sys.exit()
 

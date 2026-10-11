@@ -13,7 +13,7 @@ def flatten(x):
     return result
 
 
-class Grouping(object):
+class Grouping:
     def __init__(self, kids):
         try:
             self.kids = list(flatten([kids]))
@@ -54,15 +54,22 @@ class StatementGroup(Grouping):
 # number         := [0-9], {[0-9]} | {[0-9]}, ".", [0-9], {[0-9]}
 # symbol         := atom | "!", name, <"!!", name> | "$", [name]
 
-tokval = lambda tok: tok.value
-toktype = lambda type: lambda tok: tok.type == type
-make_number = lambda str: float(str)
+
+def tokval(tok):
+    return tok.value
+
+
+def toktype(kind):
+    return lambda tok: tok.type == kind
+
+
+def make_number(s):
+    return float(s)
 
 
 def parse(tokens):
     ## building blocks
     kw_priority = some(toktype("kw_priority"))
-    kw_probability = some(toktype("kw_probability"))
     kw_reaction = some(toktype("kw_reaction"))
     kw_exists = some(toktype("kw_exists"))
     kw_as = some(toktype("kw_as"))
