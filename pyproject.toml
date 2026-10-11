@@ -37,10 +37,17 @@ dev = [
     "pandas>=2.2.0",
     "plotly>=7.0.0",
     "pre-commit>=4.0.1",
+    "pyright>=1.1.0",
     "pytest>=8.3.4",
     "ruff==0.16.8",
     "scipy>=1.13.0",
 ]
+
+[tool.pyright]
+# Fleet standard: standard mode, no rule overrides. The per-file ratchet (pyright-baseline.json) decides pass or fail.
+typeCheckingMode = "standard"
+pythonVersion = "3.13"
+include = ["malta", "cyprus", "benchmarks", "scripts", "paper", "tests"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"

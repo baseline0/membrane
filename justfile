@@ -124,3 +124,7 @@ artifacts-list:
 # Generate the interactive demo visualizations into generated/visualization/ (gitignored)
 @demo-visualizations:
     uv run python -m benchmarks.visualization.demo
+
+# Pyright ratchet: fails when a file gains errors (scripts in fleet-base; mode from pyproject.toml).
+check-types:
+    uv run python ../fleet-base/scripts/pyright_ratchet.py check
