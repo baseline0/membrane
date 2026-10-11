@@ -29,16 +29,28 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)-8s | %(message)s",
-    handlers=[
-        logging.FileHandler("reference/lit_review/.fetch.log"),
-        logging.StreamHandler(sys.stdout),
-    ],
+import typer
+
+LOG_PATH = Path("reference/lit_review/.fetch.log")
+LOG_FORMAT = "%(asctime)s | %(levelname)-8s | %(message)s"
+
+app = typer.Typer(
+    help="Fetch papers with rate limiting and caching",
+    add_completion=False,
 )
 logger = logging.getLogger(__name__)
+
+
+def configure_logging(log_path: Path = LOG_PATH) -> None:
+    """Send INFO logs to the fetch log file and to stdout."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format=LOG_FORMAT,
+        handlers=[
+            logging.FileHandler(log_path),
+            logging.StreamHandler(sys.stdout),
+        ],
+    )
 
 
 @dataclass
@@ -415,37 +427,42 @@ def load_paper_sources() -> List[PaperSource]:
     ]
 
 
-def main():
-    """Main entry point."""
-    import argparse
+def papers_to_fetch(papers: List[PaperSource], manifest: Dict[str, FetchResult], retry: bool) -> List[PaperSource]:
+    """Select papers to attempt. Successful cached papers are skipped unless retry is set."""
+    if retry:
+        return list(papers)
+    return [p for p in papers if not (p.name in manifest and manifest[p.name].success)]
 
-    parser = argparse.ArgumentParser(description="Fetch papers with rate limiting and caching")
-    parser.add_argument("--retry", action="store_true", help="Retry failed fetches")
-    parser.add_argument("--clean", action="store_true", help="Clean cache and restart")
-    args = parser.parse_args()
 
-    logger.info("🚀 Paper Fetcher v1.0 (rate-limited, cached, reproducible)")
+def clear_manifest(fetcher: PaperFetcher) -> None:
+    """Forget all fetch history and persist the empty manifest."""
+    logger.warning("Cleaning cache and manifest...")
+    fetcher.manifest = {}
+    fetcher._save_manifest()
 
-    fetcher = PaperFetcher()
 
-    if args.clean:
-        logger.warning("Cleaning cache and manifest...")
-        fetcher.manifest = {}
-        fetcher._save_manifest()
+def run_session(fetcher: PaperFetcher, papers: List[PaperSource], retry: bool, clean: bool) -> None:
+    """Fetch the selected papers, then write the library lookup and status report."""
+    if clean:
+        clear_manifest(fetcher)
 
-    papers = load_paper_sources()
-
-    for paper in papers:
-        # Skip already-fetched papers unless --retry
-        if not args.retry and paper.name in fetcher.manifest:
-            if fetcher.manifest[paper.name].success:
-                continue
-
+    for paper in papers_to_fetch(papers, fetcher.manifest, retry):
         fetcher.fetch_paper(paper)
 
     fetcher.generate_library_lookup(papers)
     fetcher.generate_status_report()
 
 
+@app.command()
+def main(
+    retry: bool = typer.Option(False, "--retry", help="Retry failed fetches"),
+    clean: bool = typer.Option(False, "--clean", help="Clean cache and restart"),
+) -> None:
+    """Fetch papers with rate limiting and caching."""
+    configure_logging()
+    logger.info("🚀 Paper Fetcher v1.0 (rate-limited, cached, reproducible)")
+    run_session(PaperFetcher(), load_paper_sources(), retry=retry, clean=clean)
+
+
 if __name__ == "__main__":
-    main()
+    app()
