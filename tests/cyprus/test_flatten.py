@@ -7,7 +7,11 @@ sys.path.insert(0, parent_dir_path)
 
 import unittest
 
+import pytest
+
 from cyprus.parser import flatten
+
+pytestmark = pytest.mark.unit
 
 
 class TestFlatten(unittest.TestCase):

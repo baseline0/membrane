@@ -1,17 +1,19 @@
-import os
-import sys
 import unittest
 
-from cyprus.program import tokenize_file
+import pytest
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
-sys.path.insert(0, parent_dir_path)
+from cyprus.program import tokenize_file
+from malta.constants import REPO_ROOT
+
+pytestmark = pytest.mark.unit
+
+# Resolve fixtures from REPO_ROOT, not the CWD, so the test passes from any directory.
+EXAMPLE1 = REPO_ROOT / "tests" / "examples" / "example1.cyp"
 
 
 class LexerTest(unittest.TestCase):
     def test_unicode(self):
-        ts = tokenize_file("./examples/example1.cyp")
+        ts = tokenize_file(str(EXAMPLE1))
         print(ts[0])
         self.assertEqual(str(ts[0]), "3,1-3,1: env_open '['")
 

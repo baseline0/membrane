@@ -1,25 +1,22 @@
-import os
-import sys
 import unittest
 
-from funcparserlib.parser import NoParseError
+import pytest
 
 from cyprus.program import get_pretty_tree, parse, tokenize_file
+from malta.constants import REPO_ROOT
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
-sys.path.insert(0, parent_dir_path)
+pytestmark = pytest.mark.unit
+
+# Resolve fixtures from REPO_ROOT, not the CWD, so the test passes from any directory.
+EXAMPLE1 = REPO_ROOT / "tests" / "examples" / "example1.cyp"
 
 
 class ParseTest(unittest.TestCase):
     def test1(self):
 
-        try:
-            tree = parse(tokenize_file("./examples/example1.cyp"))
-            print(get_pretty_tree(tree))
-        except NoParseError as e:
-            print(e)
-
+        # A NoParseError must fail the test; swallowing it left `tree` unbound.
+        tree = parse(tokenize_file(str(EXAMPLE1)))
+        print(get_pretty_tree(tree))
         self.assertIsNotNone(tree)
 
 

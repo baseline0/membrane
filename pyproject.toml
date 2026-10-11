@@ -56,9 +56,9 @@ include = ["malta", "cyprus", "benchmarks", "scripts", "paper", "tests"]
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = ["-ra", "-q"]
-testpaths = ["tests/unit", "tests/integration", "tests/e2e"]
+testpaths = ["tests/unit", "tests/integration", "tests/e2e", "tests/cyprus"]
 pythonpath = ["."]
-norecursedirs = ["tests/cyprus"]
+markers = ["unit: fast, isolated unit tests"]
 
 [tool.ruff]
 line-length = 120
@@ -79,8 +79,8 @@ ignore = ["E501", "SIM105", "N818", "RUF001", "RUF002", "RUF022"]
 "cyprus.py" = ["E402"]  # sys.path bootstrap before imports (legacy direct-run script)
 "cyprus/program.py" = ["E402"]  # sys.path bootstrap before imports; base = get_base() sits between import groups
 "demo.py" = ["E402"]  # sys.path bootstrap before imports (legacy direct-run script)
-"tests/cyprus/test_flatten.py" = ["E402"]  # sys.path bootstrap before imports (legacy cyprus test, run directly)
-"tests/cyprus/test_particle.py" = ["E402"]  # sys.path bootstrap before imports (legacy cyprus test, run directly)
+"tests/cyprus/test_flatten.py" = ["E402"]  # sys.path bootstrap before imports (legacy cyprus test)
+"tests/cyprus/test_particle.py" = ["E402"]  # sys.path bootstrap before imports (legacy cyprus test)
 # Public API name kept: FormatConverter.jsonToCyprus is a stub with no in-repo callers; renaming breaks the contract.
 "cyprus/format_converter.py" = ["N802"]  # public method name kept (stub API)
 # str-mixin Enum kept: str(member) returns 'DotColour.<name>' (see dot.py colour convention); StrEnum would return the bare value.
