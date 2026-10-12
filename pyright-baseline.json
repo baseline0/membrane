@@ -23,7 +23,6 @@
   "paper/validate_formulas.py": 3,
   "scripts/dev/scan_related_projects.py": 2,
   "scripts/display_artifacts.py": 1,
-  "scripts/fetch_papers.py": 4,
   "tests/cyprus/test_parser.py": 1,
   "tests/unit/test_benchmarks_base.py": 1,
   "tests/unit/test_benchmarks_validators.py": 2,

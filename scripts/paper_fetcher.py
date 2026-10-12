@@ -1,40 +1,57 @@
 #!/usr/bin/env python3
 """
-Production-grade paper fetcher: respects rate limits, caches locally, maintains audit trail.
+Fetch membrane's curated paper list into reference/lit_review/.
 
-Features:
-- Multiple source attempts (arXiv, DOI, MDPI, IEEE, institutional repos)
-- Rate limiting (1-2s between requests per domain)
-- Local caching with content hash verification
-- Manifest tracking (what was fetched, from where, when)
-- Resumable (can re-run safely, skips already-fetched papers)
-- Metadata extraction for lit review integration
+Downloading, per-domain pacing, PDF validation, the manifest and the audit log come from tool_lit_review.fetch.
+This script keeps what is membrane's: the curated list, the University of Michigan library report, the CLI, and
+the .fetch.log file.
+
+Selection:
+    default    papers with no manifest entry yet (successful and failed papers are skipped)
+    --retry    also papers whose manifest status is not success (failed)
+    --clean    clear the manifest first, then select every paper
+
+Papers that need UofM library access are not requested. They are recorded as failed and listed in LIBRARY_LOOKUP.txt.
+
+Output (reference/lit_review/):
+    pdf/<paper_id>.pdf        saved PDFs
+    .manifest.json            one entry per paper id: paper_id, status (saved | cached | failed), source, path,
+                              sha256, url, error, timestamp. Read by scripts/paper_status.py.
+    fetch_audit.jsonl         every request and its outcome
+    .fetch.log                run log
+    LIBRARY_LOOKUP.txt        papers needing UofM library access
+
+A manifest in an older format stops the run: move it aside and re-run.
 
 Usage:
-    python scripts/paper_fetcher.py              # Fetch all papers
-    python scripts/paper_fetcher.py --retry      # Retry failed fetches
-    python scripts/paper_fetcher.py --clean      # Clean cache and restart
+    python scripts/paper_fetcher.py              # Fetch new papers
+    python scripts/paper_fetcher.py --retry      # Also re-attempt failed papers
+    python scripts/paper_fetcher.py --clean      # Clear the manifest and start again
 """
 
-import hashlib
-import json
 import logging
 import sys
-import time
-import urllib.error
-import urllib.parse
-import urllib.request
-from dataclasses import asdict, dataclass
-from datetime import datetime
+from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 
 import typer
+from tool_lit_review.fetch import FetchResult, PaperFetcher, PaperRecord, RateLimiter, pdf_path
 
-LOG_PATH = Path("reference/lit_review/.fetch.log")
+OUTPUT_DIR = Path("reference/lit_review")
+MANIFEST_PATH = OUTPUT_DIR / ".manifest.json"
+LOG_PATH = OUTPUT_DIR / ".fetch.log"
 LOG_FORMAT = "%(asctime)s | %(levelname)-8s | %(message)s"
+LIBRARY_LOOKUP_NAME = "LIBRARY_LOOKUP.txt"
+REQUEST_TIMEOUT_SECONDS = 10.0
+MIN_DELAY_SECONDS = 2.0
+SUCCESS_STATUSES = frozenset({"saved", "cached"})
 
 app = typer.Typer(
-    help="Fetch papers with rate limiting and caching",
+    help=(
+        "Fetch the curated membrane paper list with rate limiting and caching. "
+        "Output: reference/lit_review/pdf/<paper_id>.pdf and .manifest.json (status: saved, cached, failed)."
+    ),
     add_completion=False,
 )
 logger = logging.getLogger(__name__)
@@ -42,6 +59,7 @@ logger = logging.getLogger(__name__)
 
 def configure_logging(log_path: Path = LOG_PATH) -> None:
     """Send INFO logs to the fetch log file and to stdout."""
+    log_path.parent.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(
         level=logging.INFO,
         format=LOG_FORMAT,
@@ -52,415 +70,264 @@ def configure_logging(log_path: Path = LOG_PATH) -> None:
     )
 
 
-@dataclass
-class PaperSource:
-    """Paper metadata from curator list."""
+@dataclass(frozen=True)
+class CuratedPaper(PaperRecord):
+    """A PaperRecord with membrane-only fields: authors, year, and the UofM library flags."""
 
-    name: str
-    title: str
-    authors: str
-    year: int
-    sources: dict[str, str]  # {source_type: url/id}
-    doi: str | None = None
-    is_open_access: bool = False  # True if genuinely open-access (MDPI, IEEE Access, arXiv)
+    authors: str = ""
+    year: int = 0
     requires_library: bool = False  # True if needs UofM library access
+    is_open_access: bool = False  # True if genuinely open access (MDPI, IEEE Access)
+
+    @property
+    def needs_library(self) -> bool:
+        """Paywalled: not open access, and marked as needing UofM library access."""
+        return self.requires_library and not self.is_open_access
 
 
-@dataclass
-class FetchResult:
-    """Result of attempting to fetch a paper."""
+def load_paper_sources() -> list[CuratedPaper]:
+    """Membrane's curated paper list, as PaperRecord values (CuratedPaper subclasses them).
 
-    paper_name: str
-    title: str
-    success: bool
-    source: str | None  # Which source succeeded
-    filepath: str | None  # Where saved locally
-    content_hash: str | None  # SHA256 of PDF
-    timestamp: str  # ISO 8601
-    url: str | None  # URL fetched from
-    error: str | None  # Error message if failed
-    retry_count: int = 0
-
-    def to_dict(self) -> dict:
-        """Convert to JSON-serializable dict."""
-        return asdict(self)
-
-
-class RateLimiter:
-    """Simple rate limiter per domain."""
-
-    def __init__(self, min_delay: float = 2.0):
-        self.min_delay = min_delay
-        self.last_fetch = {}  # {domain: timestamp}
-
-    def wait(self, domain: str):
-        """Wait if necessary before fetching from domain."""
-        if domain in self.last_fetch:
-            elapsed = time.time() - self.last_fetch[domain]
-            if elapsed < self.min_delay:
-                wait_time = self.min_delay - elapsed
-                logger.debug(f"Rate limit: waiting {wait_time:.1f}s for {domain}")
-                time.sleep(wait_time)
-        self.last_fetch[domain] = time.time()
-
-    @staticmethod
-    def extract_domain(url: str) -> str:
-        """Extract domain from URL for rate limiting."""
-        parsed = urllib.parse.urlparse(url)
-        return parsed.netloc
-
-
-class PaperFetcher:
-    """Orchestrates paper fetching with caching and audit trail."""
-
-    def __init__(
-        self,
-        output_dir: Path = Path("reference/lit_review"),
-        manifest_path: Path = Path("reference/lit_review/.manifest.json"),
-    ):
-        self.output_dir = Path(output_dir)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-
-        self.manifest_path = manifest_path
-        self.manifest: dict[str, FetchResult] = self._load_manifest()
-        self.rate_limiter = RateLimiter(min_delay=2.0)
-
-    def _load_manifest(self) -> dict[str, FetchResult]:
-        """Load fetch history from manifest."""
-        if not self.manifest_path.exists():
-            logger.info("No manifest found, starting fresh")
-            return {}
-
-        try:
-            with open(self.manifest_path) as f:
-                data = json.load(f)
-            logger.info(f"Loaded manifest: {len(data)} papers tracked")
-            return {name: FetchResult(**result) for name, result in data.items()}
-        except Exception as e:
-            logger.error(f"Failed to load manifest: {e}, starting fresh")
-            return {}
-
-    def _save_manifest(self):
-        """Persist manifest to disk."""
-        data = {name: result.to_dict() for name, result in self.manifest.items()}
-        with open(self.manifest_path, "w") as f:
-            json.dump(data, f, indent=2)
-        logger.debug(f"Saved manifest: {len(self.manifest)} papers")
-
-    def _compute_hash(self, filepath: Path) -> str:
-        """Compute SHA256 hash of file."""
-        sha256 = hashlib.sha256()
-        with open(filepath, "rb") as f:
-            for chunk in iter(lambda: f.read(8192), b""):
-                sha256.update(chunk)
-        return sha256.hexdigest()
-
-    def try_fetch(self, url: str, domain: str, timeout: int = 10) -> bytes | None:
-        """Attempt to fetch URL with rate limiting and retry logic."""
-        self.rate_limiter.wait(domain)
-
-        for attempt in range(3):
-            try:
-                req = urllib.request.Request(url)
-                req.add_header("User-Agent", "Mozilla/5.0 (compatible; PaperFetcher/1.0)")
-                req.add_header("Accept", "application/pdf")
-
-                logger.debug(f"Attempt {attempt + 1}/3: GET {url}")
-                with urllib.request.urlopen(req, timeout=timeout) as response:
-                    content = response.read()
-                    logger.info(f"✅ Fetched {len(content)} bytes from {domain}")
-                    return content
-
-            except (urllib.error.URLError, urllib.error.HTTPError) as e:
-                wait_time = 2**attempt  # Exponential backoff
-                logger.debug(f"Attempt {attempt + 1} failed: {e}. Retrying in {wait_time}s...")
-                if attempt < 2:
-                    time.sleep(wait_time)
-            except Exception as e:
-                logger.debug(f"Unexpected error: {e}")
-
-        return None
-
-    def fetch_paper(self, paper: PaperSource) -> FetchResult:
-        """Attempt to fetch a single paper from multiple sources."""
-        # Check cache first
-        if paper.name in self.manifest:
-            cached = self.manifest[paper.name]
-            if cached.success:
-                logger.info(f"⏭️  {paper.name} (cached from {cached.source})")
-                return cached
-
-        logger.info(f"\n📄 {paper.title}")
-        logger.info(f"   Authors: {paper.authors} ({paper.year})")
-
-        # Skip papers that require library access
-        if paper.requires_library and not paper.is_open_access:
-            msg = "   [Library access required — see lookup list]"
-            print(msg)
-            result = FetchResult(
-                paper_name=paper.name,
-                title=paper.title,
-                success=False,
-                source=None,
-                filepath=None,
-                content_hash=None,
-                timestamp=datetime.now().isoformat(),
-                url=None,
-                error=f"Requires UofM library access (DOI: {paper.doi})",
-            )
-            self.manifest[paper.name] = result
-            self._save_manifest()
-            return result
-
-        sources_to_try = [
-            ("arXiv", paper.sources.get("arxiv")),
-            ("MDPI", paper.sources.get("mdpi")),
-            ("IEEE", paper.sources.get("ieee")),
-            ("DOI", paper.sources.get("doi")),
-            ("scholar", paper.sources.get("scholar")),
-        ]
-
-        for source_name, source_url in sources_to_try:
-            if not source_url or source_url.endswith("xxx"):
-                continue
-
-            print(f"   Trying {source_name}...", end=" ", flush=True)
-            domain = RateLimiter.extract_domain(source_url)
-            content = self.try_fetch(source_url, domain)
-
-            if content:
-                filepath = self.output_dir / f"{paper.name}.pdf"
-                with open(filepath, "wb") as f:
-                    f.write(content)
-
-                content_hash = self._compute_hash(filepath)
-                result = FetchResult(
-                    paper_name=paper.name,
-                    title=paper.title,
-                    success=True,
-                    source=source_name,
-                    filepath=str(filepath),
-                    content_hash=content_hash,
-                    timestamp=datetime.now().isoformat(),
-                    url=source_url,
-                    error=None,
-                )
-                self.manifest[paper.name] = result
-                self._save_manifest()
-                logger.info(f"✅ {source_name} | {len(content)} bytes | hash: {content_hash[:8]}")
-                return result
-
-            print("❌")
-
-        # All sources failed
-        result = FetchResult(
-            paper_name=paper.name,
-            title=paper.title,
-            success=False,
-            source=None,
-            filepath=None,
-            content_hash=None,
-            timestamp=datetime.now().isoformat(),
-            url=None,
-            error="All sources exhausted",
-        )
-        self.manifest[paper.name] = result
-        self._save_manifest()
-        logger.warning(f"⚠️  {paper.name} — could not fetch from any source")
-        return result
-
-    def generate_library_lookup(self, papers: list[PaperSource]):
-        """Generate file for papers requiring UofM library access."""
-        library_papers = [p for p in papers if p.requires_library and not p.is_open_access]
-
-        if not library_papers:
-            return
-
-        lookup_path = self.output_dir / "LIBRARY_LOOKUP.txt"
-        with open(lookup_path, "w") as f:
-            f.write("=" * 80 + "\n")
-            f.write("PAPERS REQUIRING UOFM LIBRARY ACCESS\n")
-            f.write("=" * 80 + "\n\n")
-            f.write("These papers are paywalled. Access via:\n")
-            f.write("  1. UofM Libraries website (alumni login)\n")
-            f.write("  2. On-campus access to full databases\n")
-            f.write("  3. Interlibrary loan (ILL) request\n\n")
-
-            for i, paper in enumerate(library_papers, 1):
-                f.write(f"{i}. {paper.title}\n")
-                f.write(f"   Authors: {paper.authors} ({paper.year})\n")
-                if paper.doi:
-                    f.write(f"   DOI: {paper.doi}\n")
-                f.write("   → Search via UofM Libraries\n")
-                f.write("\n")
-
-        logger.info(f"📋 Library lookup: {lookup_path}")
-
-    def generate_status_report(self):
-        """Generate summary of fetch status."""
-        total = len(self.manifest)
-        succeeded = sum(1 for r in self.manifest.values() if r.success)
-        failed = total - succeeded
-
-        logger.info("\n" + "=" * 80)
-        logger.info("📊 FETCH SUMMARY")
-        logger.info(f"   Total papers: {total}")
-        logger.info(f"   Fetched: {succeeded}")
-        logger.info(f"   Failed: {failed}")
-        logger.info(f"   Success rate: {100 * succeeded / total:.0f}%" if total > 0 else "N/A")
-
-        if failed > 0:
-            logger.info("\n⚠️  Failed papers:")
-            for name, result in self.manifest.items():
-                if not result.success:
-                    logger.info(f"   - {name}: {result.error}")
-
-        logger.info(f"\n📁 Manifest: {self.manifest_path}")
-        logger.info(f"📁 Papers: {self.output_dir}/")
-        logger.info("=" * 80)
-
-
-def load_paper_sources() -> list[PaperSource]:
-    """Load curated paper list with access status."""
+    Placeholder DOIs ('...xxx') are kept as written, so the library report still shows them. The old journal and
+    search URLs are not kept: tool_lit_review fetches arXiv, DOI and Semantic Scholar only, and those URLs were
+    landing or search pages that never returned a PDF.
+    """
     return [
-        PaperSource(
-            name="Zhang_QuantumInspiredMembrane_2023",
+        CuratedPaper(
+            paper_id="Zhang_QuantumInspiredMembrane_2023",
             title="Quantum-Inspired Membrane Computing: A Survey and Perspective",
             authors="Gexiang Zhang, Marian Gheorghe, Chao Wu",
             year=2023,
             doi="10.3390/e25020xxx",
-            is_open_access=True,  # MDPI Entropy is open-access
-            sources={
-                "mdpi": "https://www.mdpi.com/journal/entropy",
-            },
+            is_open_access=True,  # MDPI Entropy is open access
         ),
-        PaperSource(
-            name="Zhang_RealCodedQuantum_2021",
+        CuratedPaper(
+            paper_id="Zhang_RealCodedQuantum_2021",
             title="Real-Coded Quantum-Inspired Evolutionary Membrane Algorithm for Numerical Optimization",
             authors="Gexiang Zhang, Haina Rong, Ferrante Neri, Mario J. Pérez-Jiménez",
             year=2021,
             doi="10.1016/j.ins.2021.xxx",
             requires_library=True,  # Information Sciences (paywalled)
-            sources={},
         ),
-        PaperSource(
-            name="Diaz_SoftwareToolsMembraneComputing_2010",
+        CuratedPaper(
+            paper_id="Diaz_SoftwareToolsMembraneComputing_2010",
             title="Software Tools for Membrane Computing: P-Lingua and MeCoSim",
             authors="Diego Díaz-Pernil, Agustín Berciano, Fernando Peña-Cantillana, Miguel A. Gutiérrez-Naranjo",
             year=2010,
             doi="10.15837/ijccc.2010.2.xxx",
             requires_library=True,
-            sources={},
         ),
-        PaperSource(
-            name="Leporati_SimulatingQuantumCircuits_2005",
+        CuratedPaper(
+            paper_id="Leporati_SimulatingQuantumCircuits_2005",
             title="Simulating Quantum Circuits with P Systems with Active Membranes",
             authors="Alberto Leporati, Claudio Zandron, Ferruccio Ferretti, Giancarlo Mauri",
             year=2005,
             doi="10.1016/j.tcs.2004.xxx",
             requires_library=True,  # TCS (paywalled)
-            sources={},
         ),
-        PaperSource(
-            name="Xiao_QuantumInspiredMembrane_2022",
+        CuratedPaper(
+            paper_id="Xiao_QuantumInspiredMembrane_2022",
             title="A Quantum-Inspired Membrane Algorithm for Combinatorial Optimization Problems",
             authors="Jiao Xiao, Gexiang Zhang, Xiyu Liu",
             year=2022,
             doi="10.3390/math10010xxx",
-            is_open_access=True,  # MDPI Mathematics (open-access)
-            sources={
-                "mdpi": "https://www.mdpi.com/journal/mathematics",
-            },
+            is_open_access=True,  # MDPI Mathematics (open access)
         ),
-        PaperSource(
-            name="Paun_OpenProblemsMembraneComputing_2019",
+        CuratedPaper(
+            paper_id="Paun_OpenProblemsMembraneComputing_2019",
             title="Open Problems in Membrane Computing: A Retrospective and Future Outlook",
             authors="Gheorghe Păun, Linqiang Pan, Mario J. Pérez-Jiménez",
             year=2019,
             doi="10.1007/s41965-019-xxxxx",
             requires_library=True,  # Springer (likely paywalled)
-            sources={},
         ),
-        PaperSource(
-            name="Liu_NovelHybridQuantum_2021",
+        CuratedPaper(
+            paper_id="Liu_NovelHybridQuantum_2021",
             title="A Novel Hybrid Quantum-Inspired Membrane Algorithm for Global Numerical Optimization",
             authors="Xiangrong Liu, Gexiang Zhang, Thomas Back",
             year=2021,
             doi="10.1109/ACCESS.2021.xxxxx",
-            is_open_access=True,  # IEEE Access (open-access)
-            sources={
-                "ieee": "https://ieeexplore.ieee.org/document/xxxxx/",
-            },
+            is_open_access=True,  # IEEE Access (open access)
         ),
-        PaperSource(
-            name="Nishimura_QuantumPSystems_2022",
+        CuratedPaper(
+            paper_id="Nishimura_QuantumPSystems_2022",
             title="Quantum P Systems: Theoretical Framework and Computational Power",
             authors="Harumichi Nishimura, Jiang Zhao",
             year=2022,
             doi="10.1016/j.ijuc.2022.xxx",
-            requires_library=True,  # IJUC (check arXiv first)
-            sources={
-                "arxiv": "https://arxiv.org/search/?query=Nishimura+Zhao+Quantum+P+Systems",
-            },
+            requires_library=True,  # IJUC (check arXiv first; no arXiv id is recorded yet)
         ),
-        PaperSource(
-            name="Valencia_ParallelImplementation_2023",
+        CuratedPaper(
+            paper_id="Valencia_ParallelImplementation_2023",
             title="Parallel Implementation of Quantum-Inspired Membrane Algorithms on GPUs",
             authors="Luis Valencia-Cabrera, David Orellana-Martín, Mario J. Pérez-Jiménez",
             year=2023,
             doi="10.3390/app13010xxx",
-            is_open_access=True,  # MDPI Applied Sciences (open-access)
-            sources={
-                "mdpi": "https://www.mdpi.com/journal/applsci",
-            },
+            is_open_access=True,  # MDPI Applied Sciences (open access)
         ),
-        PaperSource(
-            name="Liu_MembranComputingQuantumInfo_2020",
+        CuratedPaper(
+            paper_id="Liu_MembranComputingQuantumInfo_2020",
             title="Membrane Computing and Quantum Information Processing: A Synthesis",
             authors="Xiyu Liu, Thomas Hinze, Gexiang Zhang",
             year=2020,
             doi="10.1016/j.biosystems.2020.xxx",
             requires_library=True,  # Biosystems (paywalled)
-            sources={},
         ),
     ]
 
 
-def papers_to_fetch(papers: list[PaperSource], manifest: dict[str, FetchResult], retry: bool) -> list[PaperSource]:
-    """Select papers to attempt. Successful cached papers are skipped unless retry is set."""
-    if retry:
-        return list(papers)
-    return [p for p in papers if not (p.name in manifest and manifest[p.name].success)]
+def make_fetcher() -> PaperFetcher:
+    """The tool_lit_review fetcher, rooted at membrane's reference/lit_review with membrane's manifest name.
+
+    Raises ValueError if the manifest exists but cannot be read (for example, an old membrane-format manifest).
+    """
+    return PaperFetcher(
+        root=OUTPUT_DIR,
+        manifest_path=MANIFEST_PATH,
+        limiter=RateLimiter(min_delay=MIN_DELAY_SECONDS),
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
+
+
+def papers_to_fetch(papers: list[CuratedPaper], manifest: dict[str, FetchResult], retry: bool) -> list[CuratedPaper]:
+    """Select the papers this run attempts.
+
+    Default: papers with no manifest entry. --retry also includes papers whose status is not success.
+    """
+    selected: list[CuratedPaper] = []
+    for paper in papers:
+        previous = manifest.get(paper.paper_id)
+        if previous is None or (retry and previous.status not in SUCCESS_STATUSES):
+            selected.append(paper)
+    return selected
+
+
+def record_library_gap(fetcher: PaperFetcher, paper: CuratedPaper) -> FetchResult:
+    """Record a paywalled paper as failed without any network request."""
+    result = FetchResult(
+        paper_id=paper.paper_id,
+        status="failed",
+        source=None,
+        path=None,
+        sha256=None,
+        url=None,
+        error=f"Requires UofM library access (DOI: {paper.doi})",
+        timestamp=datetime.now(UTC).isoformat(),
+    )
+    # tool_lit_review has no public way to record a result without fetching; _record stores and saves it.
+    return fetcher._record(result)
+
+
+def fetch_one(fetcher: PaperFetcher, paper: CuratedPaper) -> FetchResult:
+    """Fetch one paper. Paywalled papers are recorded as failed, unless their PDF is already in place."""
+    logger.info(f"📄 {paper.title}")
+    logger.info(f"   Authors: {paper.authors} ({paper.year})")
+    if paper.needs_library and not pdf_path(fetcher.root, paper.paper_id).exists():
+        result = record_library_gap(fetcher, paper)
+        logger.info(f"   [Library access required, see {LIBRARY_LOOKUP_NAME}]")
+        return result
+
+    result = fetcher.fetch(paper)
+    if result.status in SUCCESS_STATUSES:
+        logger.info(f"✅ {paper.paper_id}: {result.status} ({result.source or 'no source'})")
+    else:
+        logger.warning(f"⚠️  {paper.paper_id}: {result.error}")
+    return result
+
+
+def generate_library_lookup(papers: list[CuratedPaper], output_dir: Path) -> None:
+    """Write the library-access report for papers that need UofM library access."""
+    library_papers = [p for p in papers if p.needs_library]
+    if not library_papers:
+        return
+
+    lookup_path = output_dir / LIBRARY_LOOKUP_NAME
+    with open(lookup_path, "w", encoding="utf-8") as f:
+        f.write("=" * 80 + "\n")
+        f.write("PAPERS REQUIRING UOFM LIBRARY ACCESS\n")
+        f.write("=" * 80 + "\n\n")
+        f.write("These papers are paywalled. Access via:\n")
+        f.write("  1. UofM Libraries website (alumni login)\n")
+        f.write("  2. On-campus access to full databases\n")
+        f.write("  3. Interlibrary loan (ILL) request\n\n")
+
+        for i, paper in enumerate(library_papers, 1):
+            f.write(f"{i}. {paper.title}\n")
+            f.write(f"   Authors: {paper.authors} ({paper.year})\n")
+            if paper.doi:
+                f.write(f"   DOI: {paper.doi}\n")
+            f.write("   → Search via UofM Libraries\n")
+            f.write("\n")
+
+    logger.info(f"📋 Library lookup: {lookup_path}")
+
+
+def generate_status_report(fetcher: PaperFetcher) -> None:
+    """Log a summary of the manifest."""
+    total = len(fetcher.manifest)
+    succeeded = sum(1 for r in fetcher.manifest.values() if r.status in SUCCESS_STATUSES)
+    failed = total - succeeded
+
+    logger.info("\n" + "=" * 80)
+    logger.info("📊 FETCH SUMMARY")
+    logger.info(f"   Total papers: {total}")
+    logger.info(f"   Fetched: {succeeded}")
+    logger.info(f"   Failed: {failed}")
+    if total > 0:
+        logger.info(f"   Success rate: {100 * succeeded / total:.0f}%")
+
+    if failed > 0:
+        logger.info("\n⚠️  Failed papers:")
+        for paper_id, result in fetcher.manifest.items():
+            if result.status not in SUCCESS_STATUSES:
+                logger.info(f"   - {paper_id}: {result.error}")
+
+    logger.info(f"\n📁 Manifest: {fetcher.manifest_path}")
+    logger.info(f"📁 Papers: {fetcher.root}/")
+    logger.info("=" * 80)
 
 
 def clear_manifest(fetcher: PaperFetcher) -> None:
-    """Forget all fetch history and persist the empty manifest."""
-    logger.warning("Cleaning cache and manifest...")
+    """Forget all fetch history and persist the empty manifest. Saved PDFs are left in place."""
+    logger.warning("Cleaning manifest (PDFs already on disk are kept)...")
     fetcher.manifest = {}
+    # tool_lit_review has no public save; this is the only other private call besides _record.
     fetcher._save_manifest()
 
 
-def run_session(fetcher: PaperFetcher, papers: list[PaperSource], retry: bool, clean: bool) -> None:
-    """Fetch the selected papers, then write the library lookup and status report."""
+def run_session(fetcher: PaperFetcher, papers: list[CuratedPaper], retry: bool, clean: bool) -> None:
+    """Fetch the selected papers, then write the library lookup and the status summary."""
     if clean:
         clear_manifest(fetcher)
 
     for paper in papers_to_fetch(papers, fetcher.manifest, retry):
-        fetcher.fetch_paper(paper)
+        fetch_one(fetcher, paper)
 
-    fetcher.generate_library_lookup(papers)
-    fetcher.generate_status_report()
+    generate_library_lookup(papers, fetcher.root)
+    generate_status_report(fetcher)
 
 
 @app.command()
 def main(
-    retry: bool = typer.Option(False, "--retry", help="Retry failed fetches"),
-    clean: bool = typer.Option(False, "--clean", help="Clean cache and restart"),
+    retry: bool = typer.Option(False, "--retry", help="Also re-attempt papers whose last fetch failed"),
+    clean: bool = typer.Option(False, "--clean", help="Clear the manifest first, then select every paper"),
 ) -> None:
-    """Fetch papers with rate limiting and caching."""
+    """Fetch the curated membrane paper list with rate limiting and caching.
+
+    Writes reference/lit_review/pdf/<paper_id>.pdf and .manifest.json (status: saved, cached, failed).
+    Default run: papers with no manifest entry yet. Use --retry for failed papers.
+    """
     configure_logging()
-    logger.info("🚀 Paper Fetcher v1.0 (rate-limited, cached, reproducible)")
-    run_session(PaperFetcher(), load_paper_sources(), retry=retry, clean=clean)
+    logger.info("🚀 Paper fetcher (tool-lit-review sources, membrane paper list)")
+    try:
+        fetcher = make_fetcher()
+    except ValueError as exc:
+        logger.error(f"{exc}")
+        logger.error(
+            f"Move the manifest aside (mv {MANIFEST_PATH} {MANIFEST_PATH.with_suffix('.v1.json')}) and re-run."
+        )
+        raise typer.Exit(code=1) from exc
+    run_session(fetcher, load_paper_sources(), retry=retry, clean=clean)
 
 
 if __name__ == "__main__":
