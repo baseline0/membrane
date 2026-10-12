@@ -3,8 +3,6 @@
 set default-list := true
 
 # Shared recipes from fleet-agents (includes ci-check for shift-left validation)
-import "../fleet-base/src/fleet_base/justfiles/shared.just"
-
 import "just/mod.just"
 
 # --- Development ---
@@ -127,8 +125,54 @@ artifacts-list:
 
 # Pyright ratchet: fails when a file gains errors (scripts in fleet-base; mode from pyproject.toml).
 check-types:
-    uv run python ../fleet-base/scripts/pyright_ratchet.py check
+    fleet ratchet check
 
 # Unit tests: the gate the pre-push hook runs (fleet hook standard, fleet_base.hook_standard R4)
 test-unit:
     just check-unit-tests
+
+# ============================================================================
+# Shared fleet recipes, run by fleet-base's installed tool (uv tool install --editable ~/projects/fleet-base).
+# Each line calls `fleet recipe NAME`; define a recipe here instead to override it.
+# ============================================================================
+
+# Fix failing tests via aider (auto-detect and fix)
+aider-fix:
+    fleet recipe aider-fix
+
+# Implement a feature or task via aider
+aider-implement *ARGS:
+    fleet recipe aider-implement {{ARGS}}
+
+check-pre-commit:
+    fleet recipe check-pre-commit
+
+# Mypy variant, only when pyproject.toml configures it. Named apart from common.just check-types (pyright).
+check-types-mypy:
+    fleet recipe check-types-mypy
+
+check-unit-tests:
+    fleet recipe check-unit-tests
+
+check-workflows:
+    fleet recipe check-workflows
+
+# GitHub CI will run full validation including actionlint and pre-commit hooks.
+ci-check:
+    fleet recipe ci-check
+
+# Falls back to manual commit if Ollama unavailable or commitmate fails
+commit:
+    fleet recipe commit
+
+# Add all untracked files and commit with LLM or custom message
+commit-all:
+    fleet recipe commit-all
+
+# Check formatting and lint without modifying files (CI-equivalent)
+fmt-check:
+    fleet recipe fmt-check
+
+# Workflow discipline: reminder to run ci-check before push
+pre-push-reminder:
+    fleet recipe pre-push-reminder
