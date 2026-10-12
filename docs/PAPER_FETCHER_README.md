@@ -54,15 +54,14 @@ Edit `.manifest.json` to track manually-added papers:
 ```json
 {
   "Zhang_QuantumInspiredSurvey_2023": {
-    "paper_name": "Zhang_QuantumInspiredSurvey_2023",
-    "title": "Quantum-Inspired Membrane Computing: A Survey and Perspective",
-    "success": true,
-    "source": "manual",
-    "filepath": "reference/lit_review/Zhang_QuantumInspiredSurvey_2023.pdf",
-    "content_hash": "[compute via `sha256sum` if desired, or leave null]",
-    "timestamp": "2026-09-18T16:00:00",
-    "url": "[paste Google Scholar URL]",
-    "error": null
+    "paper_id": "Zhang_QuantumInspiredSurvey_2023",
+    "status": "cached",
+    "source": null,
+    "path": "reference/lit_review/pdf/Zhang_QuantumInspiredSurvey_2023.pdf",
+    "sha256": null,
+    "url": null,
+    "error": null,
+    "timestamp": "2026-10-12T16:00:00+00:00"
   }
 }
 ```

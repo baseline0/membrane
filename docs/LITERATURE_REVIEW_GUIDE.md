@@ -66,15 +66,14 @@ reference/lit_review/
 ```json
 {
   "Zhang_QuantumInspiredMembrane_2023": {
-    "paper_name": "Zhang_QuantumInspiredMembrane_2023",
-    "title": "Quantum-Inspired Membrane Computing: A Survey and Perspective",
-    "success": true,
-    "source": "MDPI",
-    "filepath": "reference/lit_review/Zhang_QuantumInspiredMembrane_2023.pdf",
-    "content_hash": "a1b2c3d4...",
-    "timestamp": "2025-09-18T15:32:10.123456",
-    "url": "https://www.mdpi.com/...",
-    "error": null
+    "paper_id": "Zhang_QuantumInspiredMembrane_2023",
+    "status": "saved",
+    "source": "Semantic Scholar",
+    "path": "reference/lit_review/pdf/Zhang_QuantumInspiredMembrane_2023.pdf",
+    "sha256": "a1b2c3d4...",
+    "url": "https://example.org/paper.pdf",
+    "error": null,
+    "timestamp": "2026-10-12T15:32:10.123456+00:00"
   }
 }
 ```
