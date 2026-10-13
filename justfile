@@ -1,5 +1,7 @@
 # Top-level manually curated Justfile
 
+import 'just/fleet-clean.just'
+
 set default-list := true
 
 # Shared recipes from fleet-agents (includes ci-check for shift-left validation)
@@ -57,7 +59,8 @@ bench-metrics:
 bench-full-metrics: bench-full bench-metrics
 
 # Remove generated artifacts: caches, simulation output, build byproducts
-clean:
+# Renamed from `clean`: removes simulation, output, and trial directories, which are generated results, not caches. The shared clean (fleet-clean.just) removes caches only.
+clean-artifacts:
     rm -rf sims/ out/ malta/output/ malta/sims/ tests/out/ tests/_trial_temp/
     rm -rf .pytest_cache/ .ruff_cache/
     find . -type d -name "__pycache__" -exec rm -r {} +
