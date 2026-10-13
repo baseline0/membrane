@@ -4,7 +4,7 @@
     "rows": 10,
     "sha256": "b1ee52a55f5dabfe95dfff5fbec86d7be89dc0518918de19bd3256b1816669ca"
   },
-  "created_at": "2026-10-13T21:19:05.526264+00:00",
+  "created_at": "2026-10-13T21:50:51.526231+00:00",
   "environment": {
     "numpy": "2.5.3",
     "pandas": "3.0.5",
@@ -13,8 +13,8 @@
   },
   "execution": {
     "image": "test-runner-313",
-    "image_fingerprint": "64fb379940c2bde4504e1c4e289dd6d88244aa3c1654fc84336636389e262c84",
-    "network": "provision-only"
+    "image_fingerprint": "68cd3c9ad113845f5bd96130be0ed44773d1801226e8ee83d46b1d89dd299044",
+    "network": "none"
   },
   "run": {
     "algorithms": [
@@ -42,7 +42,7 @@
   },
   "schema": "membrane.benchmark-run/2",
   "source": {
-    "commit": "0b228a38991d875889c1395a5c3bff6cf5788bff",
+    "commit": "b6df1b09727a0de9664059f8841de9428cc9f367",
     "method": "git-archive",
     "siblings": {
       "tool-lit-review": "82c05b33e1127eee28f24aafe1b13b28b7277903"
