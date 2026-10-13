@@ -177,9 +177,9 @@ Convergence trend per algorithm. Used for heatmaps and per-function analysis.
 
 ## Collection Pipeline
 
-1. **Run Benchmark:** `just bench-full` (30 seeds, 29 functions, 10D, ~1-2h)
-2. **Generate CSV:** BenchmarkHarness.export_csv() → benchmarks_example.csv
-3. **Collect Metrics:** `just bench-metrics` → Parse CSV, generate JSON exports
+1. **Run Benchmark:** the reproducible run in an LXD container (`infrastructure/scripts/lxc/run-experiment.sh`, `just bench-experiment`). Quick and full runs (`just bench-full`, ~1-2h) write to `scratch/bench/` and do not feed the dashboard.
+2. **Generate CSV:** the tracked artifact `benchmarks_example.csv`, with `benchmarks_example.manifest.json` beside it
+3. **Collect Metrics:** `just bench-metrics` → Parse the artifact, generate JSON exports
 4. **Export Location:** benchmarks/metrics/ (git-ignored, not committed)
 5. **Dashboard Ingestion:** Pull latest metrics/*.json files into dashboard backend
 

@@ -231,10 +231,14 @@ Convergence (log scale)
 ```
 just bench-full
   └─ benchmarks/run_example.py runs 30 seeds, 29 functions, 10D
-       └─ BenchmarkHarness.export_csv() → benchmarks_example.csv
+       └─ BenchmarkHarness.export_csv() → scratch/bench/benchmarks_example.csv (not the artifact)
+
+infrastructure/scripts/lxc/run-experiment.sh … just bench-experiment (the reproducible run)
+  └─ benchmarks_example.csv + benchmarks_example.manifest.json (schema membrane.benchmark-run/2),
+     written in a fresh container from a git archive of the pinned commit. This is the tracked artifact.
 
 just bench-metrics
-  └─ benchmarks/collect_results.py parses CSV
+  └─ benchmarks/collect_results.py parses the tracked artifact, benchmarks_example.csv
        └─ ConvergenceMetrics aggregation
             └─ export_benchmark_metrics() writes to benchmarks/metrics/
                  ├─ metrics_<run_id>.json (full)
