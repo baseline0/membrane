@@ -37,18 +37,26 @@ gen-just:
 
 # --- Benchmarking Demo ---
 
+# Quick and full runs write to scratch/bench, so they never replace the tracked benchmarks_example.csv artifact.
+
 # Run example benchmark: 3 seeds, 5 functions, 10D (fast demo)
 bench-example:
-    uv run python -m benchmarks.run_example 3 5 10
+    BENCH_OUT_DIR=scratch/bench uv run python -m benchmarks.run_example 3 5 10
 
 # Run quick benchmark: 10 seeds, 10 functions, 30D (medium)
 bench-quick:
-    uv run python -m benchmarks.run_example 10 10 30
+    BENCH_OUT_DIR=scratch/bench uv run python -m benchmarks.run_example 10 10 30
 
 # Run full benchmark: 30 seeds, all 29 functions, 10D (slow, ~1 hour)
 bench-full:
     @echo "Running full CEC2017 benchmark (expect 1-2 hours)..."
-    uv run python -m benchmarks.run_example 30 29 10
+    BENCH_OUT_DIR=scratch/bench uv run python -m benchmarks.run_example 30 29 10
+
+# The reproducible run. Called inside the experiment container (infrastructure/scripts/lxc/run-experiment.sh),
+# where the working directory is a git archive of the pinned commit. Writes out/ with the CSV and its manifest.
+bench-experiment SEEDS FUNCTIONS DIM:
+    BENCH_OUT_DIR=out uv run python -m benchmarks.run_example {{SEEDS}} {{FUNCTIONS}} {{DIM}}
+    uv run python -m benchmarks.reproducibility_cli write-manifest --out-dir out
 
 # Collect benchmark metrics for dashboard (parse benchmarks_example.csv)
 bench-metrics:

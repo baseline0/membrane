@@ -1,21 +1,24 @@
 """Example: Run benchmarks on CEC2017 functions with GA and PSO."""
 
+import json
+import os
 import sys
-from datetime import UTC, datetime
 from pathlib import Path
 
 from benchmarks.baselines.ga import GeneticAlgorithm
 from benchmarks.baselines.pso import ParticleSwarmOptimizer
 from benchmarks.harness import BenchmarkHarness
-from benchmarks.reproducibility import build_manifest, capture_source, current_environment, write_manifest
+from benchmarks.reproducibility import RUN_CSV_NAME, RUN_PARAMS_NAME
 from benchmarks.suites.cec2017 import CEC2017Suite
 
 
 def main(n_seeds: int = 3, n_functions: int = 5, dimension: int = 10):
-    """Run example benchmark on subset of CEC2017, writing the CSV and its reproducibility manifest."""
-    # Record the source before any output is written: the CSV itself would otherwise make the tree look dirty
-    source = capture_source(Path("."))
+    """Run example benchmark on subset of CEC2017, writing the CSV and its run parameters.
 
+    The output directory is BENCH_OUT_DIR (default: the current directory). The reproducibility manifest is not
+    written here: the experiment runner records the source, the container, and the environment, and
+    `benchmarks.reproducibility_cli write-manifest` writes it.
+    """
     # Use non-strict mode for quick testing (relaxes statistical rigor requirements)
     strict_mode = n_seeds >= 30
     print(f"Running benchmark: {n_functions} functions, {dimension}D, {n_seeds} seeds per run")
@@ -55,25 +58,21 @@ def main(n_seeds: int = 3, n_functions: int = 5, dimension: int = 10):
     df = pd.DataFrame(results)
     print(df.to_string(index=False))
 
-    out_csv = Path("benchmarks_example.csv")
+    out_dir = Path(os.environ.get("BENCH_OUT_DIR", "."))
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_csv = out_dir / RUN_CSV_NAME
     harness.export_csv(df, str(out_csv))
     print(f"\n✓ Results exported to {out_csv}")
 
-    manifest = build_manifest(
-        csv_path=out_csv,
-        source=source,
-        command=["python", "-m", "benchmarks.run_example", str(n_seeds), str(n_functions), str(dimension)],
-        n_seeds=n_seeds,
-        n_functions=len(functions),
-        dimension=dimension,
-        algorithms=list(algorithms),
-        functions=[func.name for func in functions],
-        environment=current_environment(),
-        created_at=datetime.now(UTC).isoformat(),
-    )
-    manifest_path = out_csv.with_suffix(".manifest.json")
-    write_manifest(manifest_path, manifest)
-    print(f"✓ Reproducibility manifest written to {manifest_path}")
+    params = {
+        "command": ["python", "-m", "benchmarks.run_example", str(n_seeds), str(n_functions), str(dimension)],
+        "n_seeds": n_seeds,
+        "n_functions": len(functions),
+        "dimension": dimension,
+        "algorithms": list(algorithms),
+        "functions": [func.name for func in functions],
+    }
+    (out_dir / RUN_PARAMS_NAME).write_text(json.dumps(params, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     return df
 

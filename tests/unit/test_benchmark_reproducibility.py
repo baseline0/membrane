@@ -1,4 +1,4 @@
-"""Reproducibility contract for benchmark artifacts: the manifest, its validator, and the CLI.
+"""Reproducibility contract for benchmark artifacts (schema v2): the manifest, its validator, and the CLI.
 
 Each fixture is a small git repository with a benchmark CSV and a manifest beside it. Each test changes one thing
 and checks that exactly the matching check fails, with its name in the report.
@@ -13,16 +13,23 @@ from typer.testing import CliRunner
 from benchmarks.reproducibility import (
     MIN_SEEDS,
     build_manifest,
+    parse_siblings,
     report,
     validate,
     write_manifest,
 )
 from benchmarks.reproducibility_cli import app
 
-ENVIRONMENT = {"python": "3.13.15", "numpy": "2.2.0", "scipy": "1.15.0", "pandas": "2.2.3"}
+ENVIRONMENT = {"python": "3.13.16", "numpy": "2.5.3", "scipy": "1.18.1", "pandas": "3.0.5"}
+EXECUTION = {
+    "image": "test-runner-313",
+    "image_fingerprint": "64fb379940c2bde4504e1c4e289dd6d88244aa3c1654fc84336636389e262c84",
+    "network": "provision-only",
+}
 FUNCTIONS = ("F1: Bent Cigar", "F3: Rosenbrock")
 ALGORITHMS = ("GA", "PSO")
 MANIFEST_NAME = "benchmarks_example.manifest.json"
+SIBLING_SHA = "82c05b33e1127eee28f24aafe1b13b28b7277903"
 
 
 def _git(repo: Path, *args: str) -> str:
@@ -50,8 +57,10 @@ def make_run(
     root: Path,
     *,
     n_seeds: int = 30,
-    dirty: bool = False,
+    method: str = "git-archive",
     commit: str | None = None,
+    siblings: dict[str, str] | None = None,
+    network: str = "provision-only",
     rows=None,
 ) -> Path:
     """Build a repository with one artifact and its manifest. Returns the manifest path."""
@@ -66,8 +75,10 @@ def make_run(
     _write_csv(csv_path, rows if rows is not None else _rows())
     manifest = build_manifest(
         csv_path=csv_path,
-        source={"commit": commit or head, "dirty": dirty},
-        command=["python", "-m", "benchmarks.run_example", str(n_seeds), "2", "10"],
+        commit=commit or head,
+        siblings={"tool-lit-review": SIBLING_SHA} if siblings is None else siblings,
+        execution={**EXECUTION, "network": network},
+        command=["just", "bench-experiment", str(n_seeds), "2", "10"],
         n_seeds=n_seeds,
         n_functions=len(FUNCTIONS),
         dimension=10,
@@ -76,6 +87,8 @@ def make_run(
         environment=ENVIRONMENT,
         created_at="2026-10-13T00:00:00+00:00",
     )
+    if method != "git-archive":
+        manifest["source"]["method"] = method
     manifest_path = root / MANIFEST_NAME
     write_manifest(manifest_path, manifest)
     return manifest_path
@@ -86,7 +99,7 @@ def _failed(checks) -> set[str]:
 
 
 class TestValidArtifact:
-    """A complete, clean, consistent artifact passes every check."""
+    """A complete, archived, consistent artifact passes every check."""
 
     def test_every_check_passes(self, tmp_path: Path):
         manifest = make_run(tmp_path / "run")
@@ -94,7 +107,7 @@ class TestValidArtifact:
         checks = validate(manifest, repo_root=tmp_path / "run")
 
         assert _failed(checks) == set()
-        assert {c.name for c in checks} >= {"schema", "required_fields", "artifact_sha256", "source_clean"}
+        assert {c.name for c in checks} >= {"schema", "required_fields", "artifact_sha256", "source_archived"}
 
     def test_the_report_is_byte_identical_for_the_same_inputs(self, tmp_path: Path):
         manifest = make_run(tmp_path / "run")
@@ -114,10 +127,11 @@ class TestManifestContract:
 
         assert _failed(checks) == {"manifest_readable"}
 
-    def test_an_unknown_schema_is_rejected(self, tmp_path: Path):
+    def test_a_schema_v1_manifest_is_rejected(self, tmp_path: Path):
+        """v1 manifests described a clean working tree, which v2 no longer accepts as evidence."""
         manifest = make_run(tmp_path / "run")
         data = json.loads(manifest.read_text())
-        data["schema"] = "something-else/9"
+        data["schema"] = "membrane.benchmark-run/1"
         manifest.write_text(json.dumps(data))
 
         assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"schema"}
@@ -150,18 +164,51 @@ class TestArtifactIntegrity:
         assert "artifact_exists" in _failed(validate(manifest, repo_root=tmp_path / "run"))
 
 
-class TestSourceRevision:
-    """The result must come from a clean, known commit."""
+class TestSourceAndExecution:
+    """The result must come from an archived, known commit, with its execution environment recorded."""
 
-    def test_a_dirty_source_tree_fails(self, tmp_path: Path):
-        manifest = make_run(tmp_path / "run", dirty=True)
+    def test_a_working_tree_source_fails(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run", method="working-tree")
 
-        assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"source_clean"}
+        assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"source_archived"}
 
     def test_a_commit_missing_from_the_repository_is_stale(self, tmp_path: Path):
         manifest = make_run(tmp_path / "run", commit="0" * 40)
 
         assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"source_known"}
+
+    def test_a_sibling_that_is_not_a_full_sha_fails(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run", siblings={"tool-lit-review": "main"})
+
+        assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"source_siblings"}
+
+    def test_an_unknown_network_policy_fails(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run", network="open")
+
+        assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"execution_recorded"}
+
+    def test_no_siblings_is_valid(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run", siblings={})
+
+        assert _failed(validate(manifest, repo_root=tmp_path / "run")) == set()
+
+
+class TestSiblingParsing:
+    """The sibling option is name=sha pairs; anything else fails at the boundary."""
+
+    def test_pairs_parse_into_a_mapping(self):
+        assert parse_siblings(f"a={SIBLING_SHA}, b={SIBLING_SHA}") == {"a": SIBLING_SHA, "b": SIBLING_SHA}
+
+    def test_an_empty_spec_means_no_siblings(self):
+        assert parse_siblings("") == {}
+
+    def test_an_item_without_a_sha_is_refused(self):
+        try:
+            parse_siblings("tool-lit-review")
+        except ValueError as exc:
+            assert "name=sha" in str(exc)
+        else:
+            raise AssertionError("expected ValueError")
 
 
 class TestStatisticalFloor:
@@ -205,7 +252,9 @@ class TestTableConsistency:
         data = json.loads(manifest.read_text())
         data["artifact"]["sha256"] = build_manifest(
             csv_path=csv_path,
-            source=data["source"],
+            commit=data["source"]["commit"],
+            siblings=data["source"]["siblings"],
+            execution=data["execution"],
             command=data["run"]["command"],
             n_seeds=30,
             n_functions=2,
@@ -220,32 +269,67 @@ class TestTableConsistency:
         assert "table_columns" in _failed(validate(manifest, repo_root=tmp_path / "run"))
 
 
-class TestProducerAndValidatorAgree:
-    """A manifest written by the producer is one the validator accepts."""
+class TestWriteManifestCommand:
+    """The in-container producer: run facts from run.json, source facts from options, output that validates."""
 
-    def test_write_then_validate_round_trips(self, tmp_path: Path):
-        manifest = make_run(tmp_path / "run")
+    def _run_dir(self, tmp_path: Path) -> Path:
+        out = tmp_path / "out"
+        out.mkdir()
+        _write_csv(out / "benchmarks_example.csv", _rows())
+        (out / "benchmarks_example.run.json").write_text(
+            json.dumps(
+                {
+                    "command": ["python", "-m", "benchmarks.run_example", "30", "2", "10"],
+                    "n_seeds": 30,
+                    "n_functions": len(FUNCTIONS),
+                    "dimension": 10,
+                    "algorithms": list(ALGORITHMS),
+                    "functions": list(FUNCTIONS),
+                }
+            ),
+            encoding="utf-8",
+        )
+        return out
 
-        assert validate(manifest, repo_root=tmp_path / "run")
-        assert _failed(validate(manifest, repo_root=tmp_path / "run")) == set()
+    def test_the_written_manifest_validates(self, tmp_path: Path):
+        out = self._run_dir(tmp_path)
+        repo = tmp_path / "repo"
+        make_run(repo)  # provides a real commit for the manifest to name
+        commit = _git(repo, "rev-parse", "HEAD")
+        env = {
+            "EXPERIMENT_COMMIT": commit,
+            "EXPERIMENT_SIBLINGS": f"tool-lit-review={SIBLING_SHA}",
+            "EXPERIMENT_IMAGE": "test-runner-313",
+            "EXPERIMENT_IMAGE_FINGERPRINT": EXECUTION["image_fingerprint"],
+            "EXPERIMENT_NETWORK": "provision-only",
+        }
+
+        result = CliRunner().invoke(app, ["write-manifest", "--out-dir", str(out)], env=env)
+
+        assert result.exit_code == 0, result.output
+        assert _failed(validate(out / MANIFEST_NAME, repo_root=repo)) == set()
 
 
 class TestCommandLine:
-    """The CLI exits 0 when every check passes and 1 when any fails, and prints the report."""
+    """The validator CLI exits 0 when every check passes and 1 when any fails, and prints the report."""
 
     def test_a_valid_artifact_exits_zero_and_prints_passed(self, tmp_path: Path):
         manifest = make_run(tmp_path / "run")
 
-        result = CliRunner().invoke(app, ["--manifest", str(manifest), "--repo-root", str(tmp_path / "run")])
+        result = CliRunner().invoke(
+            app, ["validate", "--manifest", str(manifest), "--repo-root", str(tmp_path / "run")]
+        )
 
         assert result.exit_code == 0
         assert json.loads(result.output)["passed"] is True
 
     def test_a_failing_artifact_exits_one_and_names_the_failure(self, tmp_path: Path):
-        manifest = make_run(tmp_path / "run", dirty=True)
+        manifest = make_run(tmp_path / "run", method="working-tree")
 
-        result = CliRunner().invoke(app, ["--manifest", str(manifest), "--repo-root", str(tmp_path / "run")])
+        result = CliRunner().invoke(
+            app, ["validate", "--manifest", str(manifest), "--repo-root", str(tmp_path / "run")]
+        )
 
         assert result.exit_code == 1
         failed = [c["name"] for c in json.loads(result.output)["checks"] if not c["passed"]]
-        assert failed == ["source_clean"]
+        assert failed == ["source_archived"]

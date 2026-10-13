@@ -1,16 +1,23 @@
-"""Reproducibility contract for benchmark result artifacts.
+"""Reproducibility contract for benchmark result artifacts (schema v2).
 
-A benchmark CSV counts as an artifact only when a sidecar manifest records what produced it: the source commit and
-whether the tree was clean, the command and parameters, the library versions, and the artifact's SHA-256.
+A benchmark CSV is an artifact when a sidecar manifest records how it was produced:
 
-Validation is static. It reads the artifact, its manifest, and the repository's history, and never reruns the
-benchmark. Determinism is a separate evidence step: rerun the command and compare artifact hashes.
+- source: the exact commit of this repository and of each sibling repository it depends on, delivered as a
+  `git archive` of that commit. The working tree is never used, so uncommitted edits cannot leak into a result.
+- execution: the pinned container image that ran the experiment, and the network policy in force.
+- run: the command and its parameters, and the library versions that can change the numbers.
+- artifact: the CSV's SHA-256 and row count.
+
+Validation is static. It reads the artifact, its manifest, and the repository history, and never reruns the
+benchmark. Determinism is a separate step: rerun the experiment from the same commits and compare artifact hashes.
 
 A check fails with a stable name, so reports can be read by tools:
 - manifest_readable, schema, required_fields: the manifest exists, is the known schema, and has every field.
 - artifact_exists, artifact_sha256: the file is present and unchanged since the manifest was written.
-- source_clean, source_known: the tree was clean, and the commit is in this repository (a commit that is not in
-  the repository's history means the source is stale or unknown).
+- source_archived: the source was a git archive, not a working tree.
+- source_known: the commit is in this repository. A commit missing from its history means the source is stale.
+- source_siblings: every sibling commit is a full 40-character SHA.
+- execution_recorded: the container image fingerprint and the network policy are recorded.
 - seed_floor: the run used at least MIN_SEEDS seeds, the statistical minimum for the Wilcoxon comparisons.
 - table_columns, table_rows, table_pairs, values_finite: the table has the expected columns, one row per
   (function, algorithm) pair, and finite numbers.
@@ -23,6 +30,7 @@ import hashlib
 import json
 import math
 import platform
+import re
 import subprocess
 from collections import Counter
 from collections.abc import Iterable
@@ -32,17 +40,27 @@ from itertools import product
 from pathlib import Path
 from typing import Any
 
-MANIFEST_SCHEMA = "membrane.benchmark-run/1"
+RUN_CSV_NAME = "benchmarks_example.csv"
+RUN_PARAMS_NAME = "benchmarks_example.run.json"
+MANIFEST_NAME = "benchmarks_example.manifest.json"
+MANIFEST_SCHEMA = "membrane.benchmark-run/2"
+SOURCE_METHOD = "git-archive"
+NETWORK_POLICIES = ("none", "provision-only")
 MIN_SEEDS = 30
 EXPECTED_COLUMNS = ("function", "algorithm", "mean", "std", "best")
+_FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 
 # Dotted path and expected type for each field the manifest must carry.
 REQUIRED_FIELDS: tuple[tuple[str, type], ...] = (
     ("artifact.path", str),
     ("artifact.sha256", str),
     ("artifact.rows", int),
+    ("source.method", str),
     ("source.commit", str),
-    ("source.dirty", bool),
+    ("source.siblings", dict),
+    ("execution.image", str),
+    ("execution.image_fingerprint", str),
+    ("execution.network", str),
     ("run.command", list),
     ("run.n_seeds", int),
     ("run.n_functions", int),
@@ -79,20 +97,6 @@ def _git(repo_root: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(["git", *args], cwd=repo_root, capture_output=True, text=True, check=False)
 
 
-def capture_source(repo_root: Path) -> dict[str, Any]:
-    """The commit and dirty state of the repository, captured before a run writes its outputs.
-
-    Raises RuntimeError outside a git repository, because a result with no commit cannot be reproduced.
-    """
-    head = _git(repo_root, "rev-parse", "HEAD")
-    if head.returncode != 0:
-        raise RuntimeError(f"cannot record the source commit: {head.stderr.strip() or 'not a git repository'}")
-    status = _git(repo_root, "status", "--porcelain")
-    if status.returncode != 0:
-        raise RuntimeError(f"cannot read the working tree state: {status.stderr.strip()}")
-    return {"commit": head.stdout.strip(), "dirty": bool(status.stdout.strip())}
-
-
 def current_environment() -> dict[str, str]:
     """Interpreter and library versions that can change a benchmark's numbers."""
     return {
@@ -111,10 +115,26 @@ def _read_table(path: Path) -> tuple[tuple[str, ...], list[list[str]]]:
     return tuple(rows[0]), rows[1:]
 
 
+def parse_siblings(spec: str) -> dict[str, str]:
+    """Parse "name=sha,name=sha" into a mapping. An empty spec means no siblings.
+
+    Raises ValueError for an item that is not name=sha, so a typo fails at the boundary.
+    """
+    siblings: dict[str, str] = {}
+    for item in filter(None, (part.strip() for part in spec.split(","))):
+        name, sep, sha = item.partition("=")
+        if not sep or not name or not sha:
+            raise ValueError(f"sibling must be name=sha, got {item!r}")
+        siblings[name] = sha
+    return siblings
+
+
 def build_manifest(
     *,
     csv_path: Path,
-    source: dict[str, Any],
+    commit: str,
+    siblings: dict[str, str],
+    execution: dict[str, str],
     command: Iterable[str],
     n_seeds: int,
     n_functions: int,
@@ -130,7 +150,8 @@ def build_manifest(
         "schema": MANIFEST_SCHEMA,
         "created_at": created_at,
         "artifact": {"path": csv_path.name, "sha256": sha256_of(csv_path), "rows": len(rows)},
-        "source": {"commit": source["commit"], "dirty": bool(source["dirty"])},
+        "source": {"method": SOURCE_METHOD, "commit": commit, "siblings": dict(siblings)},
+        "execution": dict(execution),
         "run": {
             "command": list(command),
             "n_seeds": n_seeds,
@@ -266,11 +287,14 @@ def validate(manifest_path: Path, repo_root: Path) -> list[Check]:
     )
 
     source = data["source"]
+    archived = source["method"] == SOURCE_METHOD
     checks.append(
         Check(
-            "source_clean",
-            source["dirty"] is False,
-            "tree was clean" if source["dirty"] is False else "tree had uncommitted changes when the run started",
+            "source_archived",
+            archived,
+            f"source is a {SOURCE_METHOD} of the commit"
+            if archived
+            else f"source method is {source['method']!r}; results must come from {SOURCE_METHOD}",
         )
     )
     known = _commit_exists(repo_root, source["commit"])
@@ -281,6 +305,28 @@ def validate(manifest_path: Path, repo_root: Path) -> list[Check]:
             f"commit {source['commit']} is in {repo_root}"
             if known
             else f"commit {source['commit']} not in {repo_root}",
+        )
+    )
+    bad_siblings = sorted(name for name, sha in source["siblings"].items() if not _FULL_SHA.match(str(sha)))
+    checks.append(
+        Check(
+            "source_siblings",
+            not bad_siblings,
+            f"{len(source['siblings'])} sibling commits pinned"
+            if not bad_siblings
+            else f"not full commit SHAs: {', '.join(bad_siblings)}",
+        )
+    )
+
+    execution = data["execution"]
+    policy_ok = execution["network"] in NETWORK_POLICIES and bool(execution["image_fingerprint"].strip())
+    checks.append(
+        Check(
+            "execution_recorded",
+            policy_ok,
+            f"image {execution['image']} {execution['image_fingerprint'][:12]}, network {execution['network']}"
+            if policy_ok
+            else f"network must be one of {NETWORK_POLICIES}, found {execution['network']!r}; image fingerprint required",
         )
     )
 
