@@ -136,54 +136,54 @@ artifacts-list:
 
 # Pyright ratchet: fails when a file gains errors (scripts in fleet-base; mode from pyproject.toml).
 check-types:
-    fleet ratchet check
+    fleet ratchet --action check
 
 # Unit tests: the gate the pre-push hook runs (fleet hook standard, fleet_base.hook_standard R4)
 test-unit:
     just check-unit-tests
 
 # ============================================================================
-# Shared fleet recipes, run by fleet-base's installed tool (uv tool install --editable ~/projects/fleet-base).
+# Shared fleet recipes, run by fleet-base's installed tool (run `just -f ~/projects/fleet-base/justfile install-fleet`; ADR-020).
 # Each line calls `fleet recipe NAME`; define a recipe here instead to override it.
 # ============================================================================
 
 # Fix failing tests via aider (auto-detect and fix)
 aider-fix:
-    fleet recipe aider-fix
+    fleet recipe --name aider-fix
 
 # Implement a feature or task via aider
 aider-implement *ARGS:
-    fleet recipe aider-implement {{ARGS}}
+    fleet recipe --name aider-implement {{ARGS}}
 
 check-pre-commit:
-    fleet recipe check-pre-commit
+    fleet recipe --name check-pre-commit
 
 # Mypy variant, only when pyproject.toml configures it. Named apart from common.just check-types (pyright).
 check-types-mypy:
-    fleet recipe check-types-mypy
+    fleet recipe --name check-types-mypy
 
 check-unit-tests:
-    fleet recipe check-unit-tests
+    fleet recipe --name check-unit-tests
 
 check-workflows:
-    fleet recipe check-workflows
+    fleet recipe --name check-workflows
 
 # GitHub CI will run full validation including actionlint and pre-commit hooks.
 ci-check:
-    fleet recipe ci-check
+    fleet recipe --name ci-check
 
 # Falls back to manual commit if Ollama unavailable or commitmate fails
 commit:
-    fleet recipe commit
+    fleet recipe --name commit
 
 # Add all untracked files and commit with LLM or custom message
 commit-all:
-    fleet recipe commit-all
+    fleet recipe --name commit-all
 
 # Check formatting and lint without modifying files (CI-equivalent)
 fmt-check:
-    fleet recipe fmt-check
+    fleet recipe --name fmt-check
 
 # Workflow discipline: reminder to run ci-check before push
 pre-push-reminder:
-    fleet recipe pre-push-reminder
+    fleet recipe --name pre-push-reminder
