@@ -1,5 +1,7 @@
 # Top-level manually curated Justfile
 
+import 'just/repo-push.just'
+
 import 'just/fleet-clean.just'
 
 set default-list := true
