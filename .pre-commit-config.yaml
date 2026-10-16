@@ -46,7 +46,7 @@ repos:
 
       - id: ci-python-env
         name: "[P1] Enforce uv run for Python in CI"
-        entry: bash -c 'grep -r "python " .github/workflows/ | grep -v "uv run python" && exit 1 || true'
+        entry: bash -c 'grep -rP "(?<!uv )(?<!uv run )(?<![\w.-])python3? " .github/workflows/ && exit 1 || true'
         language: system
         files: \.github/workflows/.*\.ya?ml$
         pass_filenames: false

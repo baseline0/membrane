@@ -16,6 +16,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Why: pyproject.toml declares tool-lit-review as an editable path source at ../tool-lit-review,
+      # which is outside this checkout on the runner. The sibling is checked out inside the workspace
+      # (same shape as fleet-agents' mcp-vscode checkout), then linked beside the workspace so the path resolves.
+      - name: Checkout tool-lit-review (sibling source for the editable path dependency)
+        uses: actions/checkout@v4
+        with:
+          repository: baseline0/tool-lit-review
+          path: tool-lit-review
+          ref: main
+          token: ${{ secrets.FLEET_READ_TOKEN }}
+
+      - name: Link tool-lit-review beside the workspace for ../tool-lit-review
+        run: ln -sfn "$GITHUB_WORKSPACE/tool-lit-review" "$(dirname "$GITHUB_WORKSPACE")/tool-lit-review"
+
       - name: Install uv
         uses: astral-sh/setup-uv@v2
         with:
