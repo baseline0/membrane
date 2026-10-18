@@ -17,14 +17,31 @@ from scripts.paper_fetcher import CuratedPaper, load_paper_sources, run_session
 MANIFEST_NAME = ".manifest.json"
 
 
+OAI_CC_BY_RECORD = """<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
+  <GetRecord><record><metadata>
+    <arXiv xmlns="http://arxiv.org/OAI/arXiv/">
+      <license>http://creativecommons.org/licenses/by/4.0/</license>
+    </arXiv>
+  </metadata></record></GetRecord>
+</OAI-PMH>
+"""
+
+
 class FakeArxiv:
-    """Serves a PDF for each arXiv id in `available`, 404 for the rest, and records every request URL."""
+    """Serves a PDF for each arXiv id in `available`, 404 for the rest, and records every PDF download URL.
+
+    The OAI licence lookup on export.arxiv.org returns a CC-BY record (the fetcher fails closed without one),
+    and it is not recorded: these tests assert on PDF downloads only.
+    """
 
     def __init__(self) -> None:
         self.available: set[str] = set()
         self.requests: list[str] = []
 
     def handle(self, request: httpx.Request) -> httpx.Response:
+        if request.url.host == "export.arxiv.org":
+            return httpx.Response(200, content=OAI_CC_BY_RECORD.encode(), headers={"content-type": "text/xml"})
         self.requests.append(str(request.url))
         arxiv_id = str(request.url).rsplit("/", 1)[-1]
         if arxiv_id in self.available:
