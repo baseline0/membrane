@@ -16,8 +16,8 @@ app.add_typer(benchmark_app, name="benchmark")
 def run(
     idx: Annotated[
         int,
-        typer.Argument(help="Which built-in SimulationFactory example to run (1-4)."),
-    ] = 1,
+        typer.Option("--idx", help="Which built-in SimulationFactory example to run (1-4)."),
+    ],
 ) -> None:
     """Run a built-in membrane simulation to completion."""
     run_simulation(idx)

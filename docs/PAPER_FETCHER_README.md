@@ -30,7 +30,7 @@ arXiv search → Author listing (not PDF) ❌
 
 ### Stage 1: Auto-Fetch (2 min)
 ```bash
-python scripts/paper_fetcher.py
+python scripts/paper_fetcher.py --retry false --clean false
 # Gets what's publicly available: ~1-2 papers typically
 ```
 
@@ -82,7 +82,7 @@ python scripts/paper_status.py
 
 ### Retry Failed Auto-Fetches
 ```bash
-python scripts/paper_fetcher.py --retry
+python scripts/paper_fetcher.py --retry true --clean false
 # Re-attempts papers that failed before
 # (Usually still fail unless source changed)
 ```
@@ -92,7 +92,7 @@ python scripts/paper_fetcher.py --retry
 # Just copy/download PDF to reference/lit_review/
 cp ~/Downloads/paper.pdf reference/lit_review/Author_Title_Year.pdf
 
-# Manifest will be updated automatically on next `paper_fetcher.py` run,
+# Manifest will be updated automatically on next `paper_fetcher.py --retry false --clean false` run,
 # or can be left out (paper_status.py still detects it)
 ```
 
@@ -175,9 +175,9 @@ See [LITERATURE_REVIEW_GUIDE.md](LITERATURE_REVIEW_GUIDE.md) for detailed workfl
 | Issue | Solution |
 |-------|----------|
 | Fetcher crashes | Check error in `.fetch.log`; usually network timeout |
-| Paper marked "failed" but you know it exists | Run `python scripts/paper_fetcher.py --retry` |
+| Paper marked "failed" but you know it exists | Run `python scripts/paper_fetcher.py --retry true --clean false` |
 | Want to force-refetch a paper | Delete from `reference/lit_review/` and from `.manifest.json`, re-run |
-| `.manifest.json` corrupted | Run `python scripts/paper_fetcher.py --clean` (wipes cache, starts fresh) |
+| `.manifest.json` corrupted | Run `python scripts/paper_fetcher.py --retry false --clean true` (wipes cache, starts fresh) |
 
 ---
 

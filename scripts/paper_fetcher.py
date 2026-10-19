@@ -6,10 +6,10 @@ Downloading, per-domain pacing, PDF validation, the manifest and the audit log c
 This script keeps what is membrane's: the curated list, the University of Michigan library report, the CLI, and
 the .fetch.log file.
 
-Selection:
-    default    papers with no manifest entry yet (successful and failed papers are skipped)
-    --retry    also papers whose manifest status is not success (failed)
-    --clean    clear the manifest first, then select every paper
+Selection (--retry and --clean are required; pass true or false):
+    --retry false --clean false   papers with no manifest entry yet (successful and failed papers are skipped)
+    --retry true                  also papers whose manifest status is not success (failed)
+    --clean true                  clear the manifest first, then select every paper
 
 Papers that need UofM library access are not requested. They are recorded as failed and listed in LIBRARY_LOOKUP.txt.
 
@@ -24,16 +24,18 @@ Output (reference/lit_review/):
 A manifest in an older format stops the run: move it aside and re-run.
 
 Usage:
-    python scripts/paper_fetcher.py              # Fetch new papers
-    python scripts/paper_fetcher.py --retry      # Also re-attempt failed papers
-    python scripts/paper_fetcher.py --clean      # Clear the manifest and start again
+    python scripts/paper_fetcher.py --retry false --clean false   # Fetch new papers
+    python scripts/paper_fetcher.py --retry true --clean false    # Also re-attempt failed papers
+    python scripts/paper_fetcher.py --retry false --clean true     # Clear the manifest and start again
 """
 
 import logging
 import sys
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from enum import StrEnum
 from pathlib import Path
+from typing import Annotated
 
 import typer
 from tool_lit_review.fetch import FetchResult, PaperFetcher, PaperRecord, RateLimiter, pdf_path
@@ -46,6 +48,14 @@ LIBRARY_LOOKUP_NAME = "LIBRARY_LOOKUP.txt"
 REQUEST_TIMEOUT_SECONDS = 10.0
 MIN_DELAY_SECONDS = 2.0
 SUCCESS_STATUSES = frozenset({"saved", "cached"})
+
+
+class TrueFalse(StrEnum):
+    """A required boolean option value, passed as `true` or `false`."""
+
+    TRUE = "true"
+    FALSE = "false"
+
 
 app = typer.Typer(
     help=(
@@ -309,13 +319,15 @@ def run_session(fetcher: PaperFetcher, papers: list[CuratedPaper], retry: bool, 
 
 @app.command()
 def main(
-    retry: bool = typer.Option(False, "--retry", help="Also re-attempt papers whose last fetch failed"),
-    clean: bool = typer.Option(False, "--clean", help="Clear the manifest first, then select every paper"),
+    retry: Annotated[TrueFalse, typer.Option("--retry", help="true also re-attempts papers whose last fetch failed")],
+    clean: Annotated[
+        TrueFalse, typer.Option("--clean", help="true clears the manifest first, then selects every paper")
+    ],
 ) -> None:
     """Fetch the curated membrane paper list with rate limiting and caching.
 
     Writes reference/lit_review/pdf/<paper_id>.pdf and .manifest.json (status: saved, cached, failed).
-    Default run: papers with no manifest entry yet. Use --retry for failed papers.
+    Without --retry or --clean: papers with no manifest entry yet. Use --retry true for failed papers.
     """
     configure_logging()
     logger.info("🚀 Paper fetcher (tool-lit-review sources, membrane paper list)")
@@ -327,7 +339,7 @@ def main(
             f"Move the manifest aside (mv {MANIFEST_PATH} {MANIFEST_PATH.with_suffix('.v1.json')}) and re-run."
         )
         raise typer.Exit(code=1) from exc
-    run_session(fetcher, load_paper_sources(), retry=retry, clean=clean)
+    run_session(fetcher, load_paper_sources(), retry=retry == TrueFalse.TRUE, clean=clean == TrueFalse.TRUE)
 
 
 if __name__ == "__main__":

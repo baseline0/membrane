@@ -66,7 +66,7 @@ def test_main_reads_manifest_from_the_default_location(
     out = capsys.readouterr().out
     assert "Summary: 1/2 papers available (50%)" in out
     assert "**Location:** " + pdf in out
-    assert "→ Re-run fetcher: python scripts/paper_fetcher.py --retry" in out
+    assert "→ Re-run fetcher: python scripts/paper_fetcher.py --retry true --clean false" in out
 
 
 def test_main_exits_when_manifest_is_missing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

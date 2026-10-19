@@ -27,7 +27,7 @@ AvailableEntry = tuple[str, dict[str, Any], float]  # (paper id, manifest row, s
 def load_manifest(manifest_path: Path) -> dict[str, dict[str, Any]]:
     """Load fetch manifest."""
     if not manifest_path.exists():
-        print("❌ No manifest found. Run: python scripts/paper_fetcher.py")
+        print("❌ No manifest found. Run: python scripts/paper_fetcher.py --retry false --clean false")
         sys.exit(1)
 
     with open(manifest_path, encoding="utf-8") as f:
@@ -100,7 +100,7 @@ def generate_console_report(
         print("-" * 80)
         for paper_id, result in missing:
             print(f"  {paper_id}: {result.get('path')} missing")
-            print("    → Delete manifest and re-fetch: python scripts/paper_fetcher.py --clean")
+            print("    → Delete manifest and re-fetch: python scripts/paper_fetcher.py --retry false --clean true")
         print()
 
     # Summary
@@ -150,9 +150,9 @@ def main() -> None:
 
     # Exit with useful code
     if len(unavailable) > 0:
-        print("\n→ Re-run fetcher: python scripts/paper_fetcher.py --retry")
+        print("\n→ Re-run fetcher: python scripts/paper_fetcher.py --retry true --clean false")
     if len(missing) > 0:
-        print("\n→ Clean and restart: python scripts/paper_fetcher.py --clean")
+        print("\n→ Clean and restart: python scripts/paper_fetcher.py --retry false --clean true")
 
 
 if __name__ == "__main__":

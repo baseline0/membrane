@@ -6,11 +6,15 @@ This guide shows how to run reproducible benchmark experiments using the unified
 
 ### Toy Problem Benchmarks
 
+Every `benchmark` option is required; pass `""` for an empty output path and `true`/`false` for
+`--include-baselines`. The former defaults were: toy `--n-dims 2 --n-generations 30 --output ""`;
+cec2017 `--n-seeds 10 --n-functions 3 --dimension 10 --output-dir "" --include-baselines false`.
+
 Test on standard functions (Sphere, Rastrigin, Rosenbrock, Ackley):
 
 ```bash
 # Quick test: 2D, 10 generations
-python -m malta.cli.main benchmark toy --n-dims 2 --n-generations 10
+python -m malta.cli.main benchmark toy --n-dims 2 --n-generations 10 --output ""
 
 # With output
 python -m malta.cli.main benchmark toy \
@@ -28,21 +32,25 @@ Full benchmark on CEC2017 functions:
 python -m malta.cli.main benchmark cec2017 \
   --n-functions 3 \
   --dimension 10 \
-  --n-seeds 10
+  --n-seeds 10 \
+  --output-dir "" \
+  --include-baselines false
 
 # With results saved
 python -m malta.cli.main benchmark cec2017 \
   --n-functions 5 \
   --dimension 10 \
   --n-seeds 30 \
-  --output-dir results/cec2017
+  --output-dir results/cec2017 \
+  --include-baselines false
 
 # Include baseline algorithms (slower)
 python -m malta.cli.main benchmark cec2017 \
   --n-functions 3 \
   --dimension 10 \
   --n-seeds 30 \
-  --include-baselines
+  --output-dir "" \
+  --include-baselines true
 ```
 
 ## Reproducibility
@@ -103,7 +111,9 @@ Results are saved as JSON with full metadata:
 python -m malta.cli.main benchmark cec2017 \
   --n-functions 3 \
   --dimension 10 \
-  --n-seeds 30
+  --n-seeds 30 \
+  --output-dir "" \
+  --include-baselines false
   # Defaults:
   # - n_compartments: 5
   # - bits_per_dim: 8
@@ -139,11 +149,11 @@ python -m malta.cli.main benchmark cec2017 \
 ```bash
 # Development
 python -m malta.cli.main benchmark cec2017 \
-  --n-functions 3 --n-seeds 10
+  --n-functions 3 --dimension 10 --n-seeds 10 --output-dir "" --include-baselines false
 
 # Publication
 python -m malta.cli.main benchmark cec2017 \
-  --n-functions 10 --n-seeds 30 --include-baselines
+  --n-functions 10 --dimension 10 --n-seeds 30 --output-dir "" --include-baselines true
 ```
 
 ### Analysis
@@ -225,7 +235,7 @@ for dim in 10 30; do
     --n-functions 10 \
     --dimension $dim \
     --n-seeds 30 \
-    --include-baselines \
+    --include-baselines true \
     --output-dir results/paper
 done
 ```
@@ -258,7 +268,7 @@ uv sync
 ```bash
 # Use fewer seeds during development
 python -m malta.cli.main benchmark cec2017 \
-  --n-functions 3 --n-seeds 5  # Quick validation
+  --n-functions 3 --dimension 10 --n-seeds 5 --output-dir "" --include-baselines false  # Quick validation
 
 # Reduce generations
 # (Modify in Python API: generations=100 instead of 1000)

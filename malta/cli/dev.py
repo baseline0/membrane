@@ -13,9 +13,9 @@ def generate_justfile(
         typer.Option(
             "--output",
             "-o",
-            help="Path where generated Justfile recipes will be saved.",
+            help="Path where generated Justfile recipes will be saved (e.g., just/cli.just).",
         ),
-    ] = Path("just/cli.just"),
+    ],
 ) -> None:
     """Regenerate Justfile recipes by introspecting Typer commands."""
     # Deferred import avoids a circular import during app setup.

@@ -222,10 +222,19 @@ def test_cli_passes_flags_to_session(tmp_path: Path, monkeypatch: pytest.MonkeyP
         lambda fetcher, papers, retry, clean: calls.append((retry, clean)),
     )
 
-    result = CliRunner().invoke(paper_fetcher.app, ["--retry", "--clean"])
+    result = CliRunner().invoke(paper_fetcher.app, ["--retry", "true", "--clean", "true"])
 
     assert result.exit_code == 0
     assert calls == [(True, True)]
+
+
+def test_cli_flags_are_required_values(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(paper_fetcher, "configure_logging", lambda *a, **k: None)
+
+    result = CliRunner().invoke(paper_fetcher.app, [])
+
+    assert result.exit_code == 2
 
 
 def test_cli_stops_with_guidance_on_an_old_format_manifest(
@@ -238,7 +247,7 @@ def test_cli_stops_with_guidance_on_an_old_format_manifest(
     monkeypatch.setattr(paper_fetcher, "configure_logging", lambda *a, **k: None)
 
     with caplog.at_level(logging.ERROR):
-        result = CliRunner().invoke(paper_fetcher.app, [])
+        result = CliRunner().invoke(paper_fetcher.app, ["--retry", "false", "--clean", "false"])
 
     assert result.exit_code == 1
     assert "Cannot read fetch manifest" in caplog.text

@@ -4,6 +4,7 @@ Provides reproducible experiment runs with proper seeding and result export.
 """
 
 import json
+from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
@@ -17,6 +18,14 @@ from benchmarks.harness import BenchmarkHarness
 from benchmarks.suites.cec2017 import CEC2017Suite
 from benchmarks.toy_benchmark import ToyBenchmark
 
+
+class TrueFalse(StrEnum):
+    """A required boolean option value, passed as `true` or `false`."""
+
+    TRUE = "true"
+    FALSE = "false"
+
+
 benchmark_app = typer.Typer(
     name="benchmark",
     help="Run optimization benchmarks on standard test functions.",
@@ -27,16 +36,16 @@ benchmark_app = typer.Typer(
 def run_toy_benchmark(
     n_dims: Annotated[
         int,
-        typer.Option(help="Problem dimensionality"),
-    ] = 2,
+        typer.Option("--n-dims", help="Problem dimensionality (default run: 2)"),
+    ],
     n_generations: Annotated[
         int,
-        typer.Option(help="Generations per run"),
-    ] = 30,
+        typer.Option("--n-generations", help="Generations per run (default run: 30)"),
+    ],
     output: Annotated[
-        str | None,
-        typer.Option(help="Output JSON file (optional)"),
-    ] = None,
+        str,
+        typer.Option("--output", help="Output JSON file; '' writes none"),
+    ],
 ) -> None:
     """Run toy problem benchmarks (sphere, Rastrigin, Rosenbrock, Ackley).
 
@@ -85,24 +94,27 @@ def run_toy_benchmark(
 def run_cec2017_benchmark(
     n_seeds: Annotated[
         int,
-        typer.Option(help="Number of random seeds (minimum 30 for statistical rigor, but 10 for quick test)"),
-    ] = 10,
+        typer.Option(
+            "--n-seeds",
+            help="Number of random seeds (30 for statistical rigor, 10 for a quick test)",
+        ),
+    ],
     n_functions: Annotated[
         int,
-        typer.Option(help="Number of CEC2017 functions to test"),
-    ] = 3,
+        typer.Option("--n-functions", help="Number of CEC2017 functions to test"),
+    ],
     dimension: Annotated[
         int,
-        typer.Option(help="Problem dimensionality"),
-    ] = 10,
+        typer.Option("--dimension", help="Problem dimensionality"),
+    ],
     output_dir: Annotated[
-        str | None,
-        typer.Option(help="Output directory for results (default: benchmarks/results)"),
-    ] = None,
+        str,
+        typer.Option("--output-dir", help="Output directory for results; '' uses benchmarks/results"),
+    ],
     include_baselines: Annotated[
-        bool,
-        typer.Option(help="Include GA and PSO baselines (slower)"),
-    ] = False,
+        TrueFalse,
+        typer.Option("--include-baselines", help="true includes GA and PSO baselines (slower)"),
+    ],
 ) -> None:
     """Run CEC2017 benchmarks with quantum-inspired algorithm.
 
@@ -139,7 +151,7 @@ def run_cec2017_benchmark(
         "QIEA": QuantumInspiredBaseline(n_compartments=5, generations=1000),
     }
 
-    if include_baselines:
+    if include_baselines == TrueFalse.TRUE:
         algorithms.update(
             {
                 "GA": GeneticAlgorithm(pop_size=100, generations=1000),

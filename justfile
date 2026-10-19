@@ -35,7 +35,7 @@ tree:
 
 # Regenerate just/cli.just by introspecting the Typer CLI
 gen-just:
-    uv run malta dev gen-just
+    uv run malta dev gen-just --output just/cli.just
 
 # --- Benchmarking Demo ---
 

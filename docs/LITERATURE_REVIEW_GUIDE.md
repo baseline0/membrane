@@ -30,16 +30,16 @@ Stage 1: FETCH          Stage 2: REVIEW           Stage 3: SYNTHESIZE
 
 ```bash
 # Initial fetch: tries to download all 10 papers
-python scripts/paper_fetcher.py
+python scripts/paper_fetcher.py --retry false --clean false
 
 # Check status: see which papers are available
 python scripts/paper_status.py
 
 # Retry failed: attempts to fetch papers that failed before
-python scripts/paper_fetcher.py --retry
+python scripts/paper_fetcher.py --retry true --clean false
 
 # Clean and restart: wipe cache, try fresh
-python scripts/paper_fetcher.py --clean
+python scripts/paper_fetcher.py --retry false --clean true
 ```
 
 ### What Happens
@@ -82,9 +82,9 @@ reference/lit_review/
 
 | Issue | Solution |
 |-------|----------|
-| "No papers found" | Ensure `paper_fetcher.py` ran successfully: check `.fetch.log` |
-| Some papers failed | Run `python scripts/paper_fetcher.py --retry` |
-| Corrupted cache | Run `python scripts/paper_fetcher.py --clean` |
+| "No papers found" | Ensure `paper_fetcher.py --retry false --clean false` ran successfully: check `.fetch.log` |
+| Some papers failed | Run `python scripts/paper_fetcher.py --retry true --clean false` |
+| Corrupted cache | Run `python scripts/paper_fetcher.py --retry false --clean true` |
 | Want to manually add papers | Place PDF in `reference/lit_review/Name_Title_Year.pdf`, update `.manifest.json` |
 
 ---
@@ -247,7 +247,7 @@ Set baseline parameters based on literature:
 ## Checklist: Literature Review Phases
 
 ### Phase 1: Fetch (Week 1, Day 1)
-- [ ] Run `python scripts/paper_fetcher.py`
+- [ ] Run `python scripts/paper_fetcher.py --retry false --clean false`
 - [ ] Run `python scripts/paper_status.py` to see what's available
 - [ ] Note any failed fetches (expected for some papers)
 
@@ -314,4 +314,4 @@ From the papers, you'll find these unsolved challenges:
 - **Need more papers?** Check citations in the 10 papers; arXiv often has related work
 - **Stuck on novelty?** Look for open problems sections — those are research gaps you could fill
 
-**Next:** Run `python scripts/paper_fetcher.py` and see how many papers download automatically.
+**Next:** Run `python scripts/paper_fetcher.py --retry false --clean false` and see how many papers download automatically.
