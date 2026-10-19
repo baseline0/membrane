@@ -223,7 +223,9 @@ def test_invoke_builds_the_fetch_list_command_and_raises_on_failure(
 
 
 def test_cli_help_lists_both_flags() -> None:
-    result = CliRunner().invoke(paper_fetcher.app, ["--help"])
+    # Pin width and colour: rich wraps and colours help text differently on CI, which split the flag names.
+    runner = CliRunner(env={"COLUMNS": "200", "NO_COLOR": "1", "TERM": "dumb"})
+    result = runner.invoke(paper_fetcher.app, ["--help"])
 
     assert result.exit_code == 0
     assert "--retry" in result.output
