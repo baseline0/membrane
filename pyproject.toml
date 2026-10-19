@@ -55,7 +55,7 @@ include = ["malta", "cyprus", "benchmarks", "scripts", "paper", "tests"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
-addopts = ["-ra", "-q"]
+addopts = ["-ra"]
 testpaths = ["tests/unit", "tests/integration", "tests/e2e", "tests/cyprus"]
 pythonpath = ["."]
 markers = ["unit: fast, isolated unit tests"]
