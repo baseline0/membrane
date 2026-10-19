@@ -39,7 +39,7 @@ repos:
       # ===== P1: Architecture =====
       - id: python-syntax
         name: "[P1] Check Python syntax"
-        entry: uv run python -m py_compile
+        entry: uv run --frozen python -m py_compile
         language: system
         types:
           - python
@@ -70,7 +70,7 @@ repos:
     hooks:
       - id: validate-formulas
         name: "[P1] Validate formulas when presentation.md or model.py changes"
-        entry: bash -c 'cd paper && uv run python validate_formulas.py'
+        entry: bash -c 'cd paper && uv run --frozen python validate_formulas.py'
         language: system
         pass_filenames: false
         files: '^paper/(presentation\.md|model\.py)$'
@@ -105,11 +105,11 @@ repos:
   - repo: local
     hooks:
       - id: uv-lock-check
-        name: "[P1] uv.lock matches pyproject.toml (read-only; run uv lock to fix)"
-        entry: uv lock --check
+        name: "[P1] uv.lock matches pyproject.toml (read-only; run just lock to fix)"
+        entry: fleet hook --name check-uv-lock
         language: system
         pass_filenames: false
-        files: '^(pyproject\.toml|uv\.lock)$'
+        files: 'pyproject\.toml$|uv\.lock$'
         stages: [pre-commit]
   - repo: local
     hooks:

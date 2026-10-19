@@ -189,3 +189,7 @@ fmt-check:
 # Workflow discipline: reminder to run ci-check before push
 pre-push-reminder:
     fleet recipe --name pre-push-reminder
+
+# Regenerate uv.lock from pyproject.toml. The uv-lock-check hook only checks; run this to fix a stale lock.
+lock:
+    uv lock
