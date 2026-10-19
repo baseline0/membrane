@@ -120,7 +120,7 @@ class CuratedPaper:
 def load_paper_sources() -> list[CuratedPaper]:
     """Membrane's curated paper list.
 
-    Placeholder DOIs ('...xxx') are kept as written, so the library report still shows them. The old journal and
+    Placeholder DOIs were removed (2026-10-19): a paper with no DOI and no arXiv id is refused by the fetcher and recorded as restricted, so an unknown identifier is never guessed. The old journal and
     search URLs are not kept: tool-lit-review fetches arXiv, DOI and Semantic Scholar only, and those URLs were
     landing or search pages that never returned a PDF.
     """
@@ -130,7 +130,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="Quantum-Inspired Membrane Computing: A Survey and Perspective",
             authors="Gexiang Zhang, Marian Gheorghe, Chao Wu",
             year=2023,
-            doi="10.3390/e25020xxx",
+            doi=None,
             is_open_access=True,  # MDPI Entropy is open access
         ),
         CuratedPaper(
@@ -138,7 +138,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="Real-Coded Quantum-Inspired Evolutionary Membrane Algorithm for Numerical Optimization",
             authors="Gexiang Zhang, Haina Rong, Ferrante Neri, Mario J. Pérez-Jiménez",
             year=2021,
-            doi="10.1016/j.ins.2021.xxx",
+            doi=None,
             requires_library=True,  # Information Sciences (paywalled)
         ),
         CuratedPaper(
@@ -146,7 +146,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="Software Tools for Membrane Computing: P-Lingua and MeCoSim",
             authors="Diego Díaz-Pernil, Agustín Berciano, Fernando Peña-Cantillana, Miguel A. Gutiérrez-Naranjo",
             year=2010,
-            doi="10.15837/ijccc.2010.2.xxx",
+            doi=None,
             requires_library=True,
         ),
         CuratedPaper(
@@ -154,7 +154,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="Simulating Quantum Circuits with P Systems with Active Membranes",
             authors="Alberto Leporati, Claudio Zandron, Ferruccio Ferretti, Giancarlo Mauri",
             year=2005,
-            doi="10.1016/j.tcs.2004.xxx",
+            doi=None,
             requires_library=True,  # TCS (paywalled)
         ),
         CuratedPaper(
@@ -162,7 +162,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="A Quantum-Inspired Membrane Algorithm for Combinatorial Optimization Problems",
             authors="Jiao Xiao, Gexiang Zhang, Xiyu Liu",
             year=2022,
-            doi="10.3390/math10010xxx",
+            doi=None,
             is_open_access=True,  # MDPI Mathematics (open access)
         ),
         CuratedPaper(
@@ -170,7 +170,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="Open Problems in Membrane Computing: A Retrospective and Future Outlook",
             authors="Gheorghe Păun, Linqiang Pan, Mario J. Pérez-Jiménez",
             year=2019,
-            doi="10.1007/s41965-019-xxxxx",
+            doi=None,
             requires_library=True,  # Springer (likely paywalled)
         ),
         CuratedPaper(
@@ -178,7 +178,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="A Novel Hybrid Quantum-Inspired Membrane Algorithm for Global Numerical Optimization",
             authors="Xiangrong Liu, Gexiang Zhang, Thomas Back",
             year=2021,
-            doi="10.1109/ACCESS.2021.xxxxx",
+            doi=None,
             is_open_access=True,  # IEEE Access (open access)
         ),
         CuratedPaper(
@@ -186,7 +186,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="Quantum P Systems: Theoretical Framework and Computational Power",
             authors="Harumichi Nishimura, Jiang Zhao",
             year=2022,
-            doi="10.1016/j.ijuc.2022.xxx",
+            doi=None,
             requires_library=True,  # IJUC (check arXiv first; no arXiv id is recorded yet)
         ),
         CuratedPaper(
@@ -194,7 +194,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="Parallel Implementation of Quantum-Inspired Membrane Algorithms on GPUs",
             authors="Luis Valencia-Cabrera, David Orellana-Martín, Mario J. Pérez-Jiménez",
             year=2023,
-            doi="10.3390/app13010xxx",
+            doi=None,
             is_open_access=True,  # MDPI Applied Sciences (open access)
         ),
         CuratedPaper(
@@ -202,7 +202,7 @@ def load_paper_sources() -> list[CuratedPaper]:
             title="Membrane Computing and Quantum Information Processing: A Synthesis",
             authors="Xiyu Liu, Thomas Hinze, Gexiang Zhang",
             year=2020,
-            doi="10.1016/j.biosystems.2020.xxx",
+            doi=None,
             requires_library=True,  # Biosystems (paywalled)
         ),
     ]

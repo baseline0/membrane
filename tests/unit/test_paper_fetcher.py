@@ -108,7 +108,7 @@ def test_library_flag_survives_the_mapping() -> None:
     assert paywalled.requires_library is True
     assert paywalled.is_open_access is False
     assert paywalled.needs_library is True
-    assert paywalled.doi == "10.1016/j.ins.2021.xxx"
+    assert paywalled.doi is None  # placeholder DOI removed; no identifier, so the fetcher refuses it
 
     open_access = by_id["Zhang_QuantumInspiredMembrane_2023"]
     assert open_access.is_open_access is True
