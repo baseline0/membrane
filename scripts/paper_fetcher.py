@@ -2,9 +2,9 @@
 """
 Fetch membrane's curated paper list into reference/lit_review/.
 
-Downloading, per-domain pacing, PDF validation, the manifest and the audit log come from tool_lit_review.fetch.
-This script keeps what is membrane's: the curated list, the University of Michigan library report, the CLI, and
-the .fetch.log file.
+Downloading, per-domain pacing, PDF validation, the manifest and the audit log come from tool-lit-review's
+`fetch-list` command, which this script runs in a subprocess. This script keeps what is membrane's: the curated list,
+the University of Michigan library report, the selection rules, the CLI, and the .fetch.log file.
 
 Selection (--retry and --clean are required; pass true or false):
     --retry false --clean false   papers with no manifest entry yet (successful and failed papers are skipped)
@@ -29,25 +29,32 @@ Usage:
     python scripts/paper_fetcher.py --retry false --clean true     # Clear the manifest and start again
 """
 
+import json
 import logging
+import subprocess
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
-from tool_lit_review.fetch import FetchResult, PaperFetcher, PaperRecord, RateLimiter, pdf_path
 
 OUTPUT_DIR = Path("reference/lit_review")
-MANIFEST_PATH = OUTPUT_DIR / ".manifest.json"
+MANIFEST_NAME = ".manifest.json"
+FETCH_LIST_NAME = ".fetch_list.json"
 LOG_PATH = OUTPUT_DIR / ".fetch.log"
 LOG_FORMAT = "%(asctime)s | %(levelname)-8s | %(message)s"
 LIBRARY_LOOKUP_NAME = "LIBRARY_LOOKUP.txt"
 REQUEST_TIMEOUT_SECONDS = 10.0
 MIN_DELAY_SECONDS = 2.0
 SUCCESS_STATUSES = frozenset({"saved", "cached"})
+TOOL_LIT_REVIEW_PROJECT = Path(__file__).resolve().parent.parent.parent / "tool-lit-review"
+
+# The keys tool-lit-review writes for each manifest entry. A row without them is an old-format manifest.
+MANIFEST_ROW_KEYS = frozenset({"paper_id", "status", "source", "path", "sha256", "url", "error", "timestamp"})
 
 
 class TrueFalse(StrEnum):
@@ -55,6 +62,14 @@ class TrueFalse(StrEnum):
 
     TRUE = "true"
     FALSE = "false"
+
+
+class ManifestError(ValueError):
+    """The fetch manifest exists but is not in the format tool-lit-review writes."""
+
+
+class FetchListFailed(RuntimeError):
+    """tool-lit-review fetch-list exited with an error. The message carries its stderr."""
 
 
 app = typer.Typer(
@@ -81,9 +96,16 @@ def configure_logging(log_path: Path = LOG_PATH) -> None:
 
 
 @dataclass(frozen=True)
-class CuratedPaper(PaperRecord):
-    """A PaperRecord with membrane-only fields: authors, year, and the UofM library flags."""
+class CuratedPaper:
+    """One paper on membrane's list. The fields tool-lit-review fetches by are paper_id, title, arxiv_id and doi.
 
+    authors, year and the UofM library flags are membrane's own.
+    """
+
+    paper_id: str
+    title: str = ""
+    arxiv_id: str | None = None
+    doi: str | None = None
     authors: str = ""
     year: int = 0
     requires_library: bool = False  # True if needs UofM library access
@@ -96,10 +118,10 @@ class CuratedPaper(PaperRecord):
 
 
 def load_paper_sources() -> list[CuratedPaper]:
-    """Membrane's curated paper list, as PaperRecord values (CuratedPaper subclasses them).
+    """Membrane's curated paper list.
 
     Placeholder DOIs ('...xxx') are kept as written, so the library report still shows them. The old journal and
-    search URLs are not kept: tool_lit_review fetches arXiv, DOI and Semantic Scholar only, and those URLs were
+    search URLs are not kept: tool-lit-review fetches arXiv, DOI and Semantic Scholar only, and those URLs were
     landing or search pages that never returned a PDF.
     """
     return [
@@ -186,20 +208,35 @@ def load_paper_sources() -> list[CuratedPaper]:
     ]
 
 
-def make_fetcher() -> PaperFetcher:
-    """The tool_lit_review fetcher, rooted at membrane's reference/lit_review with membrane's manifest name.
+def read_manifest(manifest_path: Path) -> dict[str, dict[str, Any]]:
+    """The manifest rows keyed by paper id. Empty when there is no manifest yet.
 
-    Raises ValueError if the manifest exists but cannot be read (for example, an old membrane-format manifest).
+    Raises ManifestError when the file is unreadable or a row is not in tool-lit-review's format.
     """
-    return PaperFetcher(
-        root=OUTPUT_DIR,
-        manifest_path=MANIFEST_PATH,
-        limiter=RateLimiter(min_delay=MIN_DELAY_SECONDS),
-        timeout=REQUEST_TIMEOUT_SECONDS,
-    )
+    if not manifest_path.exists():
+        return {}
+    try:
+        data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except ValueError as exc:
+        raise ManifestError(f"Cannot read fetch manifest {manifest_path}: {exc}") from exc
+    if not isinstance(data, dict):
+        raise ManifestError(f"Cannot read fetch manifest {manifest_path}: expected a JSON object")
+    for paper_id, row in data.items():
+        if not isinstance(row, dict) or not row.keys() >= MANIFEST_ROW_KEYS:
+            raise ManifestError(
+                f"Cannot read fetch manifest {manifest_path}: entry {paper_id!r} is not in fetch format"
+            )
+    return data
 
 
-def papers_to_fetch(papers: list[CuratedPaper], manifest: dict[str, FetchResult], retry: bool) -> list[CuratedPaper]:
+def write_manifest(manifest_path: Path, rows: dict[str, dict[str, Any]]) -> None:
+    """Write the manifest rows, sorted by paper id, in the format tool-lit-review uses."""
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {paper_id: rows[paper_id] for paper_id in sorted(rows)}
+    manifest_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def papers_to_fetch(papers: list[CuratedPaper], manifest: dict[str, dict[str, Any]], retry: bool) -> list[CuratedPaper]:
     """Select the papers this run attempts.
 
     Default: papers with no manifest entry. --retry also includes papers whose status is not success.
@@ -207,42 +244,59 @@ def papers_to_fetch(papers: list[CuratedPaper], manifest: dict[str, FetchResult]
     selected: list[CuratedPaper] = []
     for paper in papers:
         previous = manifest.get(paper.paper_id)
-        if previous is None or (retry and previous.status not in SUCCESS_STATUSES):
+        if previous is None or (retry and previous.get("status") not in SUCCESS_STATUSES):
             selected.append(paper)
     return selected
 
 
-def record_library_gap(fetcher: PaperFetcher, paper: CuratedPaper) -> FetchResult:
-    """Record a paywalled paper as failed without any network request."""
-    result = FetchResult(
-        paper_id=paper.paper_id,
-        status="failed",
-        source=None,
-        path=None,
-        sha256=None,
-        url=None,
-        error=f"Requires UofM library access (DOI: {paper.doi})",
-        timestamp=datetime.now(UTC).isoformat(),
-    )
-    # tool_lit_review has no public way to record a result without fetching; _record stores and saves it.
-    return fetcher._record(result)
+def library_gap_row(paper: CuratedPaper) -> dict[str, Any]:
+    """The manifest row for a paywalled paper. It is recorded as failed without any network request."""
+    return {
+        "paper_id": paper.paper_id,
+        "status": "failed",
+        "source": None,
+        "path": None,
+        "sha256": None,
+        "url": None,
+        "error": f"Requires UofM library access (DOI: {paper.doi})",
+        "timestamp": datetime.now(UTC).isoformat(),
+        "licence": None,
+    }
 
 
-def fetch_one(fetcher: PaperFetcher, paper: CuratedPaper) -> FetchResult:
-    """Fetch one paper. Paywalled papers are recorded as failed, unless their PDF is already in place."""
-    logger.info(f"📄 {paper.title}")
-    logger.info(f"   Authors: {paper.authors} ({paper.year})")
-    if paper.needs_library and not pdf_path(fetcher.root, paper.paper_id).exists():
-        result = record_library_gap(fetcher, paper)
-        logger.info(f"   [Library access required, see {LIBRARY_LOOKUP_NAME}]")
-        return result
+def fetch_list_row(paper: CuratedPaper) -> dict[str, Any]:
+    """The record tool-lit-review's fetch-list reads for one paper."""
+    return {"paper_id": paper.paper_id, "title": paper.title, "arxiv_id": paper.arxiv_id, "doi": paper.doi}
 
-    result = fetcher.fetch(paper)
-    if result.status in SUCCESS_STATUSES:
-        logger.info(f"✅ {paper.paper_id}: {result.status} ({result.source or 'no source'})")
-    else:
-        logger.warning(f"⚠️  {paper.paper_id}: {result.error}")
-    return result
+
+def invoke_fetch_list(list_path: Path, output_dir: Path, clean: bool) -> None:
+    """Run tool-lit-review's fetch-list over the list file. Its output goes to the membrane log.
+
+    Raises FetchListFailed when the command exits non-zero.
+    """
+    command = [
+        "uv",
+        "run",
+        "--project",
+        str(TOOL_LIT_REVIEW_PROJECT.resolve()),
+        "tool-lit-review",
+        "fetch-list",
+        "--records",
+        str(list_path.resolve()),
+        "--output",
+        str(output_dir.resolve()),
+        "--min-delay",
+        str(MIN_DELAY_SECONDS),
+        "--timeout",
+        str(REQUEST_TIMEOUT_SECONDS),
+        "--clean",
+        "true" if clean else "false",
+    ]
+    completed = subprocess.run(command, capture_output=True, text=True, check=False)
+    for line in completed.stdout.splitlines():
+        logger.info(f"   {line}")
+    if completed.returncode != 0:
+        raise FetchListFailed(f"tool-lit-review fetch-list exited {completed.returncode}: {completed.stderr.strip()}")
 
 
 def generate_library_lookup(papers: list[CuratedPaper], output_dir: Path) -> None:
@@ -272,10 +326,10 @@ def generate_library_lookup(papers: list[CuratedPaper], output_dir: Path) -> Non
     logger.info(f"📋 Library lookup: {lookup_path}")
 
 
-def generate_status_report(fetcher: PaperFetcher) -> None:
+def generate_status_report(manifest: dict[str, dict[str, Any]], output_dir: Path) -> None:
     """Log a summary of the manifest."""
-    total = len(fetcher.manifest)
-    succeeded = sum(1 for r in fetcher.manifest.values() if r.status in SUCCESS_STATUSES)
+    total = len(manifest)
+    succeeded = sum(1 for r in manifest.values() if r.get("status") in SUCCESS_STATUSES)
     failed = total - succeeded
 
     logger.info("\n" + "=" * 80)
@@ -288,33 +342,58 @@ def generate_status_report(fetcher: PaperFetcher) -> None:
 
     if failed > 0:
         logger.info("\n⚠️  Failed papers:")
-        for paper_id, result in fetcher.manifest.items():
-            if result.status not in SUCCESS_STATUSES:
-                logger.info(f"   - {paper_id}: {result.error}")
+        for paper_id, result in manifest.items():
+            if result.get("status") not in SUCCESS_STATUSES:
+                logger.info(f"   - {paper_id}: {result.get('error')}")
 
-    logger.info(f"\n📁 Manifest: {fetcher.manifest_path}")
-    logger.info(f"📁 Papers: {fetcher.root}/")
+    logger.info(f"\n📁 Manifest: {output_dir / MANIFEST_NAME}")
+    logger.info(f"📁 Papers: {output_dir}/")
     logger.info("=" * 80)
 
 
-def clear_manifest(fetcher: PaperFetcher) -> None:
-    """Forget all fetch history and persist the empty manifest. Saved PDFs are left in place."""
-    logger.warning("Cleaning manifest (PDFs already on disk are kept)...")
-    fetcher.manifest = {}
-    # tool_lit_review has no public save; this is the only other private call besides _record.
-    fetcher._save_manifest()
+def run_session(
+    papers: list[CuratedPaper],
+    retry: bool,
+    clean: bool,
+    output_dir: Path = OUTPUT_DIR,
+    invoke: Callable[[Path, Path, bool], None] = invoke_fetch_list,
+) -> None:
+    """Select the papers, fetch the open ones through tool-lit-review, record the paywalled ones, then report.
 
+    clean=True makes every paper selectable again: tool-lit-review's fetch-list deletes the manifest first.
+    The manifest is always read first, so an old-format manifest stops the run even with clean.
+    """
+    manifest_path = output_dir / MANIFEST_NAME
+    existing = read_manifest(manifest_path)
+    selected = papers_to_fetch(papers, {} if clean else existing, retry)
 
-def run_session(fetcher: PaperFetcher, papers: list[CuratedPaper], retry: bool, clean: bool) -> None:
-    """Fetch the selected papers, then write the library lookup and the status summary."""
-    if clean:
-        clear_manifest(fetcher)
+    to_request: list[CuratedPaper] = []
+    library_gaps: list[CuratedPaper] = []
+    for paper in selected:
+        if paper.needs_library and not (output_dir / "pdf" / f"{paper.paper_id}.pdf").exists():
+            library_gaps.append(paper)
+        else:
+            to_request.append(paper)
 
-    for paper in papers_to_fetch(papers, fetcher.manifest, retry):
-        fetch_one(fetcher, paper)
+    list_path = output_dir / FETCH_LIST_NAME
+    output_dir.mkdir(parents=True, exist_ok=True)
+    list_path.write_text(
+        json.dumps([fetch_list_row(p) for p in to_request], indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    # Always invoked, even with nothing to request, so that --clean clears the manifest.
+    invoke(list_path, output_dir, clean)
+    list_path.unlink()
 
-    generate_library_lookup(papers, fetcher.root)
-    generate_status_report(fetcher)
+    rows = read_manifest(manifest_path)  # what fetch-list wrote; empty after --clean if nothing was requested
+    for paper in library_gaps:
+        logger.info(f"📄 {paper.title}")
+        logger.info(f"   Authors: {paper.authors} ({paper.year})")
+        logger.info(f"   [Library access required, see {LIBRARY_LOOKUP_NAME}]")
+        rows[paper.paper_id] = library_gap_row(paper)
+    write_manifest(manifest_path, rows)
+
+    generate_library_lookup(papers, output_dir)
+    generate_status_report(rows, output_dir)
 
 
 @app.command()
@@ -332,14 +411,16 @@ def main(
     configure_logging()
     logger.info("🚀 Paper fetcher (tool-lit-review sources, membrane paper list)")
     try:
-        fetcher = make_fetcher()
-    except ValueError as exc:
+        run_session(load_paper_sources(), retry=retry == TrueFalse.TRUE, clean=clean == TrueFalse.TRUE)
+    except ManifestError as exc:
         logger.error(f"{exc}")
         logger.error(
-            f"Move the manifest aside (mv {MANIFEST_PATH} {MANIFEST_PATH.with_suffix('.v1.json')}) and re-run."
+            f"Move the manifest aside (mv {OUTPUT_DIR / MANIFEST_NAME} {OUTPUT_DIR / '.manifest.v1.json'}) and re-run."
         )
         raise typer.Exit(code=1) from exc
-    run_session(fetcher, load_paper_sources(), retry=retry == TrueFalse.TRUE, clean=clean == TrueFalse.TRUE)
+    except FetchListFailed as exc:
+        logger.error(f"{exc}")
+        raise typer.Exit(code=1) from exc
 
 
 if __name__ == "__main__":

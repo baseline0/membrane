@@ -1,75 +1,86 @@
 """Tests for the paper fetcher: the curated list, selection, --retry and --clean, the library report, and the CLI.
 
-No test touches the network: requests go to an httpx.MockTransport that serves PDFs from memory.
+No test runs tool-lit-review or touches the network. run_session takes an `invoke` callable; the fake below stands in
+for `tool-lit-review fetch-list` and writes the manifest rows it is told to write.
 """
 
+import json
 import logging
+import subprocess
 from pathlib import Path
 
-import httpx
 import pytest
-from tool_lit_review.fetch import ARXIV_SOURCE, PaperFetcher, PaperRecord, RateLimiter, pdf_path
 from typer.testing import CliRunner
 
 from scripts import paper_fetcher
-from scripts.paper_fetcher import CuratedPaper, load_paper_sources, run_session
+from scripts.paper_fetcher import (
+    CuratedPaper,
+    FetchListFailed,
+    ManifestError,
+    invoke_fetch_list,
+    load_paper_sources,
+    run_session,
+)
 
 MANIFEST_NAME = ".manifest.json"
 
 
-OAI_CC_BY_RECORD = """<?xml version="1.0" encoding="UTF-8"?>
-<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
-  <GetRecord><record><metadata>
-    <arXiv xmlns="http://arxiv.org/OAI/arXiv/">
-      <license>http://creativecommons.org/licenses/by/4.0/</license>
-    </arXiv>
-  </metadata></record></GetRecord>
-</OAI-PMH>
-"""
+class FakeFetchList:
+    """Stands in for `tool-lit-review fetch-list`: records each call and writes a manifest row per listed paper.
 
-
-class FakeArxiv:
-    """Serves a PDF for each arXiv id in `available`, 404 for the rest, and records every PDF download URL.
-
-    The OAI licence lookup on export.arxiv.org returns a CC-BY record (the fetcher fails closed without one),
-    and it is not recorded: these tests assert on PDF downloads only.
+    outcomes maps paper id to the status the fake gives it ('saved' or 'failed'). Papers not in outcomes are saved.
+    Like the real command, a PDF already on disk is 'cached', and clean deletes the manifest first.
     """
 
-    def __init__(self) -> None:
-        self.available: set[str] = set()
-        self.requests: list[str] = []
+    def __init__(self, outcomes: dict[str, str] | None = None) -> None:
+        self.outcomes = outcomes or {}
+        self.calls: list[dict[str, object]] = []
 
-    def handle(self, request: httpx.Request) -> httpx.Response:
-        if request.url.host == "export.arxiv.org":
-            return httpx.Response(200, content=OAI_CC_BY_RECORD.encode(), headers={"content-type": "text/xml"})
-        self.requests.append(str(request.url))
-        arxiv_id = str(request.url).rsplit("/", 1)[-1]
-        if arxiv_id in self.available:
-            return httpx.Response(200, content=b"%PDF-1.4 fake", headers={"content-type": "application/pdf"})
-        return httpx.Response(404)
+    def __call__(self, list_path: Path, output_dir: Path, clean: bool) -> None:
+        records = json.loads(list_path.read_text(encoding="utf-8"))
+        self.calls.append({"ids": [r["paper_id"] for r in records], "clean": clean})
+        manifest_path = output_dir / MANIFEST_NAME
+        if clean and manifest_path.exists():
+            manifest_path.unlink()
+        rows = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+        for record in records:
+            paper_id = record["paper_id"]
+            pdf = output_dir / "pdf" / f"{paper_id}.pdf"
+            if pdf.exists():
+                status = "cached"
+            else:
+                status = self.outcomes.get(paper_id, "saved")
+                if status == "saved":
+                    pdf.parent.mkdir(parents=True, exist_ok=True)
+                    pdf.write_bytes(b"%PDF-1.4 fake")
+            rows[paper_id] = {
+                "paper_id": paper_id,
+                "status": status,
+                "source": "DOI" if status in {"saved", "cached"} else None,
+                "path": str(pdf) if status in {"saved", "cached"} else None,
+                "sha256": None,
+                "url": None,
+                "error": None if status in {"saved", "cached"} else "HTTP 404",
+                "timestamp": "2026-10-18T00:00:00+00:00",
+                "licence": None,
+            }
+        manifest_path.parent.mkdir(parents=True, exist_ok=True)
+        manifest_path.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
 
 
-def _fetcher(root: Path, server: FakeArxiv) -> PaperFetcher:
-    """A fetcher as make_fetcher builds it, but with arXiv only, a mock client, and no sleeping."""
-    return PaperFetcher(
-        sources=(ARXIV_SOURCE,),
-        root=root,
-        client=httpx.Client(transport=httpx.MockTransport(server.handle)),
-        limiter=RateLimiter(min_delay=0.0, clock=lambda: 0.0, sleep=lambda _seconds: None),
-        manifest_path=root / MANIFEST_NAME,
-        sleep=lambda _seconds: None,
-    )
-
-
-def _paper(paper_id: str, arxiv_id: str | None = None, requires_library: bool = False) -> CuratedPaper:
+def _paper(paper_id: str, requires_library: bool = False, doi: str | None = None) -> CuratedPaper:
     return CuratedPaper(
         paper_id=paper_id,
         title=f"Title {paper_id}",
         authors="A. Author",
         year=2020,
-        arxiv_id=arxiv_id,
+        doi=doi or f"10.1000/{paper_id}",
         requires_library=requires_library,
     )
+
+
+def _manifest(output_dir: Path) -> dict[str, dict]:
+    return json.loads((output_dir / MANIFEST_NAME).read_text(encoding="utf-8"))
 
 
 def test_curated_list_keeps_every_paper_and_its_library_flags() -> None:
@@ -88,7 +99,6 @@ def test_curated_list_keeps_every_paper_and_its_library_flags() -> None:
         "Valencia_ParallelImplementation_2023",
         "Liu_MembranComputingQuantumInfo_2020",
     }
-    assert all(isinstance(p, PaperRecord) for p in papers)
 
 
 def test_library_flag_survives_the_mapping() -> None:
@@ -105,95 +115,111 @@ def test_library_flag_survives_the_mapping() -> None:
     assert open_access.needs_library is False
 
 
-def test_default_run_fetches_new_papers_then_makes_no_requests_for_recorded_ones(tmp_path: Path) -> None:
-    server = FakeArxiv()
-    server.available.add("0001.0001")
-    papers = [_paper("ok", "0001.0001"), _paper("missing", "0002.0002")]
+def test_default_run_requests_only_new_papers_then_requests_nothing_for_recorded_ones(tmp_path: Path) -> None:
+    fake = FakeFetchList()
+    papers = [_paper("ok"), _paper("other")]
 
-    run_session(_fetcher(tmp_path, server), papers, retry=False, clean=False)
+    run_session(papers, retry=False, clean=False, output_dir=tmp_path, invoke=fake)
 
-    assert server.requests == ["https://arxiv.org/pdf/0001.0001", "https://arxiv.org/pdf/0002.0002"]
-    reloaded = _fetcher(tmp_path, server)
-    assert reloaded.manifest["ok"].status == "saved"
-    assert reloaded.manifest["missing"].status == "failed"
+    assert fake.calls == [{"ids": ["ok", "other"], "clean": False}]
+    assert {k: v["status"] for k, v in _manifest(tmp_path).items()} == {"ok": "saved", "other": "saved"}
 
-    server.requests.clear()
-    run_session(reloaded, papers, retry=False, clean=False)
+    run_session(papers, retry=False, clean=False, output_dir=tmp_path, invoke=fake)
 
-    assert server.requests == []
+    assert fake.calls[-1] == {"ids": [], "clean": False}
 
 
 def test_default_run_does_not_retry_failures(tmp_path: Path) -> None:
-    server = FakeArxiv()
-    papers = [_paper("missing", "0002.0002")]
-    run_session(_fetcher(tmp_path, server), papers, retry=False, clean=False)
+    papers = [_paper("missing")]
+    run_session(papers, retry=False, clean=False, output_dir=tmp_path, invoke=FakeFetchList({"missing": "failed"}))
 
-    server.available.add("0002.0002")
-    server.requests.clear()
-    run_session(_fetcher(tmp_path, server), papers, retry=False, clean=False)
+    fake = FakeFetchList()
+    run_session(papers, retry=False, clean=False, output_dir=tmp_path, invoke=fake)
 
-    assert server.requests == []
-
-
-def test_retry_refetches_failed_papers_and_not_successful_ones(tmp_path: Path) -> None:
-    server = FakeArxiv()
-    server.available.add("0001.0001")
-    papers = [_paper("ok", "0001.0001"), _paper("missing", "0002.0002")]
-    run_session(_fetcher(tmp_path, server), papers, retry=False, clean=False)
-
-    server.available.add("0002.0002")
-    server.requests.clear()
-    fetcher = _fetcher(tmp_path, server)
-    run_session(fetcher, papers, retry=True, clean=False)
-
-    assert server.requests == ["https://arxiv.org/pdf/0002.0002"]
-    assert fetcher.manifest["missing"].status == "saved"
-    assert fetcher.manifest["ok"].status == "saved"
+    assert fake.calls == [{"ids": [], "clean": False}]
+    assert _manifest(tmp_path)["missing"]["status"] == "failed"
 
 
-def test_clean_clears_manifest_and_refetches_without_redownloading_pdfs_on_disk(tmp_path: Path) -> None:
-    server = FakeArxiv()
-    server.available.add("0001.0001")
-    papers = [_paper("ok", "0001.0001"), _paper("missing", "0002.0002")]
-    run_session(_fetcher(tmp_path, server), papers, retry=False, clean=False)
+def test_retry_requests_failed_papers_and_not_successful_ones(tmp_path: Path) -> None:
+    papers = [_paper("ok"), _paper("missing")]
+    run_session(papers, retry=False, clean=False, output_dir=tmp_path, invoke=FakeFetchList({"missing": "failed"}))
 
-    server.available.add("0002.0002")
-    server.requests.clear()
-    fetcher = _fetcher(tmp_path, server)
-    run_session(fetcher, papers, retry=False, clean=True)
+    fake = FakeFetchList()
+    run_session(papers, retry=True, clean=False, output_dir=tmp_path, invoke=fake)
 
-    # The saved PDF is still on disk, so it is recorded as cached and not requested again.
-    assert server.requests == ["https://arxiv.org/pdf/0002.0002"]
-    assert fetcher.manifest["ok"].status == "cached"
-    assert fetcher.manifest["missing"].status == "saved"
-    assert pdf_path(tmp_path, "ok").exists()
+    assert fake.calls == [{"ids": ["missing"], "clean": False}]
+    assert _manifest(tmp_path)["missing"]["status"] == "saved"
 
 
-def test_library_paper_is_recorded_as_failed_without_any_request(tmp_path: Path) -> None:
-    server = FakeArxiv()
-    server.available.add("0003.0003")
-    fetcher = _fetcher(tmp_path, server)
+def test_clean_passes_clean_true_and_requests_every_paper(tmp_path: Path) -> None:
+    papers = [_paper("ok"), _paper("missing")]
+    run_session(papers, retry=False, clean=False, output_dir=tmp_path, invoke=FakeFetchList({"missing": "failed"}))
 
-    run_session(fetcher, [_paper("paywalled", "0003.0003", requires_library=True)], retry=False, clean=False)
+    fake = FakeFetchList()
+    run_session(papers, retry=False, clean=True, output_dir=tmp_path, invoke=fake)
 
-    assert server.requests == []
-    assert fetcher.manifest["paywalled"].status == "failed"
-    assert "UofM library access" in (fetcher.manifest["paywalled"].error or "")
+    assert fake.calls == [{"ids": ["ok", "missing"], "clean": True}]
+
+
+def test_library_paper_is_recorded_as_failed_and_never_sent_to_fetch_list(tmp_path: Path) -> None:
+    fake = FakeFetchList()
+    paper = _paper("paywalled", requires_library=True, doi="10.1016/j.ins.2021.xxx")
+
+    run_session([paper], retry=False, clean=False, output_dir=tmp_path, invoke=fake)
+
+    assert fake.calls == [{"ids": [], "clean": False}]
+    row = _manifest(tmp_path)["paywalled"]
+    assert row["status"] == "failed"
+    assert "UofM library access" in row["error"]
+    assert "10.1016/j.ins.2021.xxx" in row["error"]
     lookup = (tmp_path / "LIBRARY_LOOKUP.txt").read_text(encoding="utf-8")
     assert "Title paywalled" in lookup
 
 
-def test_library_paper_with_pdf_already_in_place_is_cached(tmp_path: Path) -> None:
-    server = FakeArxiv()
-    target = pdf_path(tmp_path, "paywalled")
-    target.parent.mkdir(parents=True)
-    target.write_bytes(b"%PDF-1.4 added by hand")
+def test_library_paper_with_pdf_already_in_place_is_sent_to_fetch_list_as_cached(tmp_path: Path) -> None:
+    (tmp_path / "pdf").mkdir()
+    (tmp_path / "pdf" / "paywalled.pdf").write_bytes(b"%PDF-1.4 added by hand")
+    fake = FakeFetchList()
 
-    fetcher = _fetcher(tmp_path, server)
-    run_session(fetcher, [_paper("paywalled", requires_library=True)], retry=False, clean=False)
+    run_session(
+        [_paper("paywalled", requires_library=True)], retry=False, clean=False, output_dir=tmp_path, invoke=fake
+    )
 
-    assert server.requests == []
-    assert fetcher.manifest["paywalled"].status == "cached"
+    assert fake.calls == [{"ids": ["paywalled"], "clean": False}]
+    assert _manifest(tmp_path)["paywalled"]["status"] == "cached"
+
+
+def test_session_refuses_a_manifest_in_the_old_format(tmp_path: Path) -> None:
+    (tmp_path / MANIFEST_NAME).write_text('{"Old_Entry_2020": {"paper_name": "x", "success": true}}', encoding="utf-8")
+    fake = FakeFetchList()
+
+    with pytest.raises(ManifestError, match="not in fetch format"):
+        run_session([_paper("ok")], retry=False, clean=True, output_dir=tmp_path, invoke=fake)
+
+    assert fake.calls == []
+
+
+def test_invoke_builds_the_fetch_list_command_and_raises_on_failure(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    commands: list[list[str]] = []
+
+    def fake_run(command: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+        commands.append(command)
+        return subprocess.CompletedProcess(command, 3, stdout="", stderr="boom")
+
+    monkeypatch.setattr(paper_fetcher.subprocess, "run", fake_run)
+
+    with pytest.raises(FetchListFailed, match="exited 3: boom"):
+        invoke_fetch_list(tmp_path / "list.json", tmp_path, clean=True)
+
+    command = commands[0]
+    assert command[:3] == ["uv", "run", "--project"]
+    assert command[3].endswith("tool-lit-review")
+    assert command[4:6] == ["tool-lit-review", "fetch-list"]
+    assert command[command.index("--clean") + 1] == "true"
+    assert command[command.index("--min-delay") + 1] == str(paper_fetcher.MIN_DELAY_SECONDS)
+    assert command[command.index("--timeout") + 1] == str(paper_fetcher.REQUEST_TIMEOUT_SECONDS)
 
 
 def test_cli_help_lists_both_flags() -> None:
@@ -214,12 +240,11 @@ def test_cli_passes_flags_to_session(tmp_path: Path, monkeypatch: pytest.MonkeyP
     calls: list[tuple[bool, bool]] = []
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(paper_fetcher, "configure_logging", lambda *a, **k: None)
-    monkeypatch.setattr(paper_fetcher, "make_fetcher", lambda: object())
     monkeypatch.setattr(paper_fetcher, "load_paper_sources", lambda: [])
     monkeypatch.setattr(
         paper_fetcher,
         "run_session",
-        lambda fetcher, papers, retry, clean: calls.append((retry, clean)),
+        lambda papers, retry, clean: calls.append((retry, clean)),
     )
 
     result = CliRunner().invoke(paper_fetcher.app, ["--retry", "true", "--clean", "true"])
@@ -241,7 +266,7 @@ def test_cli_stops_with_guidance_on_an_old_format_manifest(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ) -> None:
     monkeypatch.chdir(tmp_path)
-    manifest = tmp_path / paper_fetcher.MANIFEST_PATH
+    manifest = tmp_path / paper_fetcher.OUTPUT_DIR / MANIFEST_NAME
     manifest.parent.mkdir(parents=True)
     manifest.write_text('{"Old_Entry_2020": {"paper_name": "Old_Entry_2020", "success": true}}', encoding="utf-8")
     monkeypatch.setattr(paper_fetcher, "configure_logging", lambda *a, **k: None)
