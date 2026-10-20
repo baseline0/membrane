@@ -5,6 +5,7 @@ import os
 import sys
 from pathlib import Path
 
+from benchmarks.artifact_sidecar import write_sidecar
 from benchmarks.baselines.ga import GeneticAlgorithm
 from benchmarks.baselines.pso import ParticleSwarmOptimizer
 from benchmarks.harness import BenchmarkHarness
@@ -72,7 +73,9 @@ def main(n_seeds: int = 3, n_functions: int = 5, dimension: int = 10):
         "algorithms": list(algorithms),
         "functions": [func.name for func in functions],
     }
-    (out_dir / RUN_PARAMS_NAME).write_text(json.dumps(params, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    params_path = out_dir / RUN_PARAMS_NAME
+    params_path.write_text(json.dumps(params, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_sidecar(params_path)
 
     return df
 

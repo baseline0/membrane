@@ -11,6 +11,8 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
+from benchmarks.artifact_sidecar import write_sidecar
+
 
 @dataclass
 class ConvergenceMetrics:
@@ -121,6 +123,7 @@ def export_benchmark_metrics(
         json.dumps(run.to_dict(), indent=2, default=str),
         encoding="utf-8",
     )
+    write_sidecar(metrics_file)
 
     # Algorithm comparison
     comparison = {
@@ -134,6 +137,7 @@ def export_benchmark_metrics(
         json.dumps(comparison, indent=2, default=str),
         encoding="utf-8",
     )
+    write_sidecar(comparison_file)
 
     # Convergence trends (per algorithm)
     for algo in {m.algorithm for m in run.convergence_metrics}:
@@ -162,6 +166,7 @@ def export_benchmark_metrics(
             json.dumps(trends, indent=2, default=str),
             encoding="utf-8",
         )
+        write_sidecar(trends_file)
 
     print(f"✓ Exported metrics to {output_dir}")
     print(f"  - metrics_{run.run_id}.json")

@@ -1,11 +1,13 @@
 """Unified benchmark harness: 30-seed runner with Wilcoxon tests and statistical export."""
 
 from collections import defaultdict
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from scipy import stats
 
+from benchmarks.artifact_sidecar import write_sidecar
 from benchmarks.suites.base import BenchmarkFunction, BenchmarkSuite
 from benchmarks.validators import (
     validate_dimension,
@@ -128,7 +130,9 @@ class BenchmarkHarness:
     def export_csv(self, df: pd.DataFrame, filepath: str) -> None:
         """Export DataFrame to CSV."""
         df.to_csv(filepath, index=False)
+        write_sidecar(Path(filepath))
 
     def export_json(self, df: pd.DataFrame, filepath: str) -> None:
         """Export DataFrame to JSON."""
         df.to_json(filepath, orient="records", indent=2)
+        write_sidecar(Path(filepath))

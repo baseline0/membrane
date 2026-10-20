@@ -11,6 +11,7 @@ import json
 import sys
 from pathlib import Path
 
+from benchmarks.artifact_sidecar import write_sidecar
 from benchmarks.baselines.ga import GeneticAlgorithm
 from benchmarks.baselines.pso import ParticleSwarmOptimization
 from benchmarks.baselines.quantum_inspired import QuantumInspiredBaseline
@@ -85,6 +86,7 @@ def main(n_seeds: int = 10, n_functions: int = 3, dimension: int = 10):
     output_file = output_dir / f"cec2017_{dimension}d_{n_seeds}seeds.json"
     with open(output_file, "w") as f:
         json.dump(results, f, indent=2)
+    write_sidecar(output_file)
     print(f"Results saved to: {output_file}")
 
     # Summary statistics

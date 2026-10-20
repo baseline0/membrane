@@ -18,6 +18,8 @@ from pathlib import Path
 
 import numpy as np
 
+from benchmarks.artifact_sidecar import write_sidecar
+
 # CEC2017 Function subset: name, function_id, category
 FUNCTIONS = [
     ("F1", 1, "unimodal"),
@@ -167,6 +169,7 @@ class CEC2017Runner:
             writer.writeheader()
             for result in self.results:
                 writer.writerow(result.to_dict())
+        write_sidecar(output_path)
         print(f"✅ Exported {output_path}")
 
     def export_json(self, filename: str = "results.json"):
@@ -183,6 +186,7 @@ class CEC2017Runner:
         }
         with open(output_path, "w") as f:
             json.dump(data, f, indent=2)
+        write_sidecar(output_path)
         print(f"✅ Exported {output_path}")
 
     def generate_summary(self):

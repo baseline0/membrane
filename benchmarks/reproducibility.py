@@ -42,6 +42,8 @@ from itertools import product
 from pathlib import Path
 from typing import Any
 
+from benchmarks.artifact_sidecar import write_sidecar
+
 RUN_CSV_NAME = "benchmarks_example.csv"
 RUN_PARAMS_NAME = "benchmarks_example.run.json"
 MANIFEST_NAME = "benchmarks_example.manifest.json"
@@ -177,6 +179,7 @@ def build_manifest(
 def write_manifest(path: Path, manifest: dict[str, Any]) -> None:
     """Write the manifest as stable, sorted JSON."""
     path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_sidecar(path)
 
 
 def _lookup(data: dict[str, Any], dotted: str) -> tuple[bool, Any]:
