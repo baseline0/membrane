@@ -44,6 +44,9 @@
   "source": {
     "commit": "b6df1b09727a0de9664059f8841de9428cc9f367",
     "method": "git-archive",
+    "sibling_paths": {
+      "tool-lit-review": "../tool-lit-review"
+    },
     "siblings": {
       "tool-lit-review": "82c05b33e1127eee28f24aafe1b13b28b7277903"
     }

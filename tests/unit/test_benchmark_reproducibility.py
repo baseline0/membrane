@@ -53,6 +53,23 @@ def _rows(functions=FUNCTIONS, algorithms=ALGORITHMS):
     return [(f, a, 100.0, 0.5, 99.0) for f in functions for a in algorithms]
 
 
+def _init_repo(path: Path) -> str:
+    """Create a git repository with one commit. Returns its HEAD."""
+    path.mkdir(parents=True)
+    _git(path, "init", "-q")
+    (path / "README.md").write_text("fixture\n", encoding="utf-8")
+    _git(path, "add", "README.md")
+    _git(path, "commit", "-q", "-m", "fixture")
+    return _git(path, "rev-parse", "HEAD")
+
+
+def _ensure_sibling(path: Path) -> str:
+    """The sibling repository at path, created on first use. Returns its HEAD."""
+    if path.exists():
+        return _git(path, "rev-parse", "HEAD")
+    return _init_repo(path)
+
+
 def make_run(
     root: Path,
     *,
@@ -60,23 +77,29 @@ def make_run(
     method: str = "git-archive",
     commit: str | None = None,
     siblings: dict[str, str] | None = None,
+    sibling_paths: dict[str, str] | None = None,
     network: str = "provision-only",
     rows=None,
 ) -> Path:
-    """Build a repository with one artifact and its manifest. Returns the manifest path."""
-    root.mkdir(parents=True)
-    _git(root, "init", "-q")
-    (root / "README.md").write_text("fixture\n", encoding="utf-8")
-    _git(root, "add", "README.md")
-    _git(root, "commit", "-q", "-m", "fixture")
-    head = _git(root, "rev-parse", "HEAD")
+    """Build a repository with one artifact and its manifest. Returns the manifest path.
+
+    By default the single sibling is a git repository at root.parent / "sibling", recorded by relative path
+    "../sibling" and pinned at its current HEAD.
+    """
+    head = _init_repo(root)
+
+    if siblings is None:
+        siblings = {"sibling": _ensure_sibling(root.parent / "sibling")}
+    if sibling_paths is None:
+        sibling_paths = dict.fromkeys(siblings, "../sibling")
 
     csv_path = root / "benchmarks_example.csv"
     _write_csv(csv_path, rows if rows is not None else _rows())
     manifest = build_manifest(
         csv_path=csv_path,
         commit=commit or head,
-        siblings={"tool-lit-review": SIBLING_SHA} if siblings is None else siblings,
+        siblings=siblings,
+        sibling_paths=sibling_paths,
         execution={**EXECUTION, "network": network},
         command=["just", "bench-experiment", str(n_seeds), "2", "10"],
         n_seeds=n_seeds,
@@ -178,9 +201,9 @@ class TestSourceAndExecution:
         assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"source_known"}
 
     def test_a_sibling_that_is_not_a_full_sha_fails(self, tmp_path: Path):
-        manifest = make_run(tmp_path / "run", siblings={"tool-lit-review": "main"})
+        manifest = make_run(tmp_path / "run", siblings={"sibling": "main"})
 
-        assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"source_siblings"}
+        assert "source_siblings" in _failed(validate(manifest, repo_root=tmp_path / "run"))
 
     def test_an_unknown_network_policy_fails(self, tmp_path: Path):
         manifest = make_run(tmp_path / "run", network="open")
@@ -191,6 +214,52 @@ class TestSourceAndExecution:
         manifest = make_run(tmp_path / "run", siblings={})
 
         assert _failed(validate(manifest, repo_root=tmp_path / "run")) == set()
+
+
+class TestSiblingRepositories:
+    """Each sibling is a repository at its recorded path, at the pinned SHA; an absent one is skipped, not passed."""
+
+    def test_a_sibling_at_the_pinned_sha_passes(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run")
+
+        checks = validate(manifest, repo_root=tmp_path / "run")
+
+        assert _failed(checks) == set()
+        sibling = next(c for c in checks if c.name == "sibling_sha")
+        assert sibling.passed and not sibling.skipped
+
+    def test_a_stale_sibling_sha_fails_and_names_the_sibling(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run")
+        _git(tmp_path / "sibling", "commit", "-q", "--allow-empty", "-m", "newer")
+
+        checks = validate(manifest, repo_root=tmp_path / "run")
+
+        assert _failed(checks) == {"sibling_sha"}
+        assert "sibling sibling" in next(c for c in checks if c.name == "sibling_sha").detail
+
+    def test_a_missing_sibling_is_skipped_with_its_reason(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run", sibling_paths={"sibling": "../absent"})
+
+        checks = validate(manifest, repo_root=tmp_path / "run")
+
+        sibling = next(c for c in checks if c.name == "sibling_sha")
+        assert sibling.skipped and not sibling.passed
+        assert "not present on this machine" in sibling.detail
+        assert _failed(checks) == {"sibling_sha"}
+        assert report(checks)["passed"] is False
+
+    def test_a_sibling_without_a_recorded_path_fails(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run", sibling_paths={})
+
+        checks = validate(manifest, repo_root=tmp_path / "run")
+
+        assert _failed(checks) == {"sibling_sha"}
+        assert "no path recorded" in next(c for c in checks if c.name == "sibling_sha").detail
+
+    def test_an_absolute_sibling_path_is_refused(self, tmp_path: Path):
+        manifest = make_run(tmp_path / "run", sibling_paths={"sibling": str(tmp_path / "sibling")})
+
+        assert _failed(validate(manifest, repo_root=tmp_path / "run")) == {"sibling_sha"}
 
 
 class TestSiblingParsing:
@@ -254,6 +323,7 @@ class TestTableConsistency:
             csv_path=csv_path,
             commit=data["source"]["commit"],
             siblings=data["source"]["siblings"],
+            sibling_paths=data["source"]["sibling_paths"],
             execution=data["execution"],
             command=data["run"]["command"],
             n_seeds=30,
@@ -296,9 +366,11 @@ class TestWriteManifestCommand:
         repo = tmp_path / "repo"
         make_run(repo)  # provides a real commit for the manifest to name
         commit = _git(repo, "rev-parse", "HEAD")
+        sibling_sha = _ensure_sibling(tmp_path / "sibling")
         env = {
             "EXPERIMENT_COMMIT": commit,
-            "EXPERIMENT_SIBLINGS": f"tool-lit-review={SIBLING_SHA}",
+            "EXPERIMENT_SIBLINGS": f"sibling={sibling_sha}",
+            "EXPERIMENT_SIBLING_PATHS": "sibling=../sibling",
             "EXPERIMENT_IMAGE": "test-runner-313",
             "EXPERIMENT_IMAGE_FINGERPRINT": EXECUTION["image_fingerprint"],
             "EXPERIMENT_NETWORK": "provision-only",

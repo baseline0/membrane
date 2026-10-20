@@ -17,6 +17,8 @@ A check fails with a stable name, so reports can be read by tools:
 - source_archived: the source was a git archive, not a working tree.
 - source_known: the commit is in this repository. A commit missing from its history means the source is stale.
 - source_siblings: every sibling commit is a full 40-character SHA.
+- sibling_sha (one per sibling): the sibling's recorded relative path, resolved against this repository's root, is
+  a git repository whose HEAD is the pinned SHA. A path absent on this machine is skipped, not passed.
 - execution_recorded: the container image fingerprint and the network policy are recorded.
 - seed_floor: the run used at least MIN_SEEDS seeds, the statistical minimum for the Wilcoxon comparisons.
 - table_columns, table_rows, table_pairs, values_finite: the table has the expected columns, one row per
@@ -58,6 +60,7 @@ REQUIRED_FIELDS: tuple[tuple[str, type], ...] = (
     ("source.method", str),
     ("source.commit", str),
     ("source.siblings", dict),
+    ("source.sibling_paths", dict),
     ("execution.image", str),
     ("execution.image_fingerprint", str),
     ("execution.network", str),
@@ -82,6 +85,7 @@ class Check:
     name: str
     passed: bool
     detail: str
+    skipped: bool = False  # True when the check could not run here; a skipped check never counts as passed
 
 
 def sha256_of(path: Path) -> str:
@@ -134,6 +138,7 @@ def build_manifest(
     csv_path: Path,
     commit: str,
     siblings: dict[str, str],
+    sibling_paths: dict[str, str],
     execution: dict[str, str],
     command: Iterable[str],
     n_seeds: int,
@@ -150,7 +155,12 @@ def build_manifest(
         "schema": MANIFEST_SCHEMA,
         "created_at": created_at,
         "artifact": {"path": csv_path.name, "sha256": sha256_of(csv_path), "rows": len(rows)},
-        "source": {"method": SOURCE_METHOD, "commit": commit, "siblings": dict(siblings)},
+        "source": {
+            "method": SOURCE_METHOD,
+            "commit": commit,
+            "siblings": dict(siblings),
+            "sibling_paths": dict(sibling_paths),
+        },
         "execution": dict(execution),
         "run": {
             "command": list(command),
@@ -194,6 +204,34 @@ def _commit_exists(repo_root: Path, commit: str) -> bool:
     except OSError:
         return False
     return result.returncode == 0
+
+
+def _sibling_check(name: str, sha: str, relative_path: str | None, repo_root: Path) -> Check:
+    """Check one sibling: its recorded path, resolved from repo_root, must be a repository at the pinned SHA."""
+    if relative_path is None:
+        return Check("sibling_sha", False, f"{name}: no path recorded in source.sibling_paths")
+    if Path(relative_path).is_absolute():
+        return Check("sibling_sha", False, f"{name}: path {relative_path!r} must be relative to the repository root")
+
+    location = (Path(repo_root) / relative_path).resolve()
+    if not location.is_dir():
+        return Check(
+            "sibling_sha",
+            False,
+            f"{name}: skipped, {location} is not present on this machine",
+            skipped=True,
+        )
+    try:
+        result = _git(location, "rev-parse", "HEAD")
+    except OSError as exc:
+        return Check("sibling_sha", False, f"{name}: cannot run git in {location}: {exc}")
+    if result.returncode != 0:
+        return Check("sibling_sha", False, f"{name}: {location} is not a git repository")
+
+    head = result.stdout.strip()
+    if head != sha:
+        return Check("sibling_sha", False, f"sibling {name} is at {head}, manifest pins {sha}")
+    return Check("sibling_sha", True, f"sibling {name} is at {sha}")
 
 
 def _table_checks(artifact_path: Path, run: dict[str, Any], expected_rows: int) -> list[Check]:
@@ -317,6 +355,9 @@ def validate(manifest_path: Path, repo_root: Path) -> list[Check]:
             else f"not full commit SHAs: {', '.join(bad_siblings)}",
         )
     )
+    sibling_paths = source["sibling_paths"]
+    for name, sha in sorted(source["siblings"].items()):
+        checks.append(_sibling_check(name, str(sha), sibling_paths.get(name), repo_root))
 
     execution = data["execution"]
     policy_ok = execution["network"] in NETWORK_POLICIES and bool(execution["image_fingerprint"].strip())
@@ -344,5 +385,5 @@ def validate(manifest_path: Path, repo_root: Path) -> list[Check]:
 
 
 def report(checks: list[Check]) -> dict[str, Any]:
-    """The machine-readable result: overall pass, then each check in order."""
+    """The machine-readable result: overall pass, then each check in order. A skipped check is not a pass."""
     return {"passed": all(check.passed for check in checks), "checks": [asdict(check) for check in checks]}

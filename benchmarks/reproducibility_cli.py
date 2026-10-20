@@ -58,6 +58,11 @@ def write_manifest_command(
         envvar="EXPERIMENT_SIBLINGS",
         help="Sibling commits as name=sha pairs, comma-separated; empty when there are none",
     ),
+    sibling_paths: str = typer.Option(
+        ...,
+        envvar="EXPERIMENT_SIBLING_PATHS",
+        help="Sibling locations as name=relative/path pairs, relative to the repository root; one per sibling",
+    ),
     image: str = typer.Option(..., envvar="EXPERIMENT_IMAGE", help="Container image alias that ran the experiment"),
     image_fingerprint: str = typer.Option(..., envvar="EXPERIMENT_IMAGE_FINGERPRINT", help="Fingerprint of that image"),
     network: str = typer.Option(..., envvar="EXPERIMENT_NETWORK", help="Network policy in force during the run"),
@@ -67,12 +72,17 @@ def write_manifest_command(
         sibling_pins = parse_siblings(siblings)
     except ValueError as exc:
         raise typer.BadParameter(str(exc), param_hint="--siblings") from exc
+    try:
+        sibling_locations = parse_siblings(sibling_paths)
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc), param_hint="--sibling-paths") from exc
 
     params = json.loads((out_dir / RUN_PARAMS_NAME).read_text(encoding="utf-8"))
     manifest = build_manifest(
         csv_path=out_dir / RUN_CSV_NAME,
         commit=commit,
         siblings=sibling_pins,
+        sibling_paths=sibling_locations,
         execution={"image": image, "image_fingerprint": image_fingerprint, "network": network},
         command=params["command"],
         n_seeds=params["n_seeds"],
