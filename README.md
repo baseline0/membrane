@@ -50,9 +50,54 @@ The **Malta framework** benchmarks P-systems against conventional ML optimizatio
 - **Algorithms:** Genetic Algorithms, Particle Swarm Optimization, Fuzzy Inference Systems
 - **Benchmark suites:** CEC2017 (continuous), TSPLIB (combinatorial), UCI (classification), SAT (boolean)
 - **Metrics:** Mean, std, best, convergence rate, and statistical significance
-- **Reproducibility:** 230 passing tests, Docker isolation, CI/CD validation
+- **Reproducibility:** see [Verification](#verification) for the commands that check it
 
 This is the same empirical evaluation approach used in production ML model selection and comparison studies. See `benchmarks/` for the harness and `docs/quantum/` for research applications.
+
+## Verification
+
+The commands below exist in this repo. None of them runs live or integration tests.
+
+**Unit tests** (fast tier)
+
+```bash
+uv run pytest tests/unit -q -p no:cacheprovider   # equivalent: uv run pytest -m unit
+```
+
+`tests/unit/conftest.py` applies the `unit` marker to every test under `tests/unit`, so both forms select the same tests. The full collection (`tests/unit`, `tests/integration`, `tests/e2e`, `tests/cyprus`) is larger; only the unit tier is cited here. `just test-unit` delegates to a fleet-base recipe, so the pytest command is the one given.
+
+**Formula consistency** (`paper/`)
+
+```bash
+just formula-check     # runs paper/validate_formulas.py
+```
+
+Checks that every `{{formula:id}}` reference in `paper/presentation.md` exists in `paper/model.py`. It rewrites the tracked file `paper/formula_index.md`; a clean run leaves no diff. CI runs the stricter form, `validate_formulas.py --strict`, which also fails on unused formulas and on symbols without recorded assumptions.
+
+**Benchmark artifact check** (static: reads the CSV, manifest and git history; never reruns a benchmark)
+
+```bash
+uv run python -m benchmarks.reproducibility_cli validate \
+    --manifest benchmarks_example.manifest.json --repo-root .
+```
+
+Checks the CSV's SHA-256, that the source is a `git archive` of a commit in this repo, the recorded execution image and network policy, a 30-seed floor, and the table shape (columns, one row per function/algorithm pair, finite values). The `sibling_sha` check compares each pinned sibling commit with the sibling checkout on the local machine. Prints a JSON report and exits 1 if any check fails. Check names are listed in the module docstring of `benchmarks/reproducibility.py`.
+
+**Reproducing a result**
+
+Validation does not rerun the benchmark. To test determinism, rerun the experiment from the same commits and compare the CSV's SHA-256 with the manifest's:
+
+```bash
+just bench-experiment SEEDS FUNCTIONS DIM    # writes out/ with the CSV and its manifest
+```
+
+The recipe is meant to run inside the experiment container, where the working directory is a `git archive` of the pinned commit. That container runner lives outside this repo and is not described here.
+
+**Not covered**
+
+- `tests/integration`, `tests/e2e` and `tests/cyprus` are not run by the unit command. CI (`.github/workflows/test.yml`) runs `pytest tests/`, which includes them.
+- No benchmark is rerun, so determinism is not checked here.
+- `just docker-build-cec2017`, `just build-cec2017` (CEC2017 C library) and the paper and slide builds (`just paper`, `just present`, which need Typst and Marp) are not run by any command above.
 
 ## License
 
