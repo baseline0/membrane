@@ -16,6 +16,7 @@ INDEX = PAPER / "formula_index.md"
 OUT_DIR = PAPER / "generated"
 TYP = OUT_DIR / "formula_index_appendix.typ"
 PDF = OUT_DIR / "formula_index_appendix.pdf"
+BODY = OUT_DIR / "formula_index_body.typ"
 
 ROW = re.compile(r"^\|(.+)\|\s*$")
 
@@ -65,17 +66,24 @@ def typst_table(header: list[str], rows: list[list[str]]) -> list[str]:
     return lines
 
 
+def build_body(tables: list[tuple[list[str], list[list[str]]]]) -> str:
+    """Return the intro line and tables only, with no page or text setup, for inclusion in main.typ."""
+    lines = ["Generated from model.py via validate_formulas.py."]
+    for header, rows in tables:
+        lines += ["", *typst_table(header, rows)]
+    return "\n".join(lines) + "\n"
+
+
 def build_typst(tables: list[tuple[list[str], list[list[str]]]]) -> str:
+    """Return a standalone Typst document: page and text setup, title, then the body."""
     lines = [
         '#set page(paper: "a4", margin: 1.5cm, numbering: "1")',
         "#set text(size: 8pt)",
         "",
         "= Formula Index",
         "",
-        "Generated from model.py via validate_formulas.py.",
+        build_body(tables),
     ]
-    for header, rows in tables:
-        lines += ["", *typst_table(header, rows)]
     return "\n".join(lines) + "\n"
 
 
@@ -90,6 +98,7 @@ def main() -> int:
     rows = sum(len(body) for _, body in tables)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     TYP.write_text(build_typst(tables))
+    BODY.write_text(build_body(tables))
     result = subprocess.run(["typst", "compile", str(TYP), str(PDF)], capture_output=True, text=True)
     if result.returncode != 0:
         print(result.stderr, file=sys.stderr)

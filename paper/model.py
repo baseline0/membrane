@@ -42,7 +42,7 @@ class Formula:
         default_factory=lambda: {
             "mode": "plain",
             "fold_short_frac": False,
-            "mul_symbol": "cdot",
+            "mul_symbol": "\\cdot",
         }
     )
     # NEW: Symbol display mapping (code name → LaTeX display)
@@ -167,7 +167,7 @@ FORMULAS = {
         parameters={"n": n},
         assumptions={"n": {"positive": True, "integer": True}},
         source_line=113,
-        rendering_opts={"mul_symbol": "cdot"},
+        rendering_opts={"mul_symbol": "\\cdot"},
     ),
     "mult_step1_output": Formula(
         id="mult_step1_output",
@@ -201,7 +201,7 @@ FORMULAS = {
         parameters={"n": n},
         assumptions={"n": {"positive": True, "integer": True}},
         source_line=141,
-        rendering_opts={"mul_symbol": "cdot"},
+        rendering_opts={"mul_symbol": "\\cdot"},
     ),
 }
 

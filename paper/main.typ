@@ -177,6 +177,12 @@ _To be written after results._
 
 ---
 
+== Appendix A: Formula index
+
+#include "generated/formula_index_body.typ"
+
+---
+
 == References
 
 _References to be added after literature review._

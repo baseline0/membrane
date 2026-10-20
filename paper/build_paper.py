@@ -51,8 +51,9 @@ def generate_formulas() -> bool:
         typst_str = re.sub(r"\\right\)", ")", typst_str)
         # Common LaTeX symbols to Typst
         typst_str = typst_str.replace(r"\mapsto", "arrow.r")
-        typst_str = typst_str.replace(r"\cdot", "dot")
-        typst_str = typst_str.replace(r"\times", "times")
+        # Spaces around the operators: "2dotn" would be read as one unknown variable by Typst.
+        typst_str = typst_str.replace(r"\cdot", " dot ")
+        typst_str = typst_str.replace(r"\times", " times ")
 
         comment = f"// {info['description']} (from model.py:{info['source_line']})"
         definition = f"#let {name} = $ {typst_str} $"
