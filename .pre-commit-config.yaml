@@ -12,6 +12,7 @@ repos:
         args: [--maxkb=1000]
       - id: detect-private-key
       - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
         name: "[P3] Trim trailing whitespace"
       - id: end-of-file-fixer
         name: "[P3] Fix end of file"
