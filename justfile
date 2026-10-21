@@ -10,6 +10,7 @@ set default-list := true
 import "just/mod.just"
 import 'just/fleet-checks.just'
 import 'just/fleet-commit.just'
+import 'just/fleet-test.just'
 
 # --- Development ---
 
