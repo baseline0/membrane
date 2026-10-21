@@ -56,7 +56,8 @@ include = ["malta", "cyprus", "benchmarks", "scripts", "paper", "tests"]
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = ["-ra", "--strict-markers"]
-testpaths = ["tests"]
+# tests/host needs real git on the host, so the container run (no path arguments) leaves it out. Run it with `just test-host`.
+testpaths = ["tests/unit", "tests/integration", "tests/e2e"]
 pythonpath = ["."]
 markers = [
     "unit: fast, isolated unit tests",

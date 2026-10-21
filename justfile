@@ -147,6 +147,10 @@ check-types:
 test-unit:
     just check-unit-tests
 
+# Host tests: use real git, so they run on the host, never in the git-free container.
+test-host:
+    uv run pytest tests/host -q
+
 # ============================================================================
 # Shared fleet recipes, run by fleet-base's installed tool (run `just -f ~/projects/fleet-base/justfile install-fleet`; ADR-020).
 # Each line calls `fleet recipe NAME`; define a recipe here instead to override it.
