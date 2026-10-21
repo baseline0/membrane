@@ -1,4 +1,4 @@
-"""SHA-256 sidecars: a recorded hash matches until the file changes, and a non-git folder is refused."""
+"""SHA-256 sidecars: a recorded hash matches until the file changes. The git-backed refusal test is in tests/host."""
 
 from pathlib import Path
 
@@ -37,8 +37,3 @@ def test_hash_matches_until_the_file_changes(tmp_path: Path, repo_commit: str) -
     output.write_text("a,b\n1,3\n", encoding="utf-8")
 
     assert sidecar.sidecar_matches(output) is False
-
-
-def test_producing_commit_refuses_a_folder_that_is_not_a_repo(tmp_path: Path) -> None:
-    with pytest.raises(RuntimeError, match="cannot record producing commit"):
-        sidecar.producing_commit(tmp_path)
