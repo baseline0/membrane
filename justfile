@@ -8,6 +8,7 @@ set default-list := true
 
 # Shared recipes from fleet-agents (includes ci-check for shift-left validation)
 import "just/mod.just"
+import 'just/fleet-checks.just'
 
 # --- Development ---
 
