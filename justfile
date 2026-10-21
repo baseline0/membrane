@@ -9,6 +9,7 @@ set default-list := true
 # Shared recipes from fleet-agents (includes ci-check for shift-left validation)
 import "just/mod.just"
 import 'just/fleet-checks.just'
+import 'just/fleet-commit.just'
 
 # --- Development ---
 
@@ -174,14 +175,6 @@ check-workflows:
 # GitHub CI will run full validation including actionlint and pre-commit hooks.
 ci-check:
     fleet recipe --name ci-check
-
-# Falls back to manual commit if Ollama unavailable or commitmate fails
-commit:
-    fleet recipe --name commit
-
-# Add all untracked files and commit with LLM or custom message
-commit-all:
-    fleet recipe --name commit-all
 
 # Check formatting and lint without modifying files (CI-equivalent)
 fmt-check:
