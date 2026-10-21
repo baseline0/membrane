@@ -1,7 +1,5 @@
 """SHA-256 sidecars: a recorded hash matches until the file changes, and a non-git folder is refused."""
 
-import os
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -10,27 +8,14 @@ from benchmarks import artifact_sidecar as sidecar
 
 pytestmark = pytest.mark.unit
 
-IDENTITY = {"GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
-
-
-def make_repo(root: Path) -> str:
-    """A git repo with one commit. Returns its HEAD."""
-    env = {**os.environ, **IDENTITY}
-    subprocess.run(["git", "init", "-q"], cwd=root, check=True)
-    (root / "seed.txt").write_text("seed\n", encoding="utf-8")
-    subprocess.run(["git", "add", "seed.txt"], cwd=root, check=True)
-    subprocess.run(["git", "commit", "-q", "-m", "seed"], cwd=root, check=True, env=env)
-    return subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, check=True
-    ).stdout.strip()
+FIXED_COMMIT = "4f1c0a9d2e7b8c63a5d0e1f2b3c4d5e6f7a8b9c0"
 
 
 @pytest.fixture
-def repo_commit(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> str:
-    """Point producing_commit at the temporary repo, so the sidecar records that repo's HEAD."""
-    commit = make_repo(tmp_path)
-    monkeypatch.setattr(sidecar, "producing_commit", lambda repo_root=None: commit)
-    return commit
+def repo_commit(monkeypatch: pytest.MonkeyPatch) -> str:
+    """Pin producing_commit to a fixed value, so the sidecar records a known commit without a git repository."""
+    monkeypatch.setattr(sidecar, "producing_commit", lambda repo_root=None: FIXED_COMMIT)
+    return FIXED_COMMIT
 
 
 def test_sidecar_records_the_hash_and_the_producing_commit(tmp_path: Path, repo_commit: str) -> None:
