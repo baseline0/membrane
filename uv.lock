@@ -2205,6 +2205,7 @@ dev = [
     { name = "pre-commit", specifier = ">=4.0" },
     { name = "pytest", specifier = ">=8.0" },
     { name = "ruff", specifier = ">=0.5" },
+    { name = "streamlit", specifier = ">=1.66.1" },
 ]
 
 [[package]]
