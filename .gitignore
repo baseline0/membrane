@@ -61,3 +61,6 @@ TODO.md
 # Benchmark outputs that are not artifacts: quick runs (bench-example, bench-quick, bench-full) and experiment outputs
 scratch/
 /out/
+
+# Scratch and generated output: never committed
+/working/
