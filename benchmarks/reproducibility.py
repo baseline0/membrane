@@ -23,6 +23,13 @@ A check fails with a stable name, so reports can be read by tools:
 - seed_floor: the run used at least MIN_SEEDS seeds, the statistical minimum for the Wilcoxon comparisons.
 - table_columns, table_rows, table_pairs, values_finite: the table has the expected columns, one row per
   (function, algorithm) pair, and finite numbers.
+
+compare_results is separate from validate: it compares a run's table against the committed artifact's table.
+- metric_present: every committed (function, algorithm) row and metric is present in the run.
+- run_rows: the run has no malformed, duplicated, or unexpected rows.
+- within_tolerance: each numeric metric is within RESULT_TOLERANCE of the committed value (relative), or within
+  ZERO_BASELINE_TOLERANCE (absolute) when the committed value is exactly zero.
+- numeric_metric: a committed metric that is not a number is skipped, never passed.
 """
 
 from __future__ import annotations
@@ -52,6 +59,9 @@ SOURCE_METHOD = "git-archive"
 NETWORK_POLICIES = ("none", "provision-only")
 MIN_SEEDS = 30
 EXPECTED_COLUMNS = ("function", "algorithm", "mean", "std", "best")
+KEY_COLUMNS = ("function", "algorithm")
+RESULT_TOLERANCE = 0.05  # relative: |actual - committed| / |committed| must be at most this
+ZERO_BASELINE_TOLERANCE = 0.05  # absolute: used only when the committed value is exactly zero
 _FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 
 # Dotted path and expected type for each field the manifest must carry.
@@ -290,6 +300,120 @@ def _table_checks(artifact_path: Path, run: dict[str, Any], expected_rows: int) 
             "all mean, std and best values are finite" if not bad_values else "; ".join(bad_values[:10]),
         )
     )
+    return checks
+
+
+def _as_finite(raw: str | None) -> float | None:
+    """The cell as a finite float, or None when it is absent, not a number, or NaN or infinite."""
+    if raw is None:
+        return None
+    try:
+        number = float(raw)
+    except ValueError:
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _index_rows(
+    columns: tuple[str, ...], rows: list[list[str]]
+) -> tuple[dict[tuple[str, str], dict[str, str]], list[str]]:
+    """Index each row by its (function, algorithm) pair. Also return the rows that cannot be indexed."""
+    indexed: dict[tuple[str, str], dict[str, str]] = {}
+    problems: list[str] = []
+    for row in rows:
+        cells = dict(zip(columns, row, strict=False))
+        if "function" not in cells or "algorithm" not in cells:
+            problems.append(f"row without function or algorithm: {row!r}")
+            continue
+        pair = (cells["function"], cells["algorithm"])
+        if pair in indexed:
+            problems.append(f"duplicated {pair[0]}/{pair[1]}")
+            continue
+        indexed[pair] = cells
+    return indexed, problems
+
+
+def _within_tolerance(where: str, actual: float, committed: float, tolerance: float) -> Check:
+    """Pass when actual is within tolerance of committed. A zero committed value uses an absolute limit instead."""
+    if committed == 0.0:
+        difference = abs(actual - committed)
+        passed = difference <= ZERO_BASELINE_TOLERANCE
+        rule = f"absolute difference {difference!r}, limit {ZERO_BASELINE_TOLERANCE!r} (committed value is zero)"
+    else:
+        difference = abs(actual - committed) / abs(committed)
+        passed = difference <= tolerance
+        rule = f"relative difference {difference:.4%}, limit {tolerance:.0%}"
+    return Check("within_tolerance", passed, f"{where}: actual {actual!r}, committed {committed!r}, {rule}")
+
+
+def compare_results(run_csv: Path, committed_csv: Path, tolerance: float = RESULT_TOLERANCE) -> list[Check]:
+    """Compare a run's results table with the committed artifact's table, metric by metric.
+
+    Every committed (function, algorithm) row and every non-key column must appear in the run. A numeric committed
+    value passes when the run's value is within tolerance (relative, or absolute when the committed value is zero).
+    A committed value that is not a number is reported as skipped, never as passed.
+    """
+    try:
+        committed_columns, committed_rows = _read_table(Path(committed_csv))
+        run_columns, run_rows = _read_table(Path(run_csv))
+    except (OSError, UnicodeDecodeError, csv.Error) as exc:
+        return [Check("results_readable", False, f"cannot read a results table: {exc}")]
+    if not all(key in committed_columns for key in KEY_COLUMNS):
+        return [Check("results_readable", False, f"{committed_csv} has no function and algorithm columns")]
+
+    checks = [Check("results_readable", True, f"{run_csv} against {committed_csv}")]
+    committed, committed_problems = _index_rows(committed_columns, committed_rows)
+    run, run_problems = _index_rows(run_columns, run_rows)
+    unexpected = [f"unexpected {f}/{a}" for f, a in sorted(set(run) - set(committed))]
+    row_problems = run_problems + unexpected
+    checks.append(
+        Check(
+            "run_rows",
+            not row_problems,
+            "one row per committed pair" if not row_problems else "; ".join(row_problems),
+        )
+    )
+    if committed_problems:
+        checks.append(Check("committed_rows", False, "; ".join(committed_problems)))
+
+    metrics = [column for column in committed_columns if column not in KEY_COLUMNS]
+    for pair, expected in committed.items():
+        label = f"{pair[0]}/{pair[1]}"
+        if pair not in run:
+            checks.append(Check("metric_present", False, f"{label}: row missing from the run"))
+            continue
+        for metric in metrics:
+            where = f"{label}.{metric}"
+            if metric not in run[pair]:
+                checks.append(Check("metric_present", False, f"{where}: missing from the run"))
+                continue
+            raw_committed = expected.get(metric)
+            if raw_committed is None:
+                checks.append(Check("metric_present", False, f"{where}: missing from the committed artifact"))
+                continue
+            committed_value = _as_finite(raw_committed)
+            if committed_value is None:
+                checks.append(
+                    Check(
+                        "numeric_metric",
+                        False,
+                        f"{where}: committed value {raw_committed!r} is not a finite number, skipped",
+                        skipped=True,
+                    )
+                )
+                continue
+            actual_value = _as_finite(run[pair][metric])
+            if actual_value is None:
+                checks.append(
+                    Check(
+                        "within_tolerance",
+                        False,
+                        f"{where}: run value {run[pair][metric]!r} is not a finite number, "
+                        f"committed {committed_value!r}",
+                    )
+                )
+                continue
+            checks.append(_within_tolerance(where, actual_value, committed_value, tolerance))
     return checks
 
 
