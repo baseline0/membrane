@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 TESTS_ROOT = Path(os.path.dirname(os.path.abspath(__file__)))
-TIER_FOLDERS = ("unit", "integration", "contract", "host", "e2e")
+DIRECTORY_MARKERS = {"unit": "unit", "integration": "integration", "contract": "contract", "host": "host", "e2e": "e2e"}
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
@@ -22,5 +22,5 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
             relative = Path(str(item.fspath)).resolve().relative_to(TESTS_ROOT)
         except ValueError:
             continue
-        if relative.parts and relative.parts[0] in TIER_FOLDERS:
-            item.add_marker(getattr(pytest.mark, relative.parts[0]))
+        if relative.parts and relative.parts[0] in DIRECTORY_MARKERS:
+            item.add_marker(getattr(pytest.mark, DIRECTORY_MARKERS[relative.parts[0]]))
