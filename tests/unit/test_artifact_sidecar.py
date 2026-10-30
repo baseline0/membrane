@@ -6,8 +6,6 @@ import pytest
 
 from benchmarks import artifact_sidecar as sidecar
 
-pytestmark = pytest.mark.unit
-
 FIXED_COMMIT = "4f1c0a9d2e7b8c63a5d0e1f2b3c4d5e6f7a8b9c0"
 
 

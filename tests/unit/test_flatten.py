@@ -5,13 +5,9 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
 sys.path.insert(0, parent_dir_path)
 
-import unittest
+import unittest  # noqa: E402
 
-import pytest
-
-from cyprus.parser import flatten
-
-pytestmark = pytest.mark.unit
+from cyprus.parser import flatten  # noqa: E402
 
 
 class TestFlatten(unittest.TestCase):

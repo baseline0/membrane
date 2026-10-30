@@ -143,9 +143,19 @@ artifacts-list:
 check-types:
     fleet ratchet --action check
 
-# Unit tests: the gate the pre-push hook runs (fleet hook standard, fleet_base.hook_standard R4)
+# Unit tests only (what CI and the pre-push gate run). Self-contained: depends on no other recipe.
 test-unit:
-    just check-unit-tests
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if uv run pytest --version >/dev/null 2>&1; then
+        uv run pytest -m unit --tb=short -v
+        exit 0
+    fi
+    echo "error: test-unit cannot run in this repo: install pytest as a dev dependency (uv add --dev pytest)" >&2
+    exit 1
+
+# Run tests
+test: test-unit
 
 # Host tests: use real git, so they run on the host, never in the git-free container.
 test-host:

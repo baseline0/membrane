@@ -1,11 +1,7 @@
 import unittest
 
-import pytest
-
 from cyprus.program import get_pretty_tree, parse, tokenize_file
 from malta.constants import REPO_ROOT
-
-pytestmark = pytest.mark.unit
 
 # Resolve fixtures from REPO_ROOT, not the CWD, so the test passes from any directory.
 EXAMPLE1 = REPO_ROOT / "tests" / "examples" / "example1.cyp"
