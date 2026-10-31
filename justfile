@@ -202,3 +202,8 @@ pre-push-reminder:
 # Regenerate uv.lock from pyproject.toml. The uv-lock-check hook only checks; run this to fix a stale lock.
 lock:
     uv lock
+
+# Format and fix lint in place. Pre-commit only checks; this is the one place that writes formatting.
+fmt:
+    git ls-files -z -- '*.py' | xargs -0 -r uv run ruff format
+    git ls-files -z -- '*.py' | xargs -0 -r uv run ruff check --fix
