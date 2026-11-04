@@ -28,8 +28,9 @@ Welcome to the research infrastructure for **Quantum P Systems** (Quantum Membra
 **How to use:**
 1. Find a paper → Get its citation + BibTeX
 2. Copy citation to your bibliography
-3. Use [**Paper Notes Template**](./notes/TEMPLATE_paper_notes.md) to capture key findings
-4. Link your notes back to literatura_database.md via Obsidian wikilinks
+3. Link your notes back to literatura_database.md via Obsidian wikilinks
+
+Paper notes template: Publication material moved to baseline0-content/papers/qips-optimization.
 
 ---
 
@@ -122,23 +123,8 @@ python -m malta.quantum_simulator ~/path/to/obsidian/vault
 ## 📝 For Capturing Research Notes
 
 ### Paper Notes Template
-👉 See: [`notes/TEMPLATE_paper_notes.md`](./notes/TEMPLATE_paper_notes.md)
 
-**Sections:**
-- TL;DR (one-sentence summary)
-- Bibliographic info (authors, year, venue, DOI)
-- Main contributions (what problem? how solved? why important?)
-- Technical details (formulation, approach, results, limitations)
-- Relevance to Malta (connections, insights, critiques)
-- Open questions (for authors, technical concerns, missing comparisons)
-- Future reading (related papers, datasets to explore)
-
-**How to use:**
-1. Copy `TEMPLATE_paper_notes.md` to `notes/[DATE]_[AUTHOR]_[TITLE].md`
-2. Fill in each section as you read the paper
-3. Save to Obsidian vault
-4. Use `[[double-bracket]]` syntax to link to related notes
-5. When ready to write a publication, reference your captured notes
+Publication material moved to baseline0-content/papers/qips-optimization.
 
 ---
 
@@ -177,7 +163,7 @@ literatura_database.md (Papers + Benchmarks)
 ### Workflow A: Literature → Notes → Publication
 **Time:** 2–6 months per paper/synthesis
 **Output:** Conference/journal paper
-**Use:** [`literature_database.md`](./research/literatura_database.md) + [`TEMPLATE_paper_notes.md`](./notes/TEMPLATE_paper_notes.md)
+**Use:** [`literature_database.md`](./research/literatura_database.md) (Publication material moved to baseline0-content/papers/qips-optimization.)
 
 ### Workflow B: Simulation → Benchmarking → Report
 **Time:** 1–3 months per experiment
@@ -205,8 +191,7 @@ quantum/
 │   ├── open_problems.md                # Frontier challenges
 │   └── benchmarking_strategy.md        # Experimental methodology
 │
-└── notes/                              # Obsidian research vault
-    ├── TEMPLATE_paper_notes.md         # Copy this for each paper
+└── notes/                              # Obsidian research vault (Publication material moved to baseline0-content/papers/qips-optimization.)
     ├── ideas/                          # Brainstorms + hypotheses
     └── [auto-generated sim logs]       # Created by quantum_simulator.py
 ```
@@ -263,7 +248,6 @@ open docs/quantum/research/benchmarking_strategy.md
 | `research/literatura_database.md` | Citation database + benchmarks | 20 min | Finding papers + building bibliography |
 | `research/open_problems.md` | Frontier challenges + research directions | 30 min | Choosing a research topic |
 | `research/benchmarking_strategy.md` | Experimental methodology | 20 min | Designing experiments |
-| `notes/TEMPLATE_paper_notes.md` | Paper summary template | 5 min | Reading a new paper |
 
 ---
 
@@ -331,7 +315,7 @@ run_experiment_and_log():
 | How do I run an experiment? | `INTEGRATION_GUIDE.md` (Workflow B) |
 | What open problems exist? | `research/open_problems.md` |
 | How do I structure a paper? | `research/benchmarking_strategy.md` (Reporting Pipeline) |
-| How do I capture research notes? | `notes/TEMPLATE_paper_notes.md` + copy to new file |
+| How do I capture research notes? | Publication material moved to baseline0-content/papers/qips-optimization. |
 | Where do I publish? | `research/literatura_database.md` (Section VII) |
 
 ---

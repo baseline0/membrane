@@ -28,12 +28,7 @@ membrane/
 │   │   └── __init__.py
 │   └── results/                    # Benchmark outputs (generated)
 │
-├── paper/                          # Research paper using math-trace
-│   ├── model.py                    # Quantum-inspired algorithm (SymPy, SOURCE OF TRUTH)
-│   ├── build_paper.py              # Build pipeline (formulas → Typst)
-│   ├── main.typ                    # Typst paper
-│   ├── generated/                  # Auto-generated (formulas, figures)
-│   └── lean/                       # (Optional) Formal proofs
+# Publication material moved to baseline0-content/papers/qips-optimization.
 │
 ├── docs/
 │   ├── QUANTUM.md                  # Quantum computing background
@@ -204,14 +199,10 @@ The algorithm applies quantum-inspired computing concepts to P-systems for optim
 ### Immediate (Week 1)
 - [ ] Move code to third-party/ (Malta, Cyprus, CEC2017)
 - [ ] Create algorithms/ directory structure
-- [ ] Create paper/ directory (SymPy model + Typst template)
 - [ ] Update README.md with organization
 
 ### Model (Week 2)
-- [ ] `paper/model.py` — SymPy formulation of quantum-inspired algorithm
-  - Define quantum superposition encoding
-  - Define measurement/collapse rules
-  - Export formulas for paper
+- Publication material moved to baseline0-content/papers/qips-optimization.
 - [ ] `algorithms/quantum_inspired.py` — Runnable implementation
   - Uses formulas from model.py
   - Validates they match
@@ -222,9 +213,7 @@ The algorithm applies quantum-inspired computing concepts to P-systems for optim
 - [ ] Generate comparison tables
 
 ### Paper (Week 7)
-- [ ] `paper/main.typ` — Typst template
-- [ ] `paper/build_paper.py` — Pipeline (formulas → figures → PDF)
-- [ ] `paper/lean/` — (Optional) Formal proofs of convergence
+- Publication material moved to baseline0-content/papers/qips-optimization.
 
 ---
 

@@ -58,7 +58,6 @@ docs/quantum/
 │   └── [published papers].md          # Journal submissions
 │
 ├── notes/                             # Obsidian research vault (private)
-│   ├── TEMPLATE_paper_notes.md        # Template for capturing paper summaries
 │   ├── [dated entries]                # Auto-generated simulation logs
 │   └── ideas/                         # Brainstorms, hypotheses, TODOs
 │
@@ -72,7 +71,6 @@ docs/quantum/
 | `research/literatura_database.md` | Curated papers + citation database | Update quarterly |
 | `research/open_problems.md` | Frontier challenges + research directions | Update annually |
 | `research/benchmarking_strategy.md` | Experimental protocol + benchmark suites | Reference ongoing |
-| `notes/TEMPLATE_paper_notes.md` | Quick paper capture (copy + fill) | Use for each paper |
 | `notes/[dated].md` | Auto-generated simulation logs | Created per run |
 
 ---
@@ -90,7 +88,7 @@ Use the **Literature Database** ([`research/literatura_database.md`](./research/
 
 **Action:** For each paper you find:
 1. Read & understand
-2. Copy [`notes/TEMPLATE_paper_notes.md`](./notes/TEMPLATE_paper_notes.md)
+2. Publication material moved to baseline0-content/papers/qips-optimization.
 3. Fill in sections: TL;DR, contributions, relevance to Malta, open questions
 4. Save as `notes/[DATE]_[AUTHOR]_[TITLE].md`
 
@@ -409,7 +407,6 @@ python -m malta.quantum_simulator ~/Obsidian\ Vault/Research/Quantum
 
 ### Month 1–2: Foundation
 - [ ] Read 5–10 papers from `literatura_database.md`
-- [ ] Use `TEMPLATE_paper_notes.md` to capture findings
 - [ ] Run quantum simulator 10 times; review Obsidian notes
 - [ ] Identify 2–3 open problems of interest
 
@@ -437,7 +434,6 @@ python -m malta.quantum_simulator ~/Obsidian\ Vault/Research/Quantum
 - [`research/literatura_database.md`](./research/literatura_database.md) — Complete citation database
 - [`research/open_problems.md`](./research/open_problems.md) — Frontier challenges
 - [`research/benchmarking_strategy.md`](./research/benchmarking_strategy.md) — Experimental methodology
-- [`notes/TEMPLATE_paper_notes.md`](./notes/TEMPLATE_paper_notes.md) — Paper summary template
 - [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md) — Overall Malta project architecture
 - [`../../benchmarks/`](../../benchmarks/) — Benchmark harness + dataset loaders
 
@@ -449,7 +445,7 @@ Refer to:
 1. **"How do I find papers?"** → `research/literatura_database.md` (Section I–II)
 2. **"How do I structure an experiment?"** → `research/benchmarking_strategy.md`
 3. **"What's an open problem I could solve?"** → `research/open_problems.md`
-4. **"How do I capture my notes?"** → `notes/TEMPLATE_paper_notes.md`
+4. **"How do I capture my notes?"** → Publication material moved to baseline0-content/papers/qips-optimization.
 5. **"How do I run a quantum simulation?"** → This guide, **Quick Start** section
 
 ---

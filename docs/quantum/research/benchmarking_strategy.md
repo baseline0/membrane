@@ -400,7 +400,7 @@ File: `reports/[suite_name]_[date]/publication.pdf` (auto-generated from LaTeX t
 
 - `literatura_database.md` — Citation database for all benchmarks + papers
 - `open_problems.md` — Theoretical challenges + research directions
-- `../notes/TEMPLATE_paper_notes.md` — Template for capturing research findings
+- Publication material moved to baseline0-content/papers/qips-optimization.
 - `../../planning/research_strategy.md` — Long-term 5-year plan
 
 ---

@@ -66,13 +66,7 @@ uv run pytest tests/unit -q -p no:cacheprovider   # equivalent: uv run pytest -m
 
 `tests/unit/conftest.py` applies the `unit` marker to every test under `tests/unit`, so both forms select the same tests. The full collection (`tests/unit`, `tests/integration`, `tests/e2e`, `tests/cyprus`) is larger; only the unit tier is cited here. `just test-unit` delegates to a fleet-base recipe, so the pytest command is the one given.
 
-**Formula consistency** (`paper/`)
-
-```bash
-just formula-check     # runs paper/validate_formulas.py
-```
-
-Checks that every `{{formula:id}}` reference in `paper/presentation.md` exists in `paper/model.py`. It rewrites the tracked file `paper/formula_index.md`; a clean run leaves no diff. CI runs the stricter form, `validate_formulas.py --strict`, which also fails on unused formulas and on symbols without recorded assumptions.
+Publication material moved to baseline0-content/papers/qips-optimization.
 
 **Benchmark artifact check** (static: reads the CSV, manifest and git history; never reruns a benchmark)
 
@@ -97,7 +91,7 @@ The recipe is meant to run inside the experiment container, where the working di
 
 - `tests/integration`, `tests/e2e` and `tests/cyprus` are not run by the unit command. CI (`.github/workflows/test.yml`) runs `pytest tests/`, which includes them.
 - No benchmark is rerun, so determinism is not checked here.
-- `just docker-build-cec2017`, `just build-cec2017` (CEC2017 C library) and the paper and slide builds (`just paper`, `just present`, which need Typst and Marp) are not run by any command above.
+- `just docker-build-cec2017`, `just build-cec2017` (CEC2017 C library) and the paper and slide builds are not part of this repo (Publication material moved to baseline0-content/papers/qips-optimization.).
 
 ## License
 
