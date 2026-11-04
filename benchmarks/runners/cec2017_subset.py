@@ -243,7 +243,7 @@ def main():
     print(f"   {runner.output_dir}/results.csv")
     print(f"   {runner.output_dir}/results.json")
     print("\nTo generate plots and analysis for paper:")
-    print("   cd ../paper && python build_paper.py")
+    print("   (paper build: baseline0-content/papers/qips-optimization)")
 
 
 if __name__ == "__main__":

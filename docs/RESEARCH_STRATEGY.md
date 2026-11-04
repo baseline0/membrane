@@ -116,7 +116,7 @@ As you read the 10 papers, your **specific focus** is:
 ### After Implementation
 - ✅ model.py contains SymPy formulas for QIPS (sourced from lit + your insight)
 - ✅ cec2017_subset.py runs GA vs. QIPS on 10D, generates comparison plots
-- ✅ main.typ paper auto-generates from model.py formulas + benchmark results
+- ✅ paper build moved to baseline0-content/papers/qips-optimization; it reads benchmark results from this repo
 - ✅ Claim is verified: "QIPS outperforms GA on CEC2017 subset by X% without dimensionality collapse"
 
 ---
