@@ -96,45 +96,6 @@ build-cec2017:
     (echo "Note: gcc build requires cec17_test_func.c in benchmarks/c_src/cec2017/" && exit 1)
     @echo "libcec2017.so built successfully"
 
-# --- Paper & Presentation ---
-
-# Build formula-driven presentation (build slides + validate formulas + generate index)
-present:
-    @cd paper && \
-    echo "🚀 Building formula-driven presentation..." && \
-    uv run python model.py && \
-    uv run python build_slides.py && \
-    uv run python validate_formulas.py && \
-    echo "" && \
-    echo "✅ Presentation ready!" && \
-    echo "   Generated files:" && \
-    echo "     - presentation_generated.md (Marp)" && \
-    echo "     - formula_index.md (traceability)" && \
-    echo "     - qips_equations.json (formulas)" && \
-    echo "" && \
-    echo "📊 Next: Open in Marp VS Code extension or run:" && \
-    echo "   marp presentation_generated.md -o presentation.pdf"
-
-# Generate formula index (verify consistency)
-formula-check:
-    @cd paper && uv run python validate_formulas.py
-
-# Build paper (Typst) from formulas
-paper:
-    @cd paper && uv run python build_paper.py
-
-# Render the formula index as a standalone PDF appendix (run formula-check first)
-formula-index-pdf:
-    @uv run python paper/build_formula_index_pdf.py
-
-# Build everything: paper + presentation + checks
-paper-all: paper present
-    @echo "✅ All paper artifacts built successfully"
-
-# Display artifact manifest (Artifact Contract v1)
-artifacts-list:
-    @uv run python scripts/display_artifacts.py
-
 # Generate the interactive demo visualizations into generated/visualization/ (gitignored)
 @demo-visualizations:
     uv run python -m benchmarks.visualization.demo

@@ -77,7 +77,7 @@ exclude = [
   "build",
   "dist",
 ]
-include = ["malta", "cyprus", "benchmarks", "scripts", "paper", "tests"]
+include = ["malta", "cyprus", "benchmarks", "scripts", "tests"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"

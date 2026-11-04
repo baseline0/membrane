@@ -84,15 +84,6 @@ repos:
         stages: [pre-commit]
   - repo: local
     hooks:
-      - id: validate-formulas
-        name: "[P1] Validate formulas when presentation.md or model.py changes"
-        entry: bash -c 'cd paper && uv run --frozen python validate_formulas.py'
-        language: system
-        pass_filenames: false
-        files: '^paper/(presentation\.md|model\.py)$'
-        stages: [pre-commit]
-  - repo: local
-    hooks:
       - id: check-argparse-prohibition
         name: "[P1] No argparse: CLIs use Typer"
         entry: fleet hook --name check-argparse-prohibition
