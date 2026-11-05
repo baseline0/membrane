@@ -54,3 +54,6 @@ scratch/
 
 # Scratch and generated output: never committed
 /working/
+
+# Local literature and fetch artifacts (not part of the repo)
+reference/
