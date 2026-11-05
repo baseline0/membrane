@@ -6,6 +6,9 @@ import 'just/fleet-clean.just'
 
 set default-list := true
 
+# Never let a plain `uv run` rewrite uv.lock; lock changes must be explicit (uv lock / uv sync)
+export UV_FROZEN := "1"
+
 # Shared recipes from fleet-agents (includes ci-check for shift-left validation)
 import "just/mod.just"
 import 'just/fleet-checks.just'
