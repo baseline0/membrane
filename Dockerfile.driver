@@ -1,0 +1,13 @@
+# Runtime image for the experiment driver (tool-experiment-driver). Its source arrives as the named build context
+# "driver" from docker-compose.yml, so this repo does not copy another agent's checkout into its own tree.
+FROM python:3.13-slim
+
+RUN pip install --no-cache-dir uv
+
+WORKDIR /driver
+COPY --from=driver . .
+RUN uv sync --frozen --no-dev
+
+ENV PATH="/driver/.venv/bin:$PATH"
+ENTRYPOINT ["tool-driver"]
+CMD ["--help"]

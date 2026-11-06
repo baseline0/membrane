@@ -1,6 +1,6 @@
 """Tests for malta.constants path validation."""
 
-from malta.constants import CONFIG_DIR, EXAMPLES_DIR, MALTA_ROOT, REPO_ROOT
+from malta.constants import EXAMPLES_DIR, MALTA_ROOT, REPO_ROOT
 
 
 class TestConstantsValidation:
@@ -15,13 +15,6 @@ class TestConstantsValidation:
         """MALTA_ROOT should exist and be a directory."""
         assert MALTA_ROOT.exists()
         assert MALTA_ROOT.is_dir()
-
-    def test_config_dir_exists(self):
-        """CONFIG_DIR should exist and contain simulation configs."""
-        assert CONFIG_DIR.exists()
-        assert CONFIG_DIR.is_dir()
-        configs = list(CONFIG_DIR.glob("*.json"))
-        assert len(configs) > 0, "CONFIG_DIR should contain at least one .json config"
 
     def test_examples_dir_exists(self):
         """EXAMPLES_DIR should exist and contain examples."""

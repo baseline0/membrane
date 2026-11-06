@@ -1,7 +1,38 @@
-version: '3.8'
+# Compose for the membrane P-system runtime and the experiment driver.
+#
+#   docker compose run --rm malta                       # run the built-in example 1 with seed 0
+#   docker compose run --rm malta malta run --idx 3 --seed 7
+#   docker compose run --rm experiment-driver validate /shared/spec.yaml
+#
+# Both services share ./results, so a driver run can read and write the P-system outputs. The driver's source is
+# the sibling repo ../tool-experiment-driver, passed as the named build context "driver".
+name: membrane
 
 services:
+  malta:
+    build:
+      context: .
+      dockerfile: Dockerfile.runtime
+    image: malta:latest
+    volumes:
+      - ./results:/shared/results
+    working_dir: /shared/results
+
+  experiment-driver:
+    build:
+      context: .
+      dockerfile: Dockerfile.driver
+      additional_contexts:
+        driver: ../tool-experiment-driver
+    image: experiment-driver:latest
+    volumes:
+      - ./results:/shared/results
+    working_dir: /shared/results
+    depends_on:
+      - malta
+
   cec2017-builder:
+    # Known broken: Dockerfile copies CEC2017-BoundContrained/, which is not tracked. Kept so the gap stays visible.
     build:
       context: .
       dockerfile: Dockerfile

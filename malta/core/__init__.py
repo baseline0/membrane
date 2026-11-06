@@ -1,1 +1,0 @@
-"""Malta core simulation engine."""

@@ -17,7 +17,6 @@ dependencies = [
     "pandas>=2.2.0",
     "scipy>=1.13.0",
     "sympy>=1.14.0,<1.15.0",  # Pinned minor: formula rendering must be deterministic
-    "tool-lit-review",
     "typer>=0.15.1",
 ]
 
@@ -28,7 +27,6 @@ malta = "malta.cli.main:app"
 default-groups = ["dev"]
 
 [tool.uv.sources]
-tool-lit-review = { path = "../tool-lit-review", editable = true }
 
 # The fleet runner exports each named sibling at its HEAD into the LXD container, so the path source above resolves there.
 [tool.fleet-runner]

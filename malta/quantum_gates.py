@@ -11,10 +11,8 @@ quantum-inspired parallelism.
 """
 
 import math
+from collections import Counter
 from dataclasses import dataclass
-
-from malta.core.rule import Rule
-from malta.types.mmultiset import MMultiset
 
 
 @dataclass
@@ -47,7 +45,7 @@ class QuantumState:
         return "\n".join(parts) if parts else "Empty state"
 
 
-class QuantumGate(Rule):
+class QuantumGate:
     """Base class for quantum gate rules.
 
     A quantum gate modifies both the classical multiset (membrane contents)
@@ -59,9 +57,9 @@ class QuantumGate(Rule):
         self,
         name: str,
         descr: str,
-        catalyst: MMultiset | None = None,
-        rule_input: MMultiset | None = None,
-        rule_output: MMultiset | None = None,
+        catalyst: dict | None = None,
+        rule_input: dict | None = None,
+        rule_output: dict | None = None,
     ):
         """Initialize quantum gate rule.
 
@@ -72,13 +70,11 @@ class QuantumGate(Rule):
             rule_input: Classical items consumed
             rule_output: Classical items produced
         """
-        super().__init__(
-            name=name,
-            descr=descr,
-            catalyst=catalyst or MMultiset(),
-            rule_input=rule_input or MMultiset(),
-            rule_output=rule_output or MMultiset(),
-        )
+        self.name = name
+        self.descr = descr
+        self.catalyst = Counter(catalyst or {})
+        self.rule_input = Counter(rule_input or {})
+        self.rule_output = Counter(rule_output or {})
 
     def apply_to_quantum_state(self, state: QuantumState, target: str) -> QuantumState:
         """Apply quantum operation to state vector.
