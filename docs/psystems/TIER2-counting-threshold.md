@@ -1,6 +1,6 @@
 # Tier 2 check: counting-threshold decision, v1
 
-Status: draft for review. Builds on `SPEC-v1.md`; no engine semantics change. The engine is `src/malta/psystem/engine.py`,
+Status: accepted (count-based decisions for Tier 2; the yes/no output cannot express "no" in v1, pinned by a test). Builds on `SPEC-v1.md`; no engine semantics change. The engine is `src/malta/psystem/engine.py`,
 the constructor is `src/malta/psystem/threshold.py`, the tests are `tests/unit/test_psystem_tier2_threshold.py`.
 
 ## 1. Problem
