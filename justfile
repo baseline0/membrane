@@ -83,12 +83,32 @@ clean-artifacts:
 
 # --- Benchmarking: C Library Build (local gcc) ---
 
-# Build libcec2017.so from the tracked cec17_test_func.c (gitignored output; loaded by benchmarks/suites/cec2017.py)
+# Build libcec2017.so (gitignored output; loaded by benchmarks/suites/cec2017.py). Default: the tracked stub.
+# CEC2017_SRC=/path/to/"C version" builds the real bound-constrained functions from that directory, for local use only.
+# The upstream source and its input_data are not redistributable and are never committed (see c_src/README.md).
 build-cec2017:
-    @command -v gcc >/dev/null 2>&1 || { echo "error: gcc not found on PATH; install a C compiler (e.g. apt install build-essential)" >&2; exit 1; }
-    @echo "Building CEC2017 shared library with gcc..."
-    gcc -O2 -fPIC -shared src/benchmarks/c_src/cec2017/cec17_test_func.c -o src/benchmarks/c_src/cec2017/libcec2017.so -lm
-    @echo "libcec2017.so built successfully"
+    #!/usr/bin/env bash
+    set -euo pipefail
+    command -v gcc >/dev/null 2>&1 || { echo "error: gcc not found on PATH; install a C compiler (e.g. apt install build-essential)" >&2; exit 1; }
+    dir=src/benchmarks/c_src/cec2017
+    if [ -z "${CEC2017_SRC:-}" ]; then
+        echo "Building CEC2017 stub library with gcc..."
+        gcc -O2 -fPIC -shared "$dir/cec17_test_func.c" -o "$dir/libcec2017.so" -lm
+        echo "libcec2017.so built from the tracked stub"
+        exit 0
+    fi
+    [ -f "$CEC2017_SRC/cec17_test_func.cpp" ] || { echo "error: CEC2017_SRC has no cec17_test_func.cpp: $CEC2017_SRC" >&2; exit 1; }
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+    # Two Linux fixes, both named in the upstream readme: drop the <WINDOWS.H> include Linux lacks, and read doubles with
+    # %lf, not %Lf (long double), which otherwise writes the wrong width into the double arrays and gives inf.
+    sed -e 's|#include <WINDOWS.H>|/* WINDOWS.H not needed on Linux */|' -e 's|%Lf|%lf|g' "$CEC2017_SRC/cec17_test_func.cpp" > "$tmp/cec17_upstream.cpp"
+    g++ -O2 -fPIC -Dcec17_test_func=cec17_upstream_impl -c "$tmp/cec17_upstream.cpp" -o "$tmp/upstream.o"
+    g++ -O2 -fPIC -c "$dir/cec17_shim.cpp" -o "$tmp/shim.o"
+    g++ -shared -o "$dir/libcec2017.so" "$tmp/upstream.o" "$tmp/shim.o" -lm
+    mkdir -p "$dir/input_data"
+    cp "$CEC2017_SRC"/input_data/* "$dir/input_data/"
+    echo "libcec2017.so built from CEC2017_SRC: local use only, not for redistribution"
 
 # Generate the interactive demo visualizations into generated/visualization/ (gitignored)
 @demo-visualizations:

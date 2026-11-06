@@ -1,6 +1,7 @@
 """CEC2017 Special Session Benchmark Suite wrapper with ctypes C binding."""
 
 import ctypes
+import os
 from pathlib import Path
 
 import numpy as np
@@ -53,6 +54,9 @@ class CEC2017CBinding:
             )
 
         self.lib = ctypes.CDLL(str(lib_path.resolve()))
+        # The upstream functions read their shift and rotation data from "input_data/..." relative to the working
+        # directory, the first time a dimension or function is used. Calls therefore run from the library's directory.
+        self._data_dir = lib_path.resolve().parent
 
         # C signature: void cec17_test_func(double *x, double *f, int nx, int mx, int func_num)
         self._test_func = self.lib.cec17_test_func
@@ -74,7 +78,12 @@ class CEC2017CBinding:
         x_ptr = x.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
         f_ptr = f.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
 
-        self._test_func(x_ptr, f_ptr, nx, mx, func_num)
+        previous = os.getcwd()
+        os.chdir(self._data_dir)
+        try:
+            self._test_func(x_ptr, f_ptr, nx, mx, func_num)
+        finally:
+            os.chdir(previous)
         return float(f[0])
 
 
