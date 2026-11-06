@@ -1,6 +1,6 @@
 [project]
 name = "malta"
-version = "0.1.0"
+version = "0.2.0"
 description = "Membrane-computing simulation (P System) built on anytree/networkx"
 readme = "README.md"
 authors = [
@@ -58,7 +58,22 @@ dev = [
 ]
 
 [tool.importlinter]
+root_packages = ["malta", "benchmarks", "cyprus"]
 include_external_packages = true
+
+# The engine never depends on the benchmarks; the benchmarks may use the engine.
+[[tool.importlinter.contracts]]
+name = "malta never imports benchmarks"
+type = "forbidden"
+source_modules = ["malta"]
+forbidden_modules = ["benchmarks"]
+
+# cyprus is the P-system language, independent of the engine and the benchmarks.
+[[tool.importlinter.contracts]]
+name = "cyprus does not import malta or benchmarks"
+type = "forbidden"
+source_modules = ["cyprus"]
+forbidden_modules = ["malta", "benchmarks"]
 
 [tool.pyright]
 # Fleet standard: standard mode, no rule overrides. The per-file ratchet (pyright-baseline.json) decides pass or fail.

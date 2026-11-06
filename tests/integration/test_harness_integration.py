@@ -6,8 +6,16 @@ Tests verify:
 - Produces valid results
 """
 
+import pytest
+
 from benchmarks.baselines.quantum_inspired import QuantumInspiredBaseline
 from benchmarks.suites.cec2017 import CEC2017Suite
+from malta.constants import BENCHMARKS_ROOT
+
+pytestmark = pytest.mark.skipif(
+    not (BENCHMARKS_ROOT / "c_src" / "cec2017" / "libcec2017.so").exists(),
+    reason="CEC2017 library not built: run `just build-cec2017`",
+)
 
 
 class TestQuantumInspiredBaseline:
