@@ -54,12 +54,17 @@ class GeneticAlgorithm:
         toolbox.register("evaluate", lambda x: (problem(np.array(x)),))
         toolbox.register("mate", mate_clipped)
         toolbox.register("mutate", mutate_clipped)
-        toolbox.register("select", tools.selBest)
+        # Tournament selection gives selection pressure. selBest would return the whole population sorted best-first,
+        # so every generation kept the same individuals and the search never moved toward better regions.
+        toolbox.register("select", tools.selTournament, tournsize=3)
 
         pop = toolbox.population(n=self.pop_size)
+        # The hall of fame keeps the best individual ever evaluated, so the returned value is the best-so-far and
+        # cannot regress when the population's best is lost to variation.
+        hof = tools.HallOfFame(1)
         pop, _ = algorithms.eaSimple(
-            pop, toolbox, cxpb=self.cxpb, mutpb=self.mutpb, ngen=self.generations, verbose=False
+            pop, toolbox, cxpb=self.cxpb, mutpb=self.mutpb, ngen=self.generations, halloffame=hof, verbose=False
         )
 
-        best_fitness = min([ind.fitness.values[0] for ind in pop])
+        best_fitness = min(hof[0].fitness.values[0], min(ind.fitness.values[0] for ind in pop))
         return float(best_fitness)

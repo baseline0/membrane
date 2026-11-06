@@ -62,6 +62,26 @@ class TestGeneticAlgorithm:
         result = ga.optimize(sphere_function, seed=42)
         assert result < 10.0  # Should find something better than random
 
+    def test_ga_returns_the_best_value_ever_evaluated(self, sphere_function):
+        """The returned value is the best-so-far, not the best of the final population (hall of fame)."""
+        evaluated: list[float] = []
+
+        def recording(x):
+            value = float(np.sum(np.asarray(x) ** 2))
+            evaluated.append(value)
+            return value
+
+        problem = BenchmarkFunction(
+            id="recording", name="Recording Sphere", dimension=5, bounds=(-5.0, 5.0), optimum_value=0.0, func=recording
+        )
+        result = GeneticAlgorithm(pop_size=30, generations=60).optimize(problem, seed=7)
+        assert result == min(evaluated)
+
+    def test_ga_converges_on_sphere_with_tournament_selection(self, sphere_function):
+        """With selection pressure the population converges. The old selBest left it stuck near random values."""
+        result = GeneticAlgorithm(pop_size=50, generations=200).optimize(sphere_function, seed=42)
+        assert result < 1.0
+
 
 class TestParticleSwarmOptimizer:
     def test_pso_optimize_returns_float(self, sphere_function):
