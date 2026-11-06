@@ -8,6 +8,7 @@ from anytree import Node, search
 from malta.constants import CONFIG_DIR
 from malta.core.environment import Environment, EnvState
 from malta.core.membrane_item import MembraneItem, load_membrane_items_from_file
+from malta.core.rng import make_rng
 from malta.core.rule import Rule, make_rule
 from malta.core.ruleset import RuleSet, get_ruleset_1
 from malta.types.mmultiset import MMultiset, make_mmultiset, multiset_to_dict
@@ -83,6 +84,9 @@ class Simulation:
 
         # branches from root to leave
         self.branches = None
+
+        # the seed that generated the rules and membrane contents, recorded so the run can be repeated
+        self.seed = None
 
     def save(self, fname: str):
         # with open(fname, 'w') as f:
@@ -407,7 +411,7 @@ class SimulationFactory:
         return sim
 
     @staticmethod
-    def get_sim3() -> Simulation:
+    def get_sim3(seed: int | None = None) -> Simulation:
         """
         now alphabet is used as a param.
 
@@ -420,7 +424,9 @@ class SimulationFactory:
         all_items = load_membrane_items_from_file(fname)
 
         alphabet = ["a", "b", "c", "w"]
-        ruleset = get_ruleset_1(alphabet)
+        rng = make_rng(seed)
+        sim.seed = seed
+        ruleset = get_ruleset_1(alphabet, rng=rng)
         root = get_membrane_tree1(alphabet)
 
         e = Environment(tree=root, rules=ruleset, all_items=all_items)
@@ -429,7 +435,7 @@ class SimulationFactory:
         return sim
 
     @staticmethod
-    def get_sim4() -> Simulation:
+    def get_sim4(seed: int | None = None) -> Simulation:
         """
         now we obtain alphabet from the items listed in the json file
         """
@@ -438,8 +444,10 @@ class SimulationFactory:
         fname = CONFIG_DIR / "sim4_items.json"
         all_items, alphabet = load_membrane_items_from_file(fname)
 
-        ruleset = get_ruleset_1(alphabet)
-        root, g = get_membrane_tree2(alphabet)
+        rng = make_rng(seed)
+        sim.seed = seed
+        ruleset = get_ruleset_1(alphabet, rng=rng)
+        root, g = get_membrane_tree2(alphabet, rng=rng)
 
         # TODO clean up all this
         e = Environment(tree=root, rules=ruleset, all_items=all_items)
@@ -454,15 +462,15 @@ class SimulationFactory:
         return sim
 
 
-def run(idx: int = 1):
+def run(idx: int = 1, seed: int | None = None):
     if idx == 1:
         sim = SimulationFactory.get_sim1()
     elif idx == 2:
         sim = SimulationFactory.get_sim2()
     elif idx == 3:
-        sim = SimulationFactory.get_sim3()
+        sim = SimulationFactory.get_sim3(seed)
     elif idx == 4:
-        sim = SimulationFactory.get_sim4()
+        sim = SimulationFactory.get_sim4(seed)
 
     sim.run()
 

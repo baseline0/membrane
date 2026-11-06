@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from anytree import Node, NodeMixin, PostOrderIter, PreOrderIter, RenderTree
 
+from malta.core.rng import make_rng
 from malta.types.mmultiset import MMultiset, make_mmultiset
 
 
@@ -64,7 +65,7 @@ def save_simple_graph_to_file(fname: str, g: nx.Graph) -> None:
     plt.savefig(fname)
 
 
-def get_polytree(num_nodes: int = 10):
+def get_polytree(num_nodes: int = 10, rng: random.Random | None = None, draw_to: str | None = None):
     """
     A polytree (or directed tree or oriented tree or singly
     connected network) is a directed acyclic graph (DAG)
@@ -87,9 +88,11 @@ def get_polytree(num_nodes: int = 10):
 
     """
 
-    g = nx.gn_graph(num_nodes)
-    Path("./sims/").mkdir(parents=True, exist_ok=True)
-    save_simple_graph_to_file("./sims/directed_tree_example.png", g)
+    # networkx draws its random growth from `seed`; passing the run's rng keeps the tree reproducible
+    g = nx.gn_graph(num_nodes, seed=rng if rng is not None else make_rng())
+    if draw_to is not None:
+        Path(draw_to).parent.mkdir(parents=True, exist_ok=True)
+        save_simple_graph_to_file(draw_to, g)
 
     return g
 
@@ -204,7 +207,9 @@ def show_multiset_tree(x: Node):
         print(f"{pre}{node.name}")
 
 
-def get_random_selection_from_alphabet(num: int, alphabet: list[str], max_samples: int = 10) -> dict:
+def get_random_selection_from_alphabet(
+    num: int, alphabet: list[str], max_samples: int = 10, rng: random.Random | None = None
+) -> dict:
     """
     num: the number of letters that should be selected from alphabet
     max_samples: the maximum multiplicity of the number selected
@@ -221,37 +226,41 @@ def get_random_selection_from_alphabet(num: int, alphabet: list[str], max_sample
         max_samples = 10
         print("setting max_samples to 10. expect positive")
 
-    from random import sample
+    rng = rng if rng is not None else make_rng()
 
     for i in range(num):
-        selected = sample(alphabet, 1).pop()
-        multiplicity = random.randint(1, max_samples)
+        selected = rng.sample(alphabet, 1).pop()
+        multiplicity = rng.randint(1, max_samples)
         d[selected] = multiplicity
 
     return d
 
 
-def randomly_populate(mt: MultisetTreeNode, alphabet: list[str]):
+def randomly_populate(mt: MultisetTreeNode, alphabet: list[str], rng: random.Random | None = None):
+    rng = rng if rng is not None else make_rng()
     for node in PreOrderIter(mt):
-        items = get_random_selection_from_alphabet(alphabet)
+        items = get_random_selection_from_alphabet(len(alphabet), alphabet, rng=rng)
         for k, v in items.items():
             node.add(k, v)
 
 
-def get_rand_number_and_multiplicity_of_items(alphabet: list[str], max_multiplicity: int = 1):
+def get_rand_number_and_multiplicity_of_items(
+    alphabet: list[str], max_multiplicity: int = 1, rng: random.Random | None = None
+):
     if not alphabet:
         raise ValueError
+    rng = rng if rng is not None else make_rng()
     if max_multiplicity < 1:
         max_multiplicity = 1
         print("max_multiplicity set to 1")
 
     items = {}
 
-    num_letter = random.randint(1, len(alphabet))
-    letters = random.sample(alphabet, num_letter)
+    num_letter = rng.randint(1, len(alphabet))
+    letters = rng.sample(alphabet, num_letter)
 
     for x in letters:
-        items[x] = random.randint(1, max_multiplicity)
+        items[x] = rng.randint(1, max_multiplicity)
 
     return items
 
@@ -287,7 +296,7 @@ def get_membrane_tree1(alphabet: list[str]) -> Node:
     return root
 
 
-def get_membrane_tree2(alphabet: list[str]) -> (Node, nx.Graph):
+def get_membrane_tree2(alphabet: list[str], rng: random.Random | None = None) -> (Node, nx.Graph):
     """
     a little more complex nesting
     done manually.
@@ -301,7 +310,7 @@ def get_membrane_tree2(alphabet: list[str]) -> (Node, nx.Graph):
     # walk the dag
     # at each node, add in random number of items
     num_nodes = 10
-    g = get_polytree(num_nodes)
+    g = get_polytree(num_nodes, rng=rng)
 
     # make num nodes and populate. do parent nodes later.
     nodes = []
@@ -309,7 +318,7 @@ def get_membrane_tree2(alphabet: list[str]) -> (Node, nx.Graph):
     nodes.append(root)
 
     for i in range(1, num_nodes):
-        items = get_rand_number_and_multiplicity_of_items(alphabet)
+        items = get_rand_number_and_multiplicity_of_items(alphabet, rng=rng)
         contents = make_mmultiset(items)
         y = Node(name=str(i), parent=root, contents=contents)
         nodes.append(y)

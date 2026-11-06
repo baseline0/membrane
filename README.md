@@ -39,7 +39,7 @@ This work extends academic research on fuzzy clustering and pattern recognition 
 
 **Try it yourself:**
 ```bash
-uv run malta run 1          # Run a built-in simulation
+uv run malta run --idx 1 --seed 0   # Run a built-in simulation; the seed makes it repeatable
 uv run malta benchmark toy  # Run convergence analysis
 ```
 

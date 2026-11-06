@@ -18,9 +18,13 @@ def run(
         int,
         typer.Option("--idx", help="Which built-in SimulationFactory example to run (1-4)."),
     ],
+    seed: Annotated[
+        int,
+        typer.Option("--seed", help="Seed for the random rules and membrane contents. The same seed repeats the run."),
+    ],
 ) -> None:
     """Run a built-in membrane simulation to completion."""
-    run_simulation(idx)
+    run_simulation(idx, seed)
 
 
 if __name__ == "__main__":

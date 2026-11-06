@@ -1,5 +1,6 @@
 import random
 
+from malta.core.rng import make_rng
 from malta.core.rule import Rule, make_rule
 from malta.core.util import NameGenerator
 
@@ -33,23 +34,16 @@ class RuleSet:
                 print(r)
 
     def detect_alphabet_from_rules(self):
-
-        self.alphabet = []
-
-        temp = set()
-
+        """The alphabet is every item name used by a rule. Names are whole identifiers, and the order is sorted, so
+        the alphabet does not depend on the process's string hashing."""
+        names: set[str] = set()
         for r in self.rules:
-            for c in r.catalyst:
-                temp.update(c)
-            for c in r.input:
-                temp.update(c)
-            for c in r.output:
-                temp.update(c)
-
-        self.alphabet = list(temp)
+            for multiset in (r.catalyst, r.rule_input, r.rule_output):
+                names.update(multiset)  # iterating a multiset yields its element names
+        self.alphabet = sorted(names)
 
 
-def make_random_rule_from_alphabet(alphabet: list[str]) -> Rule:
+def make_random_rule_from_alphabet(alphabet: list[str], rng: random.Random | None = None) -> Rule:
     """
     catalyst CANNOT be an input or output :)
 
@@ -63,20 +57,20 @@ def make_random_rule_from_alphabet(alphabet: list[str]) -> Rule:
     FUTURE: random multiplicity
     """
 
-    name = NameGenerator.get_rand_name()
+    rng = rng if rng is not None else make_rng()
+    name = NameGenerator.get_rand_name(rng=rng)
     catalyst = None
     r_input = None
     r_output = None
 
     if len(alphabet) < 2:
-        # the single letter just multiplies?
-        print("add more letters to alphabet")
-        return
+        # a rule needs a distinct input and output (and a catalyst when the alphabet allows it)
+        raise ValueError(f"a random rule needs at least two letters; the alphabet has {len(alphabet)}")
 
     if len(alphabet) == 2:
         print("making a rule without a catalyst since alphabet is size:2")
         # coin flip for which letter is input or output
-        coin = random.randint(0, 1)
+        coin = rng.randint(0, 1)
         if coin == 0:
             r_input = {alphabet[0]: 1}
             r_output = {alphabet[1]: 1}
@@ -85,7 +79,7 @@ def make_random_rule_from_alphabet(alphabet: list[str]) -> Rule:
             r_output = {alphabet[0]: 1}
         descr = "coin flip"
     else:
-        selected = random.sample(alphabet, 3)
+        selected = rng.sample(alphabet, 3)
         s = "".join(selected)
         descr = f"{name}: {s}"
 
@@ -97,7 +91,7 @@ def make_random_rule_from_alphabet(alphabet: list[str]) -> Rule:
     return r
 
 
-def make_random_rules_from_alphabet(alphabet: list[str], n: int = 10) -> list[Rule]:
+def make_random_rules_from_alphabet(alphabet: list[str], n: int = 10, rng: random.Random | None = None) -> list[Rule]:
     """
     alphabet: a list of strings, each of which is the identifier of a membrane item
     n: the number of rules to make. its ok if we end up with duplicate rules here. if this happens,
@@ -111,16 +105,16 @@ def make_random_rules_from_alphabet(alphabet: list[str], n: int = 10) -> list[Ru
         n = 10
 
     for i in range(1, n):
-        r = make_random_rule_from_alphabet(alphabet)
+        r = make_random_rule_from_alphabet(alphabet, rng=rng)
         ruleset.rules.append(r)
 
     return ruleset
 
 
-def get_ruleset_1(alphabet: list[str]) -> RuleSet:
+def get_ruleset_1(alphabet: list[str], rng: random.Random | None = None) -> RuleSet:
     """
     alphabet - ideally this is defined by the json file of membrane items and is the keys (identifiers)
 
     """
 
-    return make_random_rules_from_alphabet(alphabet)
+    return make_random_rules_from_alphabet(alphabet, rng=rng)

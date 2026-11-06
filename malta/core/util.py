@@ -7,6 +7,8 @@ from string import ascii_lowercase
 import networkx
 import networkx as nx
 
+from malta.core.rng import shared_rng
+
 # package-relative directory for bundled config/example data, so callers
 # work the same regardless of the process's current working directory.
 PACKAGE_DIR = Path(__file__).resolve().parent
@@ -21,11 +23,14 @@ class NameGenerator:
     # use as prefix for cluster items
 
     @staticmethod
-    def get_rand_name(letters=string.ascii_lowercase, num_chars: int = 4, prefix: str | None = None) -> str:
+    def get_rand_name(
+        letters=string.ascii_lowercase, num_chars: int = 4, prefix: str | None = None, rng: random.Random | None = None
+    ) -> str:
+        rng = rng if rng is not None else shared_rng()
         name = prefix + "_" if prefix else ""
 
         for i in range(num_chars):
-            name += random.choice(letters)
+            name += rng.choice(letters)
         return name
 
 
@@ -72,7 +77,7 @@ def hierarchy_pos(g: networkx.Graph, root=None, width=1.0, vert_gap=0.2, vert_lo
         raise TypeError("cannot use hierarchy_pos on a graph that is not a tree")
 
     if root is None:
-        root = random.choice(list(g.nodes))
+        root = next(iter(g.nodes))  # first node in graph order: the drawing is the same on every run
 
     def _hierarchy_pos(g, root, width=1.0, vert_gap=0.2, vert_loc=0, xcenter=0.5, pos=None, parent=None):
         """
