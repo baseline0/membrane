@@ -19,14 +19,14 @@ package-lock.json
 .ruff_cache/
 _trial_temp/
 
-malta/output/
-malta/sims/
+src/malta/output/
+src/malta/sims/
 tests/out/
 
-benchmarks/c_src/cec2017/libcec2017.so
-benchmarks/c_src/cec2017/input_data/
-cyprus/benchmarks/c_src/cec2017/libcec2017.so
-cyprus/benchmarks/c_src/cec2017/input_data/
+src/benchmarks/c_src/cec2017/libcec2017.so
+src/benchmarks/c_src/cec2017/input_data/
+src/cyprus/benchmarks/c_src/cec2017/libcec2017.so
+src/cyprus/benchmarks/c_src/cec2017/input_data/
 
 # Fleet-ops evaluation outputs (Phase 1-3)
 results/

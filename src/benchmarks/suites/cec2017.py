@@ -7,6 +7,7 @@ import numpy as np
 import numpy.typing as npt
 
 from benchmarks.suites.base import BenchmarkFunction, BenchmarkSuite
+from malta.constants import BENCHMARKS_ROOT
 
 # CEC2017 function names (F1-F30, excluding F2 which was removed)
 CEC2017_NAMES: dict[int, str] = {
@@ -80,7 +81,8 @@ class CEC2017CBinding:
 class CEC2017Suite(BenchmarkSuite):
     """CEC2017 Special Session Benchmark Suite using ctypes binding."""
 
-    DEFAULT_LIB_DIR = Path("benchmarks/c_src/cec2017")
+    # repo-relative through malta.constants, so the library is found from any working directory
+    DEFAULT_LIB_DIR = BENCHMARKS_ROOT / "c_src" / "cec2017"
 
     def __init__(self, lib_dir: Path | None = None):
         self._lib_dir = lib_dir or self.DEFAULT_LIB_DIR

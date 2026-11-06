@@ -5,13 +5,14 @@ requiring a full benchmark run.
 """
 
 import json
-from pathlib import Path
+
+from malta.constants import BENCHMARKS_ROOT
 
 
 class SampleMetrics:
     """Access bundled sample benchmark metrics."""
 
-    _SAMPLE_DIR = Path(__file__).parent / "sample_data"
+    _SAMPLE_DIR = BENCHMARKS_ROOT / "visualization" / "sample_data"
 
     @classmethod
     def load_default(cls) -> dict:

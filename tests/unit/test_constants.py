@@ -22,5 +22,5 @@ class TestConstantsValidation:
         assert EXAMPLES_DIR.is_dir()
 
     def test_malta_root_is_subdir_of_repo_root(self):
-        """MALTA_ROOT should be a subdirectory of REPO_ROOT."""
-        assert MALTA_ROOT.parent == REPO_ROOT
+        """MALTA_ROOT is src/malta, so its parent is src/ and REPO_ROOT is the repository root above it."""
+        assert MALTA_ROOT.parent == REPO_ROOT / "src"

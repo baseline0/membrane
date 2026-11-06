@@ -22,6 +22,7 @@ dependencies = [
 
 [project.scripts]
 malta = "malta.cli.main:app"
+malta-bench = "benchmarks.cli:benchmark_app"
 
 [tool.uv]
 default-groups = ["dev"]
@@ -37,7 +38,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["malta"]
+packages = ["src/malta", "src/benchmarks", "src/cyprus"]
 
 [dependency-groups]
 test = [
@@ -75,14 +76,14 @@ exclude = [
   "build",
   "dist",
 ]
-include = ["malta", "cyprus", "benchmarks", "scripts", "tests"]
+include = ["src/malta", "src/cyprus", "src/benchmarks", "scripts", "tests"]
 
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = "-ra --strict-markers"
 # tests/host needs real git on the host, so the container run (no path arguments) leaves it out. Run it with `just test-host`.
 testpaths = ["tests/unit", "tests/integration", "tests/e2e"]
-pythonpath = ["."]
+pythonpath = [".", "src"]
 markers = [
     "unit: deterministic, isolated, no network/services/sibling repos",
     "integration: cross-repo/service interaction; requires local setup",
@@ -107,11 +108,10 @@ ignore = ["E501", "SIM105", "N818", "RUF001", "RUF002", "RUF022"]
 [tool.ruff.lint.per-file-ignores]
 # Legacy direct-run scripts: sys.path bootstrap must precede imports so the script runs without install.
 "cyprus.py" = ["E402"]  # sys.path bootstrap before imports (legacy direct-run script)
-"cyprus/program.py" = ["E402"]  # sys.path bootstrap before imports; base = get_base() sits between import groups
+"src/cyprus/program.py" = ["E402"]  # sys.path bootstrap before imports; base = get_base() sits between import groups
 "demo.py" = ["E402"]  # sys.path bootstrap before imports (legacy direct-run script)
 "tests/cyprus/test_flatten.py" = ["E402"]  # sys.path bootstrap before imports (legacy cyprus test)
 "tests/cyprus/test_particle.py" = ["E402"]  # sys.path bootstrap before imports (legacy cyprus test)
 # Public API name kept: FormatConverter.jsonToCyprus is a stub with no in-repo callers; renaming breaks the contract.
-"cyprus/format_converter.py" = ["N802"]  # public method name kept (stub API)
+"src/cyprus/format_converter.py" = ["N802"]  # public method name kept (stub API)
 # str-mixin Enum kept: str(member) returns 'DotColour.<name>' (see dot.py colour convention); StrEnum would return the bare value.
-"malta/io/dot_colour.py" = ["UP042"]  # (str, Enum) kept: StrEnum would change str() of members

@@ -15,8 +15,9 @@ import hashlib
 import subprocess
 from pathlib import Path
 
+from malta.constants import REPO_ROOT
+
 SIDECAR_SUFFIX = ".sha256"
-REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def sha256_of(path: Path) -> str:

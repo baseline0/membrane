@@ -64,7 +64,7 @@ discovery:
   known_build_command: "python -m pytest tests/"
   known_lint_commands:
     - "ruff check ."
-    - "mypy malta/"
+    - "mypy src/malta/"
   known_security_command: "pip-audit"
 
 waivers:
@@ -88,7 +88,7 @@ waivers:
   - id: benchmark-runner-file-size
     lens: maintainability
     rule_id: "file_exceeds_line_count"
-    path_globs: ["benchmarks/run_cec2017_enhanced.py"]
+    path_globs: ["src/benchmarks/run_cec2017_enhanced.py"]
     severity_suppressed: low
     owner: mark
     rationale: |
@@ -103,7 +103,7 @@ waivers:
   - id: encoding-module-undocumented-args
     lens: maintainability
     rule_id: "missing_docstring"
-    path_globs: ["malta/encoding.py"]
+    path_globs: ["src/malta/encoding.py"]
     severity_suppressed: low
     owner: mark
     rationale: |

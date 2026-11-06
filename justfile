@@ -77,7 +77,7 @@ bench-full-metrics: bench-full bench-metrics
 # Remove generated artifacts: caches, simulation output, build byproducts
 # Renamed from `clean`: removes simulation, output, and trial directories, which are generated results, not caches. The shared clean (fleet-clean.just) removes caches only.
 clean-artifacts:
-    rm -rf sims/ out/ malta/output/ malta/sims/ tests/out/ tests/_trial_temp/
+    rm -rf sims/ out/ src/malta/output/ src/malta/sims/ tests/out/ tests/_trial_temp/
     rm -rf .pytest_cache/ .ruff_cache/
     find . -type d -name "__pycache__" -exec rm -r {} +
 
@@ -86,17 +86,16 @@ clean-artifacts:
 # Build CEC2017 library in Docker (reproducible, isolated)
 docker-build-cec2017:
     @echo "Building CEC2017 library in Docker..."
-    mkdir -p benchmarks/c_src/cec2017
-    cd .. && docker build -t malta-cec2017:latest -f cyprus/Dockerfile . && \
-    docker run --rm -v $(pwd)/cyprus/benchmarks/c_src/cec2017:/output malta-cec2017:latest
-    @echo "✓ libcec2017.so ready at benchmarks/c_src/cec2017/libcec2017.so"
+    mkdir -p src/benchmarks/c_src/cec2017
+    docker compose run --rm cec2017-builder
+    @echo "✓ libcec2017.so ready at src/benchmarks/c_src/cec2017/libcec2017.so"
 
 # Legacy: direct gcc build (requires local gcc, less reproducible)
 build-cec2017:
     @echo "Building CEC2017 shared library (direct)..."
-    mkdir -p benchmarks/c_src/cec2017
-    gcc -shared -fPIC -O3 -lm benchmarks/c_src/cec2017/cec17_test_func.c -o benchmarks/c_src/cec2017/libcec2017.so 2>/dev/null || \
-    (echo "Note: gcc build requires cec17_test_func.c in benchmarks/c_src/cec2017/" && exit 1)
+    mkdir -p src/benchmarks/c_src/cec2017
+    gcc -shared -fPIC -O3 -lm src/benchmarks/c_src/cec2017/cec17_test_func.c -o src/benchmarks/c_src/cec2017/libcec2017.so 2>/dev/null || \
+    (echo "Note: gcc build requires cec17_test_func.c in src/benchmarks/c_src/cec2017/" && exit 1)
     @echo "libcec2017.so built successfully"
 
 # Generate the interactive demo visualizations into generated/visualization/ (gitignored)
