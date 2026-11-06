@@ -30,13 +30,3 @@ services:
     working_dir: /shared/results
     depends_on:
       - malta
-
-  cec2017-builder:
-    # Known broken: Dockerfile copies CEC2017-BoundContrained/, which is not tracked. Kept so the gap stays visible.
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: malta-cec2017:latest
-    volumes:
-      - ./src/benchmarks/c_src/cec2017:/output
-    command: sh -c "cp /build/libcec2017.so /output/ && cp -r /build/input_data /output/ && echo '✓ CEC2017 library built'"

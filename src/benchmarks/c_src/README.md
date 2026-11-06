@@ -1,31 +1,21 @@
 # CEC2017 Benchmark Library
 
-The CEC2017 C++ source code is maintained in a **sibling forked repository** to keep malta clean:
-
-- **Source:** `../CEC2017-BoundConstrained/` (forked from P-N-Suganthan/CEC2017-BoundConstrained)
-- **Build:** Docker (reproducible, isolated)
-- **Output:** `libcec2017.so` + `input_data/` (rotation/shift matrices)
+**Status: the tracked source is a stub.** `cec17_test_func.c` in this directory computes a placeholder function
+(a sum of squares plus `func_num * 100`), not the CEC2017 test functions. The library builds and the ctypes wiring
+works, so the CEC2017 integration tests check the plumbing, not CEC2017 values. Do not report benchmark results from
+this library as CEC2017 results until the real source is in place (see "Open decision" below).
 
 ## Building the Library
-
-### Option 1: Docker (Recommended)
-Reproducible build, locked gcc version, no local dependencies:
-
-```bash
-just docker-build-cec2017
-```
-
-This will:
-1. Build `malta-cec2017:latest` Docker image
-2. Compile CEC2017 source to `libcec2017.so`
-3. Copy library + input data to `benchmarks/c_src/cec2017/`
-
-### Option 2: Direct gcc (Legacy)
-Requires local gcc + `cec17_test_func.c` in this directory:
 
 ```bash
 just build-cec2017
 ```
+
+This compiles `cec17_test_func.c` with local gcc into `libcec2017.so` in this directory (`gcc -O2 -fPIC -shared ... -lm`).
+It fails with a clear message if gcc is missing. The shared library is gitignored.
+
+The former Docker builder (`docker-build-cec2017`, `Dockerfile`) was removed: it copied a sibling source tree
+(`CEC2017-BoundConstrained/codes`) that is not in this repository, so it could not build.
 
 ## Integration with malta
 
@@ -33,45 +23,21 @@ The **ctypes binding** in `benchmarks/suites/cec2017.py` expects:
 
 ```
 benchmarks/c_src/cec2017/
-├── libcec2017.so          (compiled shared library)
-└── input_data/            (rotation/shift matrices)
-    ├── M_1_D10.txt
-    ├── M_1_D30.txt
-    └── ...
+├── libcec2017.so          (compiled shared library, from `just build-cec2017`)
+└── input_data/            (rotation/shift matrices; needed for the real CEC2017 functions)
 ```
 
-## Updating CEC2017
+## Open decision
 
-To incorporate upstream changes from P-N-Suganthan:
-
-```bash
-cd ../CEC2017-BoundConstrained
-git fetch origin
-git merge origin/master
-cd -
-just docker-build-cec2017
-```
-
-The Docker build will automatically pick up the new source.
-
-## Why Docker?
-
-- **Reproducibility:** gcc version locked, no system dependency drift
-- **Isolation:** Build doesn't pollute local environment
-- **Clarity:** Dockerfile documents the exact build process
-- **Maintenance:** Keep malta repo focused; CEC2017 lives in sibling
-- **Portability:** Same build runs on any machine with Docker
+The real CEC2017 C code is available outside this repository, in the local archive
+(`~/projects/ARCHIVE/_third_party/CEC2017-BoundContrained/codes`). Vendoring it, and confirming its licence, is an
+owner decision. Until then, `libcec2017.so` built here is the stub.
 
 ## Troubleshooting
 
-**Error: "cannot find CEC2017-BoundConstrained"**
-- Ensure you cloned the fork: `cd .. && git clone git@github.com:baseline0/CEC2017-BoundConstrained.git`
-- Verify sibling directory exists: `ls ../CEC2017-BoundConstrained/codes`
+**Error: "gcc: command not found"**
+- Install a C compiler (for example `sudo apt install build-essential`), then run `just build-cec2017`.
 
-**Error: "docker: command not found"**
-- Install Docker: https://docs.docker.com/get-docker/
-- Or use direct gcc build: `just build-cec2017`
-
-**Library works but results seem wrong**
-- Verify `input_data/` was copied (needed for rotations/shifts)
-- Check file permissions: `ls -lh benchmarks/c_src/cec2017/libcec2017.so`
+**Library builds but results look wrong**
+- Expected while the source is a stub: the function values are not CEC2017 values.
+- After the real source is vendored, verify `input_data/` was copied (needed for rotations/shifts).

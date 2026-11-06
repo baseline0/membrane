@@ -91,7 +91,7 @@ The recipe is meant to run inside the experiment container, where the working di
 
 - `tests/integration`, `tests/e2e` and `tests/cyprus` are not run by the unit command. CI (`.github/workflows/test.yml`) runs `pytest tests/`, which includes them.
 - No benchmark is rerun, so determinism is not checked here.
-- `just docker-build-cec2017`, `just build-cec2017` (CEC2017 C library) and the paper and slide builds are not part of this repo (Publication material moved to baseline0-content/papers/qips-optimization.).
+- `just build-cec2017` builds the CEC2017 C library from a stub source (see `src/benchmarks/c_src/README.md`); the paper and slide builds are not part of this repo (Publication material moved to baseline0-content/papers/qips-optimization.).
 
 ## License
 

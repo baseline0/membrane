@@ -81,21 +81,13 @@ clean-artifacts:
     rm -rf .pytest_cache/ .ruff_cache/
     find . -type d -name "__pycache__" -exec rm -r {} +
 
-# --- Benchmarking: C Library Build (Docker) ---
+# --- Benchmarking: C Library Build (local gcc) ---
 
-# Build CEC2017 library in Docker (reproducible, isolated)
-docker-build-cec2017:
-    @echo "Building CEC2017 library in Docker..."
-    mkdir -p src/benchmarks/c_src/cec2017
-    docker compose run --rm cec2017-builder
-    @echo "✓ libcec2017.so ready at src/benchmarks/c_src/cec2017/libcec2017.so"
-
-# Legacy: direct gcc build (requires local gcc, less reproducible)
+# Build libcec2017.so from the tracked cec17_test_func.c (gitignored output; loaded by benchmarks/suites/cec2017.py)
 build-cec2017:
-    @echo "Building CEC2017 shared library (direct)..."
-    mkdir -p src/benchmarks/c_src/cec2017
-    gcc -shared -fPIC -O3 -lm src/benchmarks/c_src/cec2017/cec17_test_func.c -o src/benchmarks/c_src/cec2017/libcec2017.so 2>/dev/null || \
-    (echo "Note: gcc build requires cec17_test_func.c in src/benchmarks/c_src/cec2017/" && exit 1)
+    @command -v gcc >/dev/null 2>&1 || { echo "error: gcc not found on PATH; install a C compiler (e.g. apt install build-essential)" >&2; exit 1; }
+    @echo "Building CEC2017 shared library with gcc..."
+    gcc -O2 -fPIC -shared src/benchmarks/c_src/cec2017/cec17_test_func.c -o src/benchmarks/c_src/cec2017/libcec2017.so -lm
     @echo "libcec2017.so built successfully"
 
 # Generate the interactive demo visualizations into generated/visualization/ (gitignored)
