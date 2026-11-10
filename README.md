@@ -126,29 +126,15 @@ will be maximally applied before those with a lower priority.
 
 # How Cyprus Works
 
-Cyprus is governed by a single monolithic clock.  All activity within
-all environments occurs in lockstep with the tick of the clock.  Each
-tick, all reactions that are applicable within a given container are applied
-maximally, obeying reaction priorities.
+See `src/cyprus/contracts.py` for the executable specification of Cyprus semantics:
 
-The clock stops ticking when no more
-reaction applications can occur.  At this point, the particles contained by
-the environments are interpreted as the final output of the program,
-with everything else left in the system discarded as leftover state.
+- **Execution model** (`ExecutionModel`, `ExecutionPhase`) — clock phases and halt conditions
+- **Membrane lifecycle** (`MembraneState`) — active vs. dissolved states
+- **Particle semantics** (`ParticleKind`) — regular, osmosis, and dissolution particles
+- **Stage 1 configuration** (`Stage1Config`) — maximal, non-deterministic rule application
+- **Side-effect specs** (`DissolutionParticleSpec`, `OsmosisParticleSpec`) — membrane dissolution and osmosis
 
-During the execution of a Cyprus program, membranes may dissolve, destroying
-their reaction defenitions with them, but spilling their particles into
-their parent container.  Environments cannot dissolve.
-
-Particles may also osmose through their containing membrane's walls, either
-targeting their container's parent, or a specific membrane by way of names.
-
-Using named targets, a particle can osmose deeper into nested membranes,
-or pass through multiple containing membranes.  Environments cannot be
-osmosed through, though particles may osmose over environmental boundaries.
-
-Reaction application is maximal, but non-deterministic: reactions are
-applied in any valid order which obeys the assigned reaction priorities.
+Tests: `tests/unit/test_membrane_lifecycle.py` (46 tests covering all contract invariants)
 
 Cyprus is a Turing complete language, though using it for anything other
 than fun and experimentation would be insane.  It is therefore an extremely
