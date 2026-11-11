@@ -84,7 +84,9 @@ def _step(system: System, rng: random.Random) -> bool:
                 if target == HERE:
                     region.contents[symbol] += 1
                 elif target == OUT:
-                    system.regions[system.parent[name]].contents[symbol] += 1
+                    parent = system.parent[name]
+                    if parent is not None:
+                        system.regions[parent].contents[symbol] += 1
                 else:
                     system.regions[target[1]].contents[symbol] += 1
     return True
